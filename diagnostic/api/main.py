@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from crawler import crawl_site
 from pagespeed import get_pagespeed
 from ai_analyzer import analyze_with_claude
+from chatbot import chat_response
 
 app = FastAPI(title="WhiteRabbit Diagnostic API")
 
@@ -98,6 +99,30 @@ async def diagnose(req: DiagnoseRequest):
         "pagespeed": pagespeed_data,
         "report": report,
     }
+
+
+class ChatRequest(BaseModel):
+    messages: list[dict]
+
+
+@app.post("/api/chat")
+async def chat(req: ChatRequest):
+    """Chat with WhiteRabbit AI assistant."""
+    if not req.messages or len(req.messages) > 20:
+        raise HTTPException(status_code=400, detail="Mensajes inválidos")
+
+    # Validate message format
+    for msg in req.messages:
+        if msg.get("role") not in ("user", "assistant"):
+            raise HTTPException(status_code=400, detail="Rol inválido")
+        if not msg.get("content") or len(msg["content"]) > 1000:
+            raise HTTPException(status_code=400, detail="Mensaje inválido")
+
+    try:
+        reply = await chat_response(req.messages)
+        return {"reply": reply}
+    except Exception as e:
+        return {"reply": "Perdón, tuve un problema técnico. Escribinos por WhatsApp y te ayudamos al toque."}
 
 
 @app.get("/health")
