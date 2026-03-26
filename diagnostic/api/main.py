@@ -32,6 +32,8 @@ def email_base(content: str) -> str:
   body{{margin:0;padding:0;background:#030305;font-family:'Helvetica Neue',Arial,sans-serif;color:#eeeef3}}
   .wrapper{{max-width:600px;margin:0 auto;padding:0}}
   .header{{background:linear-gradient(135deg,#030305 0%,#0c0c14 100%);padding:32px 40px;text-align:center;border-bottom:1px solid rgba(0,232,255,0.15)}}
+  .logo-row{{display:inline-flex;align-items:center;gap:10px}}
+  .logo-img{{width:32px;height:32px}}
   .logo-text{{font-size:24px;font-weight:700;letter-spacing:-0.5px}}
   .logo-white{{color:#eeeef3}}.logo-cyan{{color:#00e8ff}}
   .body-content{{background:#08080d;padding:40px}}
@@ -48,7 +50,7 @@ def email_base(content: str) -> str:
 </style></head>
 <body><div class="wrapper">
   <div class="header">
-    <div class="logo-text"><span class="logo-white">white</span><span class="logo-cyan">rabbit</span></div>
+    <div class="logo-row"><img src="https://www.whiterabbit.com.py/wr_iso_logo.png" alt="WhiteRabbit" class="logo-img"><div class="logo-text"><span class="logo-white">white</span><span class="logo-cyan">rabbit</span></div></div>
   </div>
   <div class="body-content">
     {content}
