@@ -288,7 +288,7 @@ async def contact(req: ContactRequest):
     if RESEND_API_KEY:
         try:
             async with httpx.AsyncClient() as client:
-                await client.post(
+                resp = await client.post(
                     "https://api.resend.com/emails",
                     headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
                     json={
@@ -299,8 +299,9 @@ async def contact(req: ContactRequest):
                     },
                     timeout=10,
                 )
-        except Exception:
-            pass  # Don't fail the contact form if email fails
+                print(f"[EMAIL WELCOME] to={email} status={resp.status_code} body={resp.text}")
+        except Exception as e:
+            print(f"[EMAIL WELCOME ERROR] {e}")
 
     return {"success": True, "message": "Mensaje recibido. Te respondemos pronto!"}
 
@@ -374,7 +375,9 @@ async def reply_message(msg_id: int, req: ReplyRequest, authorization: str | Non
                     timeout=10,
                 )
                 email_sent = resp.status_code in (200, 201)
-        except Exception:
+                print(f"[EMAIL REPLY] to={msg['email']} status={resp.status_code} body={resp.text}")
+        except Exception as e:
+            print(f"[EMAIL REPLY ERROR] {e}")
             email_sent = False
 
     conn.execute(
