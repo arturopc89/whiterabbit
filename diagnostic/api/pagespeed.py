@@ -1,4 +1,6 @@
-"""PageSpeed Insights API integration — free, no API key required for basic usage."""
+"""PageSpeed Insights API integration."""
+
+import os
 
 import httpx
 
@@ -27,6 +29,10 @@ async def get_pagespeed(url: str, strategy: str = "mobile") -> dict:
         "strategy": strategy,
         "category": "performance",
     }
+
+    api_key = os.environ.get("GOOGLE_PSI_API_KEY")
+    if api_key:
+        params["key"] = api_key
 
     try:
         async with httpx.AsyncClient(timeout=60) as client:
@@ -72,6 +78,10 @@ async def get_pagespeed(url: str, strategy: str = "mobile") -> dict:
             if not result["fcp"]:
                 fcp_audit = audits.get("first-contentful-paint", {})
                 result["fcp"] = fcp_audit.get("numericValue")
+
+            if result["cls"] is None:
+                cls_audit = audits.get("cumulative-layout-shift", {})
+                result["cls"] = cls_audit.get("numericValue")
 
             si = audits.get("speed-index", {})
             result["speed_index"] = si.get("numericValue")
