@@ -271,6 +271,93 @@ section{position:relative;z-index:1;padding:8rem 3rem}
 @keyframes glitch1{0%,90%{transform:translate(0)}92%{transform:translate(-2px,1px)}94%{transform:translate(2px,-1px)}96%{transform:translate(-1px,2px)}98%{transform:translate(1px,-2px)}100%{transform:translate(0)}}
 @keyframes glitch2{0%,88%{transform:translate(0)}90%{transform:translate(2px,1px)}93%{transform:translate(-2px,-1px)}96%{transform:translate(1px,2px)}100%{transform:translate(0)}}
 
+/* ── DIAGNOSTIC SECTION ── */
+.diagnostic-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.diag-header{text-align:center;margin-bottom:3rem}
+.diag-rabbit-says{display:inline-flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:0.6rem 1.5rem;margin-bottom:1.5rem;font-family:var(--mono);font-size:0.82rem;color:var(--cyan)}
+.diag-rabbit-says img{width:28px;height:28px;border-radius:50%}
+.diag-form-wrap{max-width:600px;margin:0 auto}
+.diag-input-row{display:flex;gap:12px;margin-bottom:0.8rem}
+.diag-input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.9rem 1.2rem;color:var(--white);font-family:var(--body);font-size:0.95rem;outline:none;transition:border-color 0.3s}
+.diag-input:focus{border-color:var(--cyan);box-shadow:0 0 20px rgba(0,232,255,0.08)}
+.diag-input::placeholder{color:var(--dim)}
+.diag-btn{padding:0.9rem 2rem;background:linear-gradient(135deg,#00e8ff 0%,#8b3dff 100%);border:none;border-radius:10px;color:#fff;font-family:var(--display);font-weight:600;font-size:0.95rem;cursor:pointer;transition:all 0.3s;white-space:nowrap}
+.diag-btn:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(0,232,255,0.2)}
+.diag-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.diag-hint{font-size:0.75rem;color:var(--dim);font-family:var(--mono);text-align:center}
+
+/* Diagnostic loading */
+.diag-loading{display:none;text-align:center;padding:3rem 0}
+.diag-loading.active{display:block}
+.diag-spinner{width:48px;height:48px;border:2px solid var(--border);border-top-color:var(--cyan);border-radius:50%;margin:0 auto 1.5rem;animation:diagSpin 0.8s linear infinite}
+@keyframes diagSpin{to{transform:rotate(360deg)}}
+.diag-loading-text{font-family:var(--mono);font-size:0.82rem;color:var(--muted)}
+.diag-loading-step{color:var(--cyan);transition:all 0.3s}
+
+/* Diagnostic results */
+.diag-results{display:none;margin-top:3rem}
+.diag-results.active{display:block}
+
+/* Score circle */
+.diag-score-wrap{text-align:center;margin-bottom:3rem}
+.diag-score-circle{position:relative;width:140px;height:140px;margin:0 auto 1rem}
+.diag-score-circle svg{width:140px;height:140px;transform:rotate(-90deg)}
+.diag-score-circle .track{fill:none;stroke:var(--border);stroke-width:6}
+.diag-score-circle .fill{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset 1.5s cubic-bezier(0.16,1,0.3,1)}
+.diag-score-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:2.8rem;font-weight:700}
+.diag-score-label{font-family:var(--mono);font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
+.diag-business-type{font-size:0.9rem;color:var(--muted);margin-top:0.5rem}
+.diag-summary{max-width:600px;margin:1rem auto 0;font-size:0.9rem;color:var(--muted);line-height:1.7;text-align:center}
+
+/* Metrics row */
+.diag-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:3rem}
+.diag-metric{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center}
+.diag-metric-val{font-family:var(--display);font-size:1.5rem;font-weight:700;margin-bottom:0.3rem}
+.diag-metric-label{font-family:var(--mono);font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em}
+.diag-metric.good .diag-metric-val{color:#22c55e}
+.diag-metric.warning .diag-metric-val{color:#f59e0b}
+.diag-metric.bad .diag-metric-val{color:#ef4444}
+
+/* Issues & opportunities */
+.diag-columns{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:3rem}
+.diag-col-title{font-family:var(--display);font-size:1.1rem;font-weight:600;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.diag-issue{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.6rem}
+.diag-issue-header{display:flex;align-items:center;gap:8px;margin-bottom:0.4rem}
+.diag-issue-impact{font-family:var(--mono);font-size:0.65rem;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.05em}
+.diag-issue-impact.alto{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3)}
+.diag-issue-impact.medio{background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3)}
+.diag-issue-impact.bajo{background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3)}
+.diag-issue-title{font-size:0.88rem;font-weight:500}
+.diag-issue-desc{font-size:0.78rem;color:var(--muted);line-height:1.5;margin-top:0.3rem}
+
+.diag-opp{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.6rem;position:relative;overflow:hidden}
+.diag-opp::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cyan);border-radius:3px 0 0 3px}
+.diag-opp-title{font-size:0.88rem;font-weight:500;margin-bottom:0.3rem}
+.diag-opp-impact{font-size:0.78rem;color:var(--cyan);font-family:var(--mono);margin-bottom:0.2rem}
+.diag-opp-fix{font-size:0.78rem;color:var(--muted);line-height:1.5}
+
+/* Automation proposals */
+.diag-auto-title{font-family:var(--display);font-size:1.1rem;font-weight:600;margin-bottom:1rem;text-align:center}
+.diag-auto-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+.diag-auto-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;position:relative;overflow:hidden;transition:all 0.3s}
+.diag-auto-card::before{content:'';position:absolute;inset:0;opacity:0;background:radial-gradient(circle at 50% 0%,rgba(0,232,255,0.06),transparent 60%);transition:opacity 0.3s}
+.diag-auto-card:hover::before{opacity:1}
+.diag-auto-card:hover{border-color:rgba(255,255,255,0.08);transform:translateY(-4px)}
+.diag-auto-card h4{font-family:var(--display);font-size:0.95rem;font-weight:600;margin-bottom:0.5rem}
+.diag-auto-card p{font-size:0.8rem;color:var(--muted);line-height:1.6;margin-bottom:0.8rem}
+.diag-auto-tools{font-family:var(--mono);font-size:0.68rem;color:var(--cyan);opacity:0.7}
+
+/* Traffic estimate */
+.diag-traffic{text-align:center;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:2.5rem}
+.diag-traffic-label{font-family:var(--mono);font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem}
+.diag-traffic-val{font-family:var(--display);font-size:1.1rem;font-weight:600;color:#22c55e}
+
+/* Diagnostic CTA */
+.diag-cta{text-align:center;padding-top:1rem}
+.diag-cta-text{font-family:var(--display);font-size:clamp(1.4rem,3vw,1.8rem);font-weight:700;margin-bottom:1rem}
+.diag-error{display:none;text-align:center;padding:2rem;color:#ef4444;font-family:var(--mono);font-size:0.85rem}
+.diag-error.active{display:block}
+
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
   body{cursor:auto}
@@ -287,6 +374,10 @@ section{position:relative;z-index:1;padding:8rem 3rem}
   .services-grid{grid-template-columns:1fr 1fr}
   .process-steps{grid-template-columns:1fr 1fr;gap:2rem}
   .process-connector{display:none}
+  .diag-input-row{flex-direction:column}
+  .diag-metrics{grid-template-columns:1fr 1fr}
+  .diag-columns{grid-template-columns:1fr}
+  .diag-auto-grid{grid-template-columns:1fr}
   .cta-buttons{flex-direction:column;align-items:center}
   .footer{flex-direction:column;gap:1rem;text-align:center}
 }
@@ -314,6 +405,7 @@ section{position:relative;z-index:1;padding:8rem 3rem}
   <div class="nav-links">
     <a href="#servicios">Servicios</a>
     <a href="#proceso">Proceso</a>
+    <a href="#diagnostico">Diagnóstico</a>
     <a href="#contacto">Contacto</a>
     <a href="#contacto" class="nav-cta">Hablemos</a>
   </div>
@@ -758,6 +850,86 @@ section{position:relative;z-index:1;padding:8rem 3rem}
   </div>
 </section>
 
+<!-- ═══ DIAGNOSTIC ═══ -->
+<section class="diagnostic-section" id="diagnostico" style="position:relative">
+  <div class="section-inner">
+    <div class="diag-header reveal">
+      <div class="diag-rabbit-says"><img src="wr_iso_logo.png" alt="" width="28" height="28"> No me creas. Probalo vos mismo.</div>
+      <div class="section-title">Diagnóstico gratis<br><span class="gradient">de tu sitio web</span></div>
+      <div class="section-desc" style="margin:0 auto;text-align:center">Ingresá tu URL y nuestro agente de IA analiza tu web en segundos: rendimiento, SEO, seguridad y oportunidades de crecimiento.</div>
+    </div>
+
+    <div class="diag-form-wrap reveal" id="diagForm">
+      <div class="diag-input-row">
+        <input type="text" class="diag-input" id="diagUrl" placeholder="ej: www.tunegocio.com.py" autocomplete="url" spellcheck="false">
+        <button class="diag-btn" id="diagBtn" onclick="runDiagnostic()">Analizar</button>
+      </div>
+      <div class="diag-hint">Gratis. Sin registro. Resultados en ~30 segundos.</div>
+    </div>
+
+    <div class="diag-loading" id="diagLoading">
+      <div class="diag-spinner"></div>
+      <div class="diag-loading-text">
+        <span class="diag-loading-step" id="diagStep">Conectando con el sitio...</span>
+      </div>
+    </div>
+
+    <div class="diag-error" id="diagError"></div>
+
+    <div class="diag-results" id="diagResults">
+      <!-- Score -->
+      <div class="diag-score-wrap reveal">
+        <div class="diag-score-circle">
+          <svg viewBox="0 0 140 140">
+            <circle class="track" cx="70" cy="70" r="62"/>
+            <circle class="fill" id="diagScoreFill" cx="70" cy="70" r="62" stroke-dasharray="389.56" stroke-dashoffset="389.56"/>
+          </svg>
+          <div class="diag-score-num" id="diagScoreNum">0</div>
+        </div>
+        <div class="diag-score-label">Health Score</div>
+        <div class="diag-business-type" id="diagBizType"></div>
+        <div class="diag-summary" id="diagSummary"></div>
+      </div>
+
+      <!-- Core Web Vitals -->
+      <div class="diag-metrics reveal" id="diagMetrics"></div>
+
+      <!-- Issues & Opportunities -->
+      <div class="diag-columns reveal">
+        <div>
+          <div class="diag-col-title"><span style="color:#ef4444">&#9679;</span> Problemas críticos</div>
+          <div id="diagIssues"></div>
+        </div>
+        <div>
+          <div class="diag-col-title"><span style="color:var(--cyan)">&#9679;</span> Oportunidades de mejora</div>
+          <div id="diagOpps"></div>
+        </div>
+      </div>
+
+      <!-- Automation proposals -->
+      <div class="reveal">
+        <div class="diag-auto-title">Lo que <span class="gradient">Whiterabbit</span> puede hacer por vos</div>
+        <div class="diag-auto-grid" id="diagAuto"></div>
+      </div>
+
+      <!-- Traffic estimate -->
+      <div class="diag-traffic reveal" id="diagTraffic">
+        <div class="diag-traffic-label">Potencial de crecimiento estimado</div>
+        <div class="diag-traffic-val" id="diagTrafficVal"></div>
+      </div>
+
+      <!-- CTA -->
+      <div class="diag-cta reveal">
+        <div class="diag-cta-text">¿Querés que hagamos<br><span class="gradient">esto realidad?</span></div>
+        <a href="https://wa.me/595XXXXXXXXX?text=Hola%20Whiterabbit!%20Vi%20el%20diagnóstico%20de%20mi%20web%20y%20quiero%20saber%20más." class="btn-wa" target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Hablemos por WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══ CTA ═══ -->
 <section class="cta-section" id="contacto" style="position:relative">
   <div class="cta-inner reveal">
@@ -1085,6 +1257,232 @@ rabbitScene.addEventListener('mouseenter', () => {
 rabbitScene.addEventListener('mouseleave', () => {
   rabbitScene.classList.remove('revealing');
 });
+
+// ── DIAGNOSTIC TOOL ──
+const DIAG_API = 'https://whiterabbit-diagnostic-production.up.railway.app';
+
+const diagSteps = [
+  'Conectando con el sitio...',
+  'Analizando meta tags y estructura...',
+  'Midiendo rendimiento con PageSpeed...',
+  'Evaluando seguridad y headers...',
+  'Nuestro agente IA está analizando todo...',
+  'Generando reporte personalizado...',
+];
+
+let diagStepIdx = 0;
+let diagStepInterval;
+
+// Enter key triggers analysis
+document.getElementById('diagUrl').addEventListener('keydown', e => {
+  if (e.key === 'Enter') runDiagnostic();
+});
+
+async function runDiagnostic() {
+  const urlInput = document.getElementById('diagUrl');
+  const btn = document.getElementById('diagBtn');
+  const loading = document.getElementById('diagLoading');
+  const results = document.getElementById('diagResults');
+  const errorEl = document.getElementById('diagError');
+  const stepEl = document.getElementById('diagStep');
+
+  const url = urlInput.value.trim();
+  if (!url) { urlInput.focus(); return; }
+
+  // Reset
+  btn.disabled = true;
+  btn.textContent = 'Analizando...';
+  results.classList.remove('active');
+  errorEl.classList.remove('active');
+  loading.classList.add('active');
+  diagStepIdx = 0;
+  stepEl.textContent = diagSteps[0];
+
+  // Rotate loading steps
+  diagStepInterval = setInterval(() => {
+    diagStepIdx = (diagStepIdx + 1) % diagSteps.length;
+    stepEl.style.opacity = 0;
+    setTimeout(() => {
+      stepEl.textContent = diagSteps[diagStepIdx];
+      stepEl.style.opacity = 1;
+    }, 200);
+  }, 3500);
+
+  try {
+    const resp = await fetch(DIAG_API + '/api/diagnose', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.detail || 'Error del servidor');
+    }
+
+    const data = await resp.json();
+
+    if (!data.success) {
+      throw new Error(data.error || 'No se pudo analizar el sitio');
+    }
+
+    renderDiagResults(data);
+  } catch (err) {
+    errorEl.textContent = err.message || 'Error de conexión. Intentá de nuevo.';
+    errorEl.classList.add('active');
+  } finally {
+    clearInterval(diagStepInterval);
+    loading.classList.remove('active');
+    btn.disabled = false;
+    btn.textContent = 'Analizar';
+  }
+}
+
+function getScoreColor(score) {
+  if (score >= 80) return '#22c55e';
+  if (score >= 50) return '#f59e0b';
+  return '#ef4444';
+}
+
+function getMetricClass(val, good, bad) {
+  if (val === null || val === undefined) return '';
+  if (val <= good) return 'good';
+  if (val <= bad) return 'warning';
+  return 'bad';
+}
+
+function renderDiagResults(data) {
+  const report = data.report;
+  const ps = data.pagespeed;
+  const results = document.getElementById('diagResults');
+
+  // Score circle
+  const score = report.health_score || 0;
+  const color = getScoreColor(score);
+  const circumference = 389.56;
+  const offset = circumference - (score / 100) * circumference;
+  const fill = document.getElementById('diagScoreFill');
+  fill.style.stroke = color;
+  // Reset then animate
+  fill.style.transition = 'none';
+  fill.setAttribute('stroke-dashoffset', circumference);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      fill.style.transition = 'stroke-dashoffset 1.5s cubic-bezier(0.16,1,0.3,1)';
+      fill.setAttribute('stroke-dashoffset', offset);
+    });
+  });
+
+  // Animate number
+  const numEl = document.getElementById('diagScoreNum');
+  numEl.style.color = color;
+  animateNumber(numEl, 0, score, 1200);
+
+  // Business type & summary
+  document.getElementById('diagBizType').textContent = report.business_type ? 'Tipo de negocio detectado: ' + report.business_type : '';
+  document.getElementById('diagSummary').textContent = report.summary || '';
+
+  // Core Web Vitals metrics
+  const metricsEl = document.getElementById('diagMetrics');
+  const psScore = ps.score;
+  const lcp = ps.lcp ? (ps.lcp / 1000).toFixed(1) + 's' : '—';
+  const cls = ps.cls !== null && ps.cls !== undefined ? ps.cls.toFixed(2) : '—';
+  const inp = ps.inp ? ps.inp + 'ms' : '—';
+
+  metricsEl.innerHTML =
+    '<div class="diag-metric ' + (psScore !== null ? (psScore >= 90 ? 'good' : psScore >= 50 ? 'warning' : 'bad') : '') + '">' +
+      '<div class="diag-metric-val">' + (psScore !== null ? psScore : '—') + '</div>' +
+      '<div class="diag-metric-label">Performance</div></div>' +
+    '<div class="diag-metric ' + (ps.lcp ? getMetricClass(ps.lcp, 2500, 4000) : '') + '">' +
+      '<div class="diag-metric-val">' + lcp + '</div>' +
+      '<div class="diag-metric-label">LCP</div></div>' +
+    '<div class="diag-metric ' + (ps.cls !== null && ps.cls !== undefined ? getMetricClass(ps.cls, 0.1, 0.25) : '') + '">' +
+      '<div class="diag-metric-val">' + cls + '</div>' +
+      '<div class="diag-metric-label">CLS</div></div>' +
+    '<div class="diag-metric ' + (ps.inp ? getMetricClass(ps.inp, 200, 500) : '') + '">' +
+      '<div class="diag-metric-val">' + inp + '</div>' +
+      '<div class="diag-metric-label">INP</div></div>';
+
+  // Critical issues
+  const issuesEl = document.getElementById('diagIssues');
+  if (report.critical_issues && report.critical_issues.length) {
+    issuesEl.innerHTML = report.critical_issues.map(i =>
+      '<div class="diag-issue">' +
+        '<div class="diag-issue-header">' +
+          '<span class="diag-issue-impact ' + (i.impact || 'medio') + '">' + (i.impact || 'medio') + '</span>' +
+          '<span class="diag-issue-title">' + escHtml(i.issue) + '</span>' +
+        '</div>' +
+        '<div class="diag-issue-desc">' + escHtml(i.explanation || '') + '</div>' +
+      '</div>'
+    ).join('');
+  } else {
+    issuesEl.innerHTML = '<div style="color:var(--muted);font-size:0.85rem;padding:1rem">No se encontraron problemas críticos.</div>';
+  }
+
+  // Opportunities
+  const oppsEl = document.getElementById('diagOpps');
+  if (report.opportunities && report.opportunities.length) {
+    oppsEl.innerHTML = report.opportunities.slice(0, 6).map(o =>
+      '<div class="diag-opp">' +
+        '<div class="diag-opp-title">' + escHtml(o.title) + '</div>' +
+        '<div class="diag-opp-impact">' + escHtml(o.estimated_impact || '') + '</div>' +
+        '<div class="diag-opp-fix">' + escHtml(o.how_to_fix || '') + '</div>' +
+      '</div>'
+    ).join('');
+  } else {
+    oppsEl.innerHTML = '<div style="color:var(--muted);font-size:0.85rem;padding:1rem">Sin oportunidades adicionales.</div>';
+  }
+
+  // Automation proposals
+  const autoEl = document.getElementById('diagAuto');
+  if (report.automation_proposals && report.automation_proposals.length) {
+    autoEl.innerHTML = report.automation_proposals.map(a =>
+      '<div class="diag-auto-card">' +
+        '<h4>' + escHtml(a.title) + '</h4>' +
+        '<p>' + escHtml(a.description || '') + '</p>' +
+        '<div class="diag-auto-tools">' + escHtml(a.tools || '') + '</div>' +
+      '</div>'
+    ).join('');
+  } else {
+    autoEl.innerHTML = '';
+  }
+
+  // Traffic estimate
+  const trafficVal = document.getElementById('diagTrafficVal');
+  trafficVal.textContent = report.traffic_estimate || 'No disponible';
+  document.getElementById('diagTraffic').style.display = report.traffic_estimate ? 'block' : 'none';
+
+  // Show results
+  results.classList.add('active');
+
+  // Scroll to results
+  setTimeout(() => {
+    document.querySelector('.diag-score-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 200);
+
+  // Re-observe reveals inside results
+  results.querySelectorAll('.reveal').forEach(el => {
+    el.classList.remove('visible');
+    rObs.observe(el);
+  });
+}
+
+function animateNumber(el, from, to, duration) {
+  const start = performance.now();
+  function tick(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(from + (to - from) * eased);
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function escHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
 </script>
 </body>
 </html>
