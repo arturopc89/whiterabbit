@@ -22,6 +22,77 @@ DASHBOARD_TOKEN = os.getenv("DASHBOARD_TOKEN", "whiterabbit-admin-2024")
 RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
 DB_PATH = os.getenv("DB_PATH", "messages.db")
 
+# ── Email HTML Templates ──
+
+def email_base(content: str) -> str:
+    """Wrap content in WhiteRabbit branded email template."""
+    return f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  body{{margin:0;padding:0;background:#030305;font-family:'Helvetica Neue',Arial,sans-serif;color:#eeeef3}}
+  .wrapper{{max-width:600px;margin:0 auto;padding:0}}
+  .header{{background:linear-gradient(135deg,#030305 0%,#0c0c14 100%);padding:32px 40px;text-align:center;border-bottom:1px solid rgba(0,232,255,0.15)}}
+  .logo-text{{font-size:24px;font-weight:700;letter-spacing:-0.5px}}
+  .logo-white{{color:#eeeef3}}.logo-cyan{{color:#00e8ff}}
+  .body-content{{background:#08080d;padding:40px}}
+  .body-content p{{color:#b0b0c0;font-size:15px;line-height:1.7;margin-bottom:16px}}
+  .body-content h2{{color:#eeeef3;font-size:20px;font-weight:600;margin-bottom:20px}}
+  .highlight{{color:#00e8ff;font-weight:600}}
+  .quote-box{{background:#0c0c14;border-left:3px solid #8b3dff;padding:16px 20px;margin:24px 0;border-radius:0 8px 8px 0}}
+  .quote-box p{{color:#55556a;font-size:13px;margin:0;font-style:italic}}
+  .cta-btn{{display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#00e8ff 0%,#8b3dff 100%);color:#030305;text-decoration:none;font-weight:700;font-size:14px;border-radius:8px;margin-top:8px}}
+  .footer{{background:#030305;padding:32px 40px;text-align:center;border-top:1px solid rgba(255,255,255,0.05)}}
+  .footer p{{color:#55556a;font-size:12px;line-height:1.6;margin:0}}
+  .footer a{{color:#00e8ff;text-decoration:none}}
+  .divider{{height:1px;background:linear-gradient(90deg,transparent,rgba(0,232,255,0.3),transparent);margin:24px 0}}
+</style></head>
+<body><div class="wrapper">
+  <div class="header">
+    <div class="logo-text"><span class="logo-white">white</span><span class="logo-cyan">rabbit</span></div>
+  </div>
+  <div class="body-content">
+    {content}
+  </div>
+  <div class="footer">
+    <p>WhiteRabbit — Automatización & IA en Paraguay</p>
+    <p style="margin-top:8px"><a href="https://www.whiterabbit.com.py">www.whiterabbit.com.py</a> · <a href="https://wa.me/595XXXXXXXXX">WhatsApp</a></p>
+  </div>
+</div></body></html>"""
+
+
+def email_welcome(name: str) -> str:
+    """Auto-reply welcome email when someone sends a message."""
+    return email_base(f"""
+    <h2>¡Hola {name}! 👋</h2>
+    <p>Recibimos tu mensaje y ya estamos en ello. Nuestro equipo te va a responder lo antes posible.</p>
+    <div class="divider"></div>
+    <p>Mientras tanto, si querés agendar algo más directo:</p>
+    <p style="text-align:center;margin-top:24px">
+      <a href="https://wa.me/595XXXXXXXXX?text=Hola%20WhiteRabbit!%20Acabo%20de%20dejarles%20un%20mensaje%20en%20la%20web" class="cta-btn">💬 Escribinos por WhatsApp</a>
+    </p>
+    <div class="divider"></div>
+    <p style="color:#55556a;font-size:13px">Este es un mensaje automático. Un humano real te va a responder pronto — probablemente con café en mano ☕</p>
+    """)
+
+
+def email_reply(name: str, reply_text: str, original_message: str) -> str:
+    """Branded reply email from the dashboard."""
+    return email_base(f"""
+    <h2>Hola {name} 👋</h2>
+    <p>{reply_text.replace(chr(10), '<br>')}</p>
+    <div class="quote-box">
+      <p>Tu mensaje original: "{original_message[:300]}{'...' if len(original_message) > 300 else ''}"</p>
+    </div>
+    <div class="divider"></div>
+    <p>¿Querés seguir la conversación?</p>
+    <p style="text-align:center;margin-top:16px">
+      <a href="https://wa.me/595XXXXXXXXX" class="cta-btn">💬 Respondenos por WhatsApp</a>
+    </p>
+    <p style="text-align:center;margin-top:12px">
+      <span style="color:#55556a;font-size:13px">O simplemente respondé este email</span>
+    </p>
+    """)
+
 app = FastAPI(title="WhiteRabbit Diagnostic API")
 
 app.add_middleware(
@@ -211,6 +282,24 @@ async def contact(req: ContactRequest):
     conn.commit()
     conn.close()
 
+    # Send auto-reply welcome email
+    if RESEND_API_KEY:
+        try:
+            async with httpx.AsyncClient() as client:
+                await client.post(
+                    "https://api.resend.com/emails",
+                    headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
+                    json={
+                        "from": "WhiteRabbit <onboarding@resend.dev>",
+                        "to": [email],
+                        "subject": "¡Recibimos tu mensaje! — WhiteRabbit",
+                        "html": email_welcome(name),
+                    },
+                    timeout=10,
+                )
+        except Exception:
+            pass  # Don't fail the contact form if email fails
+
     return {"success": True, "message": "Mensaje recibido. Te respondemos pronto!"}
 
 
@@ -278,12 +367,7 @@ async def reply_message(msg_id: int, req: ReplyRequest, authorization: str | Non
                         "from": "WhiteRabbit <onboarding@resend.dev>",
                         "to": [msg["email"]],
                         "subject": f"Re: Tu mensaje a WhiteRabbit",
-                        "html": (
-                            f"<p>Hola {msg['name']},</p>"
-                            f"<p>{reply_text}</p>"
-                            f"<hr><p style='color:#888;font-size:12px'>En respuesta a tu mensaje: \"{msg['message'][:200]}\"</p>"
-                            f"<p style='color:#888;font-size:12px'>— WhiteRabbit</p>"
-                        ),
+                        "html": email_reply(msg["name"], reply_text, msg["message"]),
                     },
                     timeout=10,
                 )
