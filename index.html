@@ -7,6 +7,7 @@
 <meta name="description" content="Whiterabbit es la agencia tech en Asunción que automatiza procesos con inteligencia artificial, posiciona tu web en Google, desarrolla sistemas a medida y potencia tu marketing digital. Chatbots, SEO, desarrollo web y Meta Ads en Paraguay.">
 <meta name="keywords" content="automatización IA Paraguay, chatbot WhatsApp Asunción, SEO Paraguay, desarrollo web Paraguay, agencia marketing digital Asunción, inteligencia artificial empresas, sistemas a medida Paraguay, Meta Ads Paraguay, posicionamiento web Google, whiterabbit">
 <meta name="author" content="Whiterabbit">
+<meta name="google-site-verification" content="zsyI6f1LyOOEQk5wcGL9ZImi_x8WlAC4pg0lYSmLAT0" />
 <meta name="robots" content="index, follow">
 <meta property="og:title" content="Whiterabbit — Automatización con IA, SEO & Desarrollo en Paraguay">
 <meta property="og:description" content="Automatizamos procesos con IA, posicionamos tu web en Google, desarrollamos sistemas a medida y hacemos crecer tu negocio con marketing inteligente.">
@@ -164,9 +165,9 @@ section{position:relative;z-index:1;padding:8rem 3rem}
 .service-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;position:relative;overflow:hidden;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);cursor:default}
 .service-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.4s}
 .service-card:nth-child(1)::before{background:radial-gradient(circle at 30% 20%,rgba(0,232,255,0.06),transparent 60%)}
-.service-card:nth-child(2)::before{background:radial-gradient(circle at 70% 20%,rgba(139,61,255,0.06),transparent 60%)}
-.service-card:nth-child(3)::before{background:radial-gradient(circle at 50% 20%,rgba(255,61,139,0.06),transparent 60%)}
-.service-card:nth-child(4)::before{background:radial-gradient(circle at 40% 20%,rgba(34,197,94,0.06),transparent 60%)}
+.service-card:nth-child(2)::before{background:radial-gradient(circle at 70% 20%,rgba(34,197,94,0.06),transparent 60%)}
+.service-card:nth-child(3)::before{background:radial-gradient(circle at 50% 20%,rgba(139,61,255,0.06),transparent 60%)}
+.service-card:nth-child(4)::before{background:radial-gradient(circle at 40% 20%,rgba(255,61,139,0.06),transparent 60%)}
 .service-card:hover::before{opacity:1}
 .service-card:hover{border-color:rgba(255,255,255,0.08);transform:translateY(-6px)}
 .service-icon{width:56px;height:56px;position:relative;margin-bottom:1.5rem}
@@ -209,6 +210,15 @@ section{position:relative;z-index:1;padding:8rem 3rem}
 .service-card p{font-size:0.85rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem}
 .service-tags{display:flex;flex-wrap:wrap;gap:6px}
 .service-tag{padding:3px 10px;font-size:0.68rem;font-family:var(--mono);border-radius:100px;border:1px solid var(--border);color:var(--dim);letter-spacing:0.02em}
+/* Card-specific accent colors for nums and tags */
+.service-card:nth-child(1) .service-num{color:var(--cyan)}
+.service-card:nth-child(1) .service-tag{color:var(--cyan);border-color:rgba(0,232,255,0.25)}
+.service-card:nth-child(2) .service-num{color:#22c55e}
+.service-card:nth-child(2) .service-tag{color:#22c55e;border-color:rgba(34,197,94,0.25)}
+.service-card:nth-child(3) .service-num{color:var(--violet)}
+.service-card:nth-child(3) .service-tag{color:var(--violet);border-color:rgba(139,61,255,0.25)}
+.service-card:nth-child(4) .service-num{color:var(--magenta)}
+.service-card:nth-child(4) .service-tag{color:var(--magenta);border-color:rgba(255,61,139,0.25)}
 
 /* ── PROCESS ── */
 .process-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
