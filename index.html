@@ -1157,6 +1157,13 @@ window.addEventListener('scroll', () => {
 
 // ── REVEAL ──
 const reveals = document.querySelectorAll('.reveal');
+// Make already-visible elements show instantly (no flash of empty)
+reveals.forEach(el => {
+  const rect = el.getBoundingClientRect();
+  if (rect.top < window.innerHeight + 50) {
+    el.classList.add('visible');
+  }
+});
 const rObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
@@ -1166,8 +1173,8 @@ const rObs = new IntersectionObserver(entries => {
       e.target.classList.add('visible');
     }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px 0px 0px' });
-reveals.forEach(el => rObs.observe(el));
+}, { threshold: 0.05, rootMargin: '0px 0px 100px 0px' });
+reveals.forEach(el => { if (!el.classList.contains('visible')) rObs.observe(el); });
 
 // ── CODE FLASHLIGHT CANVAS ──
 const codeCanvas = document.getElementById('codeCanvas');
