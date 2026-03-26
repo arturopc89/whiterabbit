@@ -58,9 +58,8 @@ body{font-family:var(--body);background:var(--bg);color:var(--white);-webkit-fon
 .nav.scrolled{background:rgba(3,3,5,0.85);backdrop-filter:blur(24px) saturate(1.2);border-bottom:1px solid var(--border)}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--white)}
 .nav-logo-mark{width:36px;height:36px;position:relative;display:flex;align-items:center;justify-content:center}
-.nav-logo-mark::before{content:'';position:absolute;inset:0;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--violet));opacity:0.9;transition:transform 0.3s}
-.nav-logo:hover .nav-logo-mark::before{transform:rotate(45deg) scale(1.05)}
-.nav-logo-letter{font-family:var(--display);font-weight:800;font-size:1.1rem;color:var(--bg);position:relative;z-index:1}
+.nav-logo-mark svg{transition:transform 0.3s}
+.nav-logo:hover .nav-logo-mark svg{transform:translateX(3px) scale(1.05)}
 .nav-brand{font-family:var(--display);font-size:1.15rem;font-weight:700;letter-spacing:-0.03em}
 .nav-brand em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .nav-links{display:flex;align-items:center;gap:2.5rem}
@@ -297,7 +296,9 @@ section{position:relative;z-index:1;padding:8rem 3rem}
 <!-- ═══ NAV ═══ -->
 <nav class="nav" id="nav">
   <a href="#" class="nav-logo">
-    <div class="nav-logo-mark"><span class="nav-logo-letter">W</span></div>
+    <div class="nav-logo-mark">
+      <img src="wr_iso_logo.png" alt="Whiterabbit" width="36" height="36">
+    </div>
     <div class="nav-brand">white<em>rabbit</em></div>
   </a>
   <div class="nav-links">
@@ -349,131 +350,297 @@ section{position:relative;z-index:1;padding:8rem 3rem}
 
 <span class="c-cmt">/* hecho con código puro
    follow the white rabbit */</span></code></pre></div>
-        <!-- Neon rabbit SVG — animated humanoid -->
+        <!-- Neon rabbit SVG — wireframe low-poly with glowing nodes -->
         <svg class="rabbit-svg rabbit-pulse" viewBox="0 0 300 460" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            <filter id="glowStrong"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="glowStrong"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="glowSoft"><feGaussianBlur stdDeviation="12" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <!-- Ambient glow behind the rabbit -->
+            <radialGradient id="ambientGlow" cx="50%" cy="45%" r="50%">
+              <stop offset="0%" stop-color="rgba(0,232,255,0.08)"/>
+              <stop offset="100%" stop-color="rgba(0,232,255,0)"/>
+            </radialGradient>
           </defs>
 
-          <!-- ══ BODY (behind head) ══ -->
-          <g id="rabbitBody">
-            <!-- Body shape — torso (closer to head) -->
-            <ellipse cx="150" cy="312" rx="52" ry="60" fill="rgba(0,232,255,0.015)" stroke="var(--cyan)" stroke-width="1.5" opacity="0.9"/>
-            <!-- Neck connector -->
-            <path d="M132 254 Q150 260 168 254" stroke="var(--cyan)" stroke-width="1" opacity="0.3" fill="none"/>
-            <!-- Chest emblem -->
-            <text x="150" y="318" text-anchor="middle" font-family="Syne,sans-serif" font-weight="800" font-size="20" fill="none" stroke="var(--cyan)" stroke-width="0.7" opacity="0.35">W</text>
-            <!-- Circuit patterns on body -->
-            <path d="M122 295 L122 315 L137 315 L137 340" fill="none" stroke="rgba(0,232,255,0.25)" stroke-width="0.8" stroke-dasharray="4 3"/>
-            <circle cx="122" cy="295" r="2" fill="var(--cyan)" filter="url(#glow)"/>
-            <circle cx="137" cy="340" r="2" fill="var(--cyan)" filter="url(#glow)"/>
-            <path d="M178 300 L178 320 L163 320 L163 345" fill="none" stroke="rgba(0,232,255,0.25)" stroke-width="0.8" stroke-dasharray="4 3"/>
-            <circle cx="178" cy="300" r="2" fill="var(--cyan)" filter="url(#glow)"/>
-            <circle cx="163" cy="345" r="2" fill="var(--cyan)" filter="url(#glow)"/>
-            <path d="M128 360 L150 360 L150 375 L172 375" fill="none" stroke="rgba(0,232,255,0.2)" stroke-width="0.8" stroke-dasharray="4 3"/>
-            <circle cx="128" cy="360" r="1.5" fill="var(--cyan)" filter="url(#glow)"/>
-            <circle cx="172" cy="375" r="1.5" fill="var(--cyan)" filter="url(#glow)"/>
-            <!-- Left arm — flush to body -->
-            <path d="M100 298 Q94 316 95 346 Q96 356 100 360" stroke="var(--cyan)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-            <circle cx="100" cy="363" r="6" fill="rgba(0,232,255,0.03)" stroke="var(--cyan)" stroke-width="1.1"/>
-            <!-- Right arm — flush to body, very subtle sway -->
-            <g style="transform-origin:200px 298px">
-              <path d="M200 298 Q206 316 205 346 Q204 356 200 360" stroke="var(--cyan)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-              <circle cx="200" cy="363" r="6" fill="rgba(0,232,255,0.03)" stroke="var(--cyan)" stroke-width="1.1"/>
-              <animateTransform attributeName="transform" type="rotate" values="0 200 298;-1.5 200 298;0 200 298;1 200 298;0 200 298" dur="5s" repeatCount="indefinite"/>
-            </g>
-            <!-- Legs -->
-            <path d="M128 388 L125 410" stroke="var(--cyan)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-            <path d="M172 388 L175 410" stroke="var(--cyan)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-            <!-- Feet -->
-            <ellipse cx="122" cy="418" rx="18" ry="7" fill="rgba(0,232,255,0.03)" stroke="var(--cyan)" stroke-width="1.2"/>
-            <ellipse cx="178" cy="418" rx="18" ry="7" fill="rgba(0,232,255,0.03)" stroke="var(--cyan)" stroke-width="1.2"/>
-            <!-- Breathing animation on body -->
-            <animateTransform attributeName="transform" type="scale" values="1 1;1.008 1.012;1 1" dur="3.5s" repeatCount="indefinite" additive="sum"/>
-          </g>
+          <!-- Ambient background glow -->
+          <ellipse cx="150" cy="200" rx="160" ry="200" fill="url(#ambientGlow)">
+            <animate attributeName="rx" values="160;170;160" dur="4s" repeatCount="indefinite"/>
+            <animate attributeName="ry" values="200;210;200" dur="4s" repeatCount="indefinite"/>
+          </ellipse>
 
-          <!-- ══ HEAD GROUP (separate from body, with subtle tilt) ══ -->
-          <g id="rabbitHead" style="transform-origin:150px 200px">
-            <animateTransform attributeName="transform" type="rotate" values="0 150 200;-2 150 200;0 150 200;1.5 150 200;0 150 200" dur="6s" repeatCount="indefinite"/>
+          <!-- ══ HEAD GROUP with subtle tilt ══ -->
+          <g id="rabbitHead" style="transform-origin:150px 220px">
+            <animateTransform attributeName="transform" type="rotate" values="0 150 220;-2 150 220;0 150 220;1.5 150 220;0 150 220" dur="6s" repeatCount="indefinite"/>
 
-            <!-- Ears with independent wiggle -->
-            <!-- Left ear -->
-            <g id="leftEar" style="transform-origin:120px 155px">
-              <animateTransform attributeName="transform" type="rotate" values="0 120 155;-4 120 155;0 120 155;2 120 155;0 120 155" dur="5s" repeatCount="indefinite"/>
-              <path d="M108 155 Q107 75 116 32 Q120 12 130 12 Q138 12 140 38 Q141 65 140 115" stroke="var(--cyan)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-              <path d="M118 145 Q117 88 122 48 Q125 28 132 28 Q136 30 137 52 Q138 78 137 125 Z" fill="rgba(0,232,255,0.025)" stroke="rgba(0,232,255,0.4)" stroke-width="0.6"/>
-              <!-- Inner ear circuit -->
-              <path d="M126 125 Q126 82 128 52" fill="none" stroke="rgba(0,232,255,0.3)" stroke-width="0.8" stroke-dasharray="3 3"/>
-              <circle cx="128" cy="52" r="2" fill="var(--cyan)" filter="url(#glow)"/>
-              <circle cx="126" cy="92" r="1.5" fill="var(--cyan)" filter="url(#glow)"/>
-            </g>
-            <!-- Right ear -->
-            <g id="rightEar" style="transform-origin:180px 155px">
-              <animateTransform attributeName="transform" type="rotate" values="0 180 155;3 180 155;0 180 155;-3 180 155;0 180 155" dur="4.2s" repeatCount="indefinite"/>
-              <path d="M192 155 Q193 75 184 32 Q180 12 170 12 Q162 12 160 38 Q159 65 160 115" stroke="var(--cyan)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-              <path d="M182 145 Q183 88 178 48 Q175 28 168 28 Q164 30 163 52 Q162 78 163 125 Z" fill="rgba(0,232,255,0.025)" stroke="rgba(0,232,255,0.4)" stroke-width="0.6"/>
-              <path d="M174 125 Q174 82 172 52" fill="none" stroke="rgba(0,232,255,0.3)" stroke-width="0.8" stroke-dasharray="3 3"/>
-              <circle cx="172" cy="52" r="2" fill="var(--cyan)" filter="url(#glow)"/>
-              <circle cx="174" cy="92" r="1.5" fill="var(--cyan)" filter="url(#glow)"/>
+            <!-- ── LEFT EAR wireframe ── -->
+            <g id="leftEar" style="transform-origin:125px 160px">
+              <animateTransform attributeName="transform" type="rotate" values="0 125 160;-4 125 160;0 125 160;2 125 160;0 125 160" dur="5s" repeatCount="indefinite"/>
+              <!-- Outer ear wireframe triangles -->
+              <polygon points="110,155 125,15 105,85" fill="none" stroke="rgba(0,232,255,0.2)" stroke-width="0.6"/>
+              <polygon points="125,15 140,155 110,155" fill="none" stroke="rgba(0,232,255,0.35)" stroke-width="0.7"/>
+              <polygon points="125,15 140,155 135,80" fill="none" stroke="rgba(0,232,255,0.15)" stroke-width="0.5"/>
+              <polygon points="110,155 105,85 125,120" fill="none" stroke="rgba(0,232,255,0.25)" stroke-width="0.6"/>
+              <polygon points="105,85 125,15 115,50" fill="none" stroke="rgba(0,232,255,0.18)" stroke-width="0.5"/>
+              <polygon points="125,120 105,85 135,80" fill="none" stroke="rgba(0,232,255,0.22)" stroke-width="0.5"/>
+              <polygon points="125,120 135,80 140,155" fill="none" stroke="rgba(0,232,255,0.2)" stroke-width="0.5"/>
+              <!-- Inner ear fill triangles (subtle) -->
+              <polygon points="115,50 125,15 130,55" fill="rgba(0,232,255,0.025)" stroke="rgba(0,232,255,0.3)" stroke-width="0.5"/>
+              <polygon points="115,50 130,55 120,90" fill="rgba(0,232,255,0.02)" stroke="rgba(0,232,255,0.2)" stroke-width="0.4"/>
+              <polygon points="120,90 130,55 135,80" fill="rgba(0,232,255,0.015)" stroke="rgba(0,232,255,0.18)" stroke-width="0.4"/>
+              <polygon points="120,90 125,120 110,155" fill="rgba(0,232,255,0.01)" stroke="rgba(0,232,255,0.15)" stroke-width="0.4"/>
+              <!-- Ear nodes -->
+              <circle cx="125" cy="15" r="2.5" fill="#00e8ff" filter="url(#glowStrong)">
+                <animate attributeName="r" values="2.5;3.5;2.5" dur="3s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="115" cy="50" r="1.8" fill="#00e8ff" filter="url(#glow)">
+                <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="130" cy="55" r="1.5" fill="#00e8ff" filter="url(#glow)"/>
+              <circle cx="105" cy="85" r="2" fill="#00e8ff" filter="url(#glow)">
+                <animate attributeName="r" values="2;2.8;2" dur="4s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="135" cy="80" r="1.5" fill="#00e8ff" filter="url(#glow)"/>
+              <circle cx="120" cy="90" r="1.3" fill="rgba(0,232,255,0.7)"/>
+              <circle cx="125" cy="120" r="1.8" fill="#00e8ff" filter="url(#glow)"/>
             </g>
 
-            <!-- Head shape -->
-            <ellipse cx="150" cy="195" rx="58" ry="52" fill="rgba(0,232,255,0.02)" stroke="var(--cyan)" stroke-width="1.8"/>
+            <!-- ── RIGHT EAR wireframe ── -->
+            <g id="rightEar" style="transform-origin:175px 160px">
+              <animateTransform attributeName="transform" type="rotate" values="0 175 160;3 175 160;0 175 160;-3 175 160;0 175 160" dur="4.2s" repeatCount="indefinite"/>
+              <polygon points="190,155 175,15 195,85" fill="none" stroke="rgba(0,232,255,0.2)" stroke-width="0.6"/>
+              <polygon points="175,15 160,155 190,155" fill="none" stroke="rgba(0,232,255,0.35)" stroke-width="0.7"/>
+              <polygon points="175,15 160,155 165,80" fill="none" stroke="rgba(0,232,255,0.15)" stroke-width="0.5"/>
+              <polygon points="190,155 195,85 175,120" fill="none" stroke="rgba(0,232,255,0.25)" stroke-width="0.6"/>
+              <polygon points="195,85 175,15 185,50" fill="none" stroke="rgba(0,232,255,0.18)" stroke-width="0.5"/>
+              <polygon points="175,120 195,85 165,80" fill="none" stroke="rgba(0,232,255,0.22)" stroke-width="0.5"/>
+              <polygon points="175,120 165,80 160,155" fill="none" stroke="rgba(0,232,255,0.2)" stroke-width="0.5"/>
+              <!-- Inner ear fill -->
+              <polygon points="185,50 175,15 170,55" fill="rgba(0,232,255,0.025)" stroke="rgba(0,232,255,0.3)" stroke-width="0.5"/>
+              <polygon points="185,50 170,55 180,90" fill="rgba(0,232,255,0.02)" stroke="rgba(0,232,255,0.2)" stroke-width="0.4"/>
+              <polygon points="180,90 170,55 165,80" fill="rgba(0,232,255,0.015)" stroke="rgba(0,232,255,0.18)" stroke-width="0.4"/>
+              <polygon points="180,90 175,120 190,155" fill="rgba(0,232,255,0.01)" stroke="rgba(0,232,255,0.15)" stroke-width="0.4"/>
+              <!-- Ear nodes -->
+              <circle cx="175" cy="15" r="2.5" fill="#00e8ff" filter="url(#glowStrong)">
+                <animate attributeName="r" values="2.5;3.5;2.5" dur="3.2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="185" cy="50" r="1.8" fill="#00e8ff" filter="url(#glow)">
+                <animate attributeName="opacity" values="0.6;1;0.6" dur="2.8s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="170" cy="55" r="1.5" fill="#00e8ff" filter="url(#glow)"/>
+              <circle cx="195" cy="85" r="2" fill="#00e8ff" filter="url(#glow)">
+                <animate attributeName="r" values="2;2.8;2" dur="3.7s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="165" cy="80" r="1.5" fill="#00e8ff" filter="url(#glow)"/>
+              <circle cx="180" cy="90" r="1.3" fill="rgba(0,232,255,0.7)"/>
+              <circle cx="175" cy="120" r="1.8" fill="#00e8ff" filter="url(#glow)"/>
+            </g>
 
-            <!-- Cheeks subtle glow -->
-            <circle cx="105" cy="205" r="12" fill="rgba(0,232,255,0.02)" stroke="none"/>
-            <circle cx="195" cy="205" r="12" fill="rgba(0,232,255,0.02)" stroke="none"/>
+            <!-- ── HEAD wireframe mesh ── -->
+            <!-- Outer head triangles -->
+            <polygon points="110,155 92,200 100,240" fill="none" stroke="rgba(0,232,255,0.3)" stroke-width="0.7"/>
+            <polygon points="110,155 150,160 130,190" fill="none" stroke="rgba(0,232,255,0.25)" stroke-width="0.6"/>
+            <polygon points="150,160 190,155 170,190" fill="none" stroke="rgba(0,232,255,0.25)" stroke-width="0.6"/>
+            <polygon points="190,155 208,200 200,240" fill="none" stroke="rgba(0,232,255,0.3)" stroke-width="0.7"/>
+            <polygon points="92,200 110,155 130,190" fill="none" stroke="rgba(0,232,255,0.2)" stroke-width="0.6"/>
+            <polygon points="208,200 190,155 170,190" fill="none" stroke="rgba(0,232,255,0.2)" stroke-width="0.6"/>
+            <!-- Mid-face triangles -->
+            <polygon points="130,190 150,160 170,190" fill="rgba(0,232,255,0.015)" stroke="rgba(0,232,255,0.3)" stroke-width="0.6"/>
+            <polygon points="92,200 130,190 120,220" fill="rgba(0,232,255,0.01)" stroke="rgba(0,232,255,0.22)" stroke-width="0.5"/>
+            <polygon points="208,200 170,190 180,220" fill="rgba(0,232,255,0.01)" stroke="rgba(0,232,255,0.22)" stroke-width="0.5"/>
+            <polygon points="130,190 150,210 120,220" fill="rgba(0,232,255,0.02)" stroke="rgba(0,232,255,0.2)" stroke-width="0.5"/>
+            <polygon points="170,190 150,210 180,220" fill="rgba(0,232,255,0.02)" stroke="rgba(0,232,255,0.2)" stroke-width="0.5"/>
+            <polygon points="130,190 170,190 150,210" fill="rgba(0,232,255,0.025)" stroke="rgba(0,232,255,0.28)" stroke-width="0.6"/>
+            <!-- Lower face -->
+            <polygon points="120,220 150,210 150,240" fill="rgba(0,232,255,0.015)" stroke="rgba(0,232,255,0.2)" stroke-width="0.5"/>
+            <polygon points="180,220 150,210 150,240" fill="rgba(0,232,255,0.015)" stroke="rgba(0,232,255,0.2)" stroke-width="0.5"/>
+            <polygon points="100,240 120,220 130,255" fill="rgba(0,232,255,0.01)" stroke="rgba(0,232,255,0.18)" stroke-width="0.5"/>
+            <polygon points="200,240 180,220 170,255" fill="rgba(0,232,255,0.01)" stroke="rgba(0,232,255,0.18)" stroke-width="0.5"/>
+            <polygon points="120,220 150,240 130,255" fill="rgba(0,232,255,0.012)" stroke="rgba(0,232,255,0.15)" stroke-width="0.5"/>
+            <polygon points="180,220 150,240 170,255" fill="rgba(0,232,255,0.012)" stroke="rgba(0,232,255,0.15)" stroke-width="0.5"/>
+            <polygon points="130,255 150,240 170,255" fill="rgba(0,232,255,0.02)" stroke="rgba(0,232,255,0.2)" stroke-width="0.5"/>
+            <!-- Chin -->
+            <polygon points="130,255 150,270 170,255" fill="rgba(0,232,255,0.015)" stroke="rgba(0,232,255,0.25)" stroke-width="0.6"/>
+            <polygon points="100,240 130,255 115,270" fill="none" stroke="rgba(0,232,255,0.12)" stroke-width="0.4"/>
+            <polygon points="200,240 170,255 185,270" fill="none" stroke="rgba(0,232,255,0.12)" stroke-width="0.4"/>
 
-            <!-- Eye sockets -->
-            <ellipse cx="128" cy="188" rx="14" ry="13" fill="rgba(0,232,255,0.04)" stroke="rgba(0,232,255,0.25)" stroke-width="0.8"/>
-            <ellipse cx="172" cy="188" rx="14" ry="13" fill="rgba(0,232,255,0.04)" stroke="rgba(0,232,255,0.25)" stroke-width="0.8"/>
-
-            <!-- Eyes — open state with blink -->
+            <!-- ── EYES — glowing orbs in wireframe ── -->
             <g id="eyesOpen">
-              <circle cx="128" cy="188" r="6" fill="var(--cyan)" filter="url(#glowStrong)">
-                <animate attributeName="r" values="6;5.5;6" dur="3s" repeatCount="indefinite"/>
+              <!-- Eye glow halos -->
+              <circle cx="128" cy="198" r="16" fill="rgba(0,232,255,0.04)" filter="url(#glowSoft)"/>
+              <circle cx="172" cy="198" r="16" fill="rgba(0,232,255,0.04)" filter="url(#glowSoft)"/>
+              <!-- Eye cores -->
+              <circle cx="128" cy="198" r="7" fill="#00e8ff" filter="url(#glowStrong)">
+                <animate attributeName="r" values="7;6;7" dur="3s" repeatCount="indefinite"/>
               </circle>
-              <circle cx="172" cy="188" r="6" fill="var(--cyan)" filter="url(#glowStrong)">
-                <animate attributeName="r" values="6;5.5;6" dur="3s" repeatCount="indefinite"/>
+              <circle cx="172" cy="198" r="7" fill="#00e8ff" filter="url(#glowStrong)">
+                <animate attributeName="r" values="7;6;7" dur="3s" repeatCount="indefinite"/>
               </circle>
-              <!-- Eye highlights -->
-              <circle cx="126" cy="186" r="2" fill="#fff" opacity="0.85"/>
-              <circle cx="170" cy="186" r="2" fill="#fff" opacity="0.85"/>
-              <circle cx="131" cy="190" r="1" fill="#fff" opacity="0.5"/>
-              <circle cx="175" cy="190" r="1" fill="#fff" opacity="0.5"/>
-              <!-- Blink: hide eyes briefly -->
+              <!-- Bright center -->
+              <circle cx="126" cy="196" r="2.5" fill="#fff" opacity="0.9"/>
+              <circle cx="170" cy="196" r="2.5" fill="#fff" opacity="0.9"/>
+              <circle cx="131" cy="200" r="1.2" fill="#fff" opacity="0.5"/>
+              <circle cx="175" cy="200" r="1.2" fill="#fff" opacity="0.5"/>
+              <!-- Blink -->
               <animate attributeName="opacity" values="1;1;1;1;1;0;1;1;1;1;1;1;1;1;0;0;1;1;1;1" dur="5s" repeatCount="indefinite"/>
             </g>
-            <!-- Eyes — closed state (thin line) shown during blink -->
             <g id="eyesClosed" opacity="0">
-              <line x1="118" y1="188" x2="138" y2="188" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="162" y1="188" x2="182" y2="188" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="116" y1="198" x2="140" y2="198" stroke="#00e8ff" stroke-width="2" stroke-linecap="round" filter="url(#glow)"/>
+              <line x1="160" y1="198" x2="184" y2="198" stroke="#00e8ff" stroke-width="2" stroke-linecap="round" filter="url(#glow)"/>
               <animate attributeName="opacity" values="0;0;0;0;0;1;0;0;0;0;0;0;0;0;1;1;0;0;0;0" dur="5s" repeatCount="indefinite"/>
             </g>
 
-            <!-- Nose -->
-            <ellipse cx="150" cy="210" rx="5" ry="3.5" fill="rgba(0,232,255,0.2)" stroke="var(--cyan)" stroke-width="1" filter="url(#glow)"/>
+            <!-- Nose node -->
+            <circle cx="150" cy="222" r="3" fill="#00e8ff" filter="url(#glowStrong)">
+              <animate attributeName="r" values="3;3.5;3" dur="2s" repeatCount="indefinite"/>
+            </circle>
 
-            <!-- Mouth — slight smile -->
-            <path d="M150 214 Q150 221 142 222" stroke="var(--cyan)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-            <path d="M150 214 Q150 221 158 222" stroke="var(--cyan)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            <!-- Whiskers — glowing lines -->
+            <g id="whiskersLeft" style="transform-origin:115px 225px">
+              <animateTransform attributeName="transform" type="rotate" values="0 115 225;-2 115 225;0 115 225;1 115 225;0 115 225" dur="4s" repeatCount="indefinite"/>
+              <line x1="60" y1="215" x2="115" y2="222" stroke="rgba(0,232,255,0.3)" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="55" y1="228" x2="112" y2="228" stroke="rgba(0,232,255,0.22)" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="62" y1="240" x2="115" y2="234" stroke="rgba(0,232,255,0.15)" stroke-width="0.7" stroke-linecap="round"/>
+              <circle cx="60" cy="215" r="1.5" fill="#00e8ff" filter="url(#glow)"/>
+              <circle cx="55" cy="228" r="1.2" fill="rgba(0,232,255,0.6)"/>
+              <circle cx="62" cy="240" r="1" fill="rgba(0,232,255,0.4)"/>
+            </g>
+            <g id="whiskersRight" style="transform-origin:185px 225px">
+              <animateTransform attributeName="transform" type="rotate" values="0 185 225;2 185 225;0 185 225;-1 185 225;0 185 225" dur="4.3s" repeatCount="indefinite"/>
+              <line x1="240" y1="215" x2="185" y2="222" stroke="rgba(0,232,255,0.3)" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="245" y1="228" x2="188" y2="228" stroke="rgba(0,232,255,0.22)" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="238" y1="240" x2="185" y2="234" stroke="rgba(0,232,255,0.15)" stroke-width="0.7" stroke-linecap="round"/>
+              <circle cx="240" cy="215" r="1.5" fill="#00e8ff" filter="url(#glow)"/>
+              <circle cx="245" cy="228" r="1.2" fill="rgba(0,232,255,0.6)"/>
+              <circle cx="238" cy="240" r="1" fill="rgba(0,232,255,0.4)"/>
+            </g>
 
-            <!-- Whiskers — animated subtle sway -->
-            <g id="whiskersLeft" style="transform-origin:110px 207px">
-              <animateTransform attributeName="transform" type="rotate" values="0 110 207;-2 110 207;0 110 207;1 110 207;0 110 207" dur="4s" repeatCount="indefinite"/>
-              <line x1="95" y1="200" x2="115" y2="205" stroke="rgba(0,232,255,0.35)" stroke-width="0.8" stroke-linecap="round"/>
-              <line x1="93" y1="208" x2="114" y2="209" stroke="rgba(0,232,255,0.28)" stroke-width="0.8" stroke-linecap="round"/>
-              <line x1="96" y1="216" x2="115" y2="213" stroke="rgba(0,232,255,0.2)" stroke-width="0.8" stroke-linecap="round"/>
-            </g>
-            <g id="whiskersRight" style="transform-origin:190px 207px">
-              <animateTransform attributeName="transform" type="rotate" values="0 190 207;2 190 207;0 190 207;-1 190 207;0 190 207" dur="4.3s" repeatCount="indefinite"/>
-              <line x1="205" y1="200" x2="185" y2="205" stroke="rgba(0,232,255,0.35)" stroke-width="0.8" stroke-linecap="round"/>
-              <line x1="207" y1="208" x2="186" y2="209" stroke="rgba(0,232,255,0.28)" stroke-width="0.8" stroke-linecap="round"/>
-              <line x1="204" y1="216" x2="185" y2="213" stroke="rgba(0,232,255,0.2)" stroke-width="0.8" stroke-linecap="round"/>
-            </g>
+            <!-- ── HEAD VERTEX NODES (the bright intersections) ── -->
+            <circle cx="150" cy="160" r="2.5" fill="#00e8ff" filter="url(#glowStrong)">
+              <animate attributeName="r" values="2.5;3.5;2.5" dur="3.5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="110" cy="155" r="2.2" fill="#00e8ff" filter="url(#glow)"/>
+            <circle cx="190" cy="155" r="2.2" fill="#00e8ff" filter="url(#glow)"/>
+            <circle cx="92" cy="200" r="2.5" fill="#00e8ff" filter="url(#glowStrong)">
+              <animate attributeName="opacity" values="0.7;1;0.7" dur="2.8s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="208" cy="200" r="2.5" fill="#00e8ff" filter="url(#glowStrong)">
+              <animate attributeName="opacity" values="0.7;1;0.7" dur="3.1s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="130" cy="190" r="1.8" fill="#00e8ff" filter="url(#glow)"/>
+            <circle cx="170" cy="190" r="1.8" fill="#00e8ff" filter="url(#glow)"/>
+            <circle cx="100" cy="240" r="2" fill="#00e8ff" filter="url(#glow)">
+              <animate attributeName="r" values="2;2.8;2" dur="4.2s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="200" cy="240" r="2" fill="#00e8ff" filter="url(#glow)">
+              <animate attributeName="r" values="2;2.8;2" dur="3.8s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="120" cy="220" r="1.5" fill="rgba(0,232,255,0.8)"/>
+            <circle cx="180" cy="220" r="1.5" fill="rgba(0,232,255,0.8)"/>
+            <circle cx="150" cy="240" r="1.8" fill="#00e8ff" filter="url(#glow)"/>
+            <circle cx="130" cy="255" r="2" fill="#00e8ff" filter="url(#glow)"/>
+            <circle cx="170" cy="255" r="2" fill="#00e8ff" filter="url(#glow)"/>
+            <circle cx="150" cy="270" r="2.5" fill="#00e8ff" filter="url(#glowStrong)">
+              <animate attributeName="r" values="2.5;3.2;2.5" dur="3s" repeatCount="indefinite"/>
+            </circle>
           </g>
 
+          <!-- ══ BODY wireframe (behind head, with breathing) ══ -->
+          <g id="rabbitBody">
+            <animateTransform attributeName="transform" type="scale" values="1 1;1.006 1.01;1 1" dur="3.5s" repeatCount="indefinite" additive="sum"/>
+            
+            <!-- Neck to shoulder structure -->
+            <polygon points="130,255 150,270 115,290" fill="none" stroke="rgba(0,232,255,0.2)" stroke-width="0.5"/>
+            <polygon points="170,255 150,270 185,290" fill="none" stroke="rgba(0,232,255,0.2)" stroke-width="0.5"/>
+            <polygon points="150,270 115,290 185,290" fill="rgba(0,232,255,0.01)" stroke="rgba(0,232,255,0.25)" stroke-width="0.6"/>
+            
+            <!-- Torso wireframe mesh -->
+            <polygon points="115,290 150,295 100,330" fill="rgba(0,232,255,0.012)" stroke="rgba(0,232,255,0.22)" stroke-width="0.5"/>
+            <polygon points="185,290 150,295 200,330" fill="rgba(0,232,255,0.012)" stroke="rgba(0,232,255,0.22)" stroke-width="0.5"/>
+            <polygon points="150,295 100,330 150,340" fill="rgba(0,232,255,0.018)" stroke="rgba(0,232,255,0.2)" stroke-width="0.5"/>
+            <polygon points="150,295 200,330 150,340" fill="rgba(0,232,255,0.018)" stroke="rgba(0,232,255,0.2)" stroke-width="0.5"/>
+            <polygon points="100,330 150,340 105,370" fill="rgba(0,232,255,0.01)" stroke="rgba(0,232,255,0.18)" stroke-width="0.5"/>
+            <polygon points="200,330 150,340 195,370" fill="rgba(0,232,255,0.01)" stroke="rgba(0,232,255,0.18)" stroke-width="0.5"/>
+            <polygon points="105,370 150,340 150,380" fill="rgba(0,232,255,0.008)" stroke="rgba(0,232,255,0.15)" stroke-width="0.4"/>
+            <polygon points="195,370 150,340 150,380" fill="rgba(0,232,255,0.008)" stroke="rgba(0,232,255,0.15)" stroke-width="0.4"/>
+            <polygon points="105,370 150,380 120,400" fill="none" stroke="rgba(0,232,255,0.12)" stroke-width="0.4"/>
+            <polygon points="195,370 150,380 180,400" fill="none" stroke="rgba(0,232,255,0.12)" stroke-width="0.4"/>
+            
+            <!-- Arms -->
+            <polygon points="115,290 100,330 85,310" fill="none" stroke="rgba(0,232,255,0.18)" stroke-width="0.5"/>
+            <polygon points="85,310 100,330 80,355" fill="none" stroke="rgba(0,232,255,0.15)" stroke-width="0.4"/>
+            <polygon points="185,290 200,330 215,310" fill="none" stroke="rgba(0,232,255,0.18)" stroke-width="0.5"/>
+            <g style="transform-origin:200px 330px">
+              <polygon points="215,310 200,330 220,355" fill="none" stroke="rgba(0,232,255,0.15)" stroke-width="0.4"/>
+              <animateTransform attributeName="transform" type="rotate" values="0 200 330;-1.5 200 330;0 200 330;1 200 330;0 200 330" dur="5s" repeatCount="indefinite"/>
+            </g>
+            
+            <!-- Legs -->
+            <polygon points="120,400 150,380 135,430" fill="none" stroke="rgba(0,232,255,0.12)" stroke-width="0.4"/>
+            <polygon points="180,400 150,380 165,430" fill="none" stroke="rgba(0,232,255,0.12)" stroke-width="0.4"/>
+            <!-- Feet -->
+            <polygon points="135,430 110,440 145,445" fill="none" stroke="rgba(0,232,255,0.15)" stroke-width="0.5"/>
+            <polygon points="165,430 190,440 155,445" fill="none" stroke="rgba(0,232,255,0.15)" stroke-width="0.5"/>
+            
+            <!-- Body nodes -->
+            <circle cx="115" cy="290" r="2.2" fill="#00e8ff" filter="url(#glow)"/>
+            <circle cx="185" cy="290" r="2.2" fill="#00e8ff" filter="url(#glow)"/>
+            <circle cx="150" cy="295" r="2.5" fill="#00e8ff" filter="url(#glowStrong)">
+              <animate attributeName="r" values="2.5;3.2;2.5" dur="3.3s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="100" cy="330" r="2" fill="#00e8ff" filter="url(#glow)">
+              <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="200" cy="330" r="2" fill="#00e8ff" filter="url(#glow)">
+              <animate attributeName="opacity" values="0.6;1;0.6" dur="2.8s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="150" cy="340" r="2" fill="#00e8ff" filter="url(#glow)"/>
+            <circle cx="85" cy="310" r="1.5" fill="rgba(0,232,255,0.7)"/>
+            <circle cx="215" cy="310" r="1.5" fill="rgba(0,232,255,0.7)"/>
+            <circle cx="80" cy="355" r="2" fill="#00e8ff" filter="url(#glow)">
+              <animate attributeName="r" values="2;2.8;2" dur="4s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="220" cy="355" r="2" fill="#00e8ff" filter="url(#glow)">
+              <animate attributeName="r" values="2;2.8;2" dur="3.6s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="105" cy="370" r="1.8" fill="#00e8ff" filter="url(#glow)"/>
+            <circle cx="195" cy="370" r="1.8" fill="#00e8ff" filter="url(#glow)"/>
+            <circle cx="150" cy="380" r="1.5" fill="rgba(0,232,255,0.7)"/>
+            <circle cx="120" cy="400" r="1.5" fill="rgba(0,232,255,0.6)"/>
+            <circle cx="180" cy="400" r="1.5" fill="rgba(0,232,255,0.6)"/>
+            <circle cx="135" cy="430" r="1.5" fill="rgba(0,232,255,0.5)"/>
+            <circle cx="165" cy="430" r="1.5" fill="rgba(0,232,255,0.5)"/>
+            <circle cx="110" cy="440" r="1.3" fill="rgba(0,232,255,0.4)"/>
+            <circle cx="190" cy="440" r="1.3" fill="rgba(0,232,255,0.4)"/>
+            
+            <!-- Chest "W" emblem — wireframe style -->
+            <text x="150" y="328" text-anchor="middle" font-family="Syne,sans-serif" font-weight="800" font-size="16" fill="none" stroke="rgba(0,232,255,0.2)" stroke-width="0.6">W</text>
+          </g>
+
+          <!-- ══ FLOATING PARTICLES around rabbit ══ -->
+          <g id="floatingParticles">
+            <circle cx="50" cy="150" r="1" fill="#00e8ff" opacity="0.4">
+              <animate attributeName="cy" values="150;130;150" dur="5s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.4;0.8;0.4" dur="5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="250" cy="180" r="0.8" fill="#8b3dff" opacity="0.3">
+              <animate attributeName="cy" values="180;160;180" dur="4s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="40" cy="300" r="1.2" fill="#00e8ff" opacity="0.3">
+              <animate attributeName="cx" values="40;50;40" dur="6s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.3;0.6;0.3" dur="6s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="260" cy="350" r="0.7" fill="#ff3d8b" opacity="0.3">
+              <animate attributeName="cy" values="350;335;350" dur="3.5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="70" cy="80" r="0.9" fill="#8b3dff" opacity="0.2">
+              <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4.5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="230" cy="100" r="1" fill="#00e8ff" opacity="0.25">
+              <animate attributeName="cy" values="100;85;100" dur="5.5s" repeatCount="indefinite"/>
+            </circle>
+          </g>
         </svg>
         <!-- Orbit dots -->
         <div class="orbit-dot"></div>
@@ -592,7 +759,7 @@ section{position:relative;z-index:1;padding:8rem 3rem}
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Escribinos por WhatsApp
       </a>
-      <a href="mailto:hola@whiterabbit.com.py" class="btn-outline">O mandanos un email →</a>
+      <a href="/cdn-cgi/l/email-protection#8de5e2e1eccdfae5e4f9e8ffecefefe4f9a3eee2e0a3fdf4" class="btn-outline">O mandanos un email →</a>
     </div>
   </div>
 </section>
@@ -622,14 +789,14 @@ section{position:relative;z-index:1;padding:8rem 3rem}
 
 <!-- ═══ FOOTER ═══ -->
 <footer class="footer">
-  <div class="footer-left">&copy; 2026 Whiterabbit — Asunción, Paraguay</div>
+  <div class="footer-left"><img src="wr_iso_logo.png" alt="Whiterabbit" width="36" height="36" style="vertical-align:middle;margin-right:10px">&copy; 2026 Whiterabbit — Asunción, Paraguay</div>
   <div class="footer-right"><a href="#">Instagram</a><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
 </footer>
 
 <!-- ═══ WA FLOAT ═══ -->
 <a href="https://wa.me/595XXXXXXXXX" target="_blank" class="wa-float"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── PARTICLE SYSTEM ──
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
