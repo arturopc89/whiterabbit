@@ -299,7 +299,7 @@ section{position:relative;z-index:1;padding:8rem 3rem}
 #codeCanvas{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0.9}
 
 /* ── REVEAL ── */
-.reveal{opacity:0;transform:translateY(24px);transition:all 0.7s cubic-bezier(0.16,1,0.3,1)}
+.reveal{opacity:0;transform:translateY(16px);transition:all 0.4s cubic-bezier(0.16,1,0.3,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
 /* ── GLITCH TEXT (CSS only) ── */
@@ -1159,7 +1159,7 @@ window.addEventListener('scroll', () => {
 const reveals = document.querySelectorAll('.reveal');
 const rObs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+}, { threshold: 0.05, rootMargin: '0px 0px 40px 0px' });
 reveals.forEach(el => rObs.observe(el));
 
 // ── CODE FLASHLIGHT CANVAS ──
