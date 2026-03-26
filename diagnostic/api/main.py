@@ -292,7 +292,7 @@ async def contact(req: ContactRequest):
                     "https://api.resend.com/emails",
                     headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
                     json={
-                        "from": "WhiteRabbit <onboarding@resend.dev>",
+                        "from": "WhiteRabbit <hola@whiterabbit.com.py>",
                         "to": [email],
                         "subject": "¡Recibimos tu mensaje! — WhiteRabbit",
                         "html": email_welcome(name),
@@ -366,7 +366,7 @@ async def reply_message(msg_id: int, req: ReplyRequest, authorization: str | Non
                         "Content-Type": "application/json",
                     },
                     json={
-                        "from": "WhiteRabbit <onboarding@resend.dev>",
+                        "from": "WhiteRabbit <hola@whiterabbit.com.py>",
                         "to": [msg["email"]],
                         "subject": f"Re: Tu mensaje a WhiteRabbit",
                         "html": email_reply(msg["name"], reply_text, msg["message"]),
