@@ -3,419 +3,911 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Whiterabbit — Automatización, IA & Desarrollo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-:root {
-  --black: #050508; --dark: #0a0a0f; --dark-surface: #0f0f16; --dark-card: #12121c;
-  --dark-border: rgba(255,255,255,0.06); --white: #f0f0f5; --muted: #6b6b80;
-  --cyan: #00F0FF; --cyan-dim: rgba(0,240,255,0.15); --cyan-glow: rgba(0,240,255,0.4);
-  --violet: #7B2FFF; --violet-dim: rgba(123,47,255,0.15); --violet-glow: rgba(123,47,255,0.3);
-  --gradient: linear-gradient(135deg, #00F0FF, #7B2FFF);
-  --gradient-text: linear-gradient(135deg, #00F0FF 0%, #7B2FFF 100%);
-  --font-display: 'Outfit', sans-serif; --font-mono: 'JetBrains Mono', monospace;
+<title>Whiterabbit — Automatización con IA, SEO, Desarrollo Web & Marketing en Paraguay</title>
+<meta name="description" content="Whiterabbit es la agencia tech en Asunción que automatiza procesos con inteligencia artificial, posiciona tu web en Google, desarrolla sistemas a medida y potencia tu marketing digital. Chatbots, SEO, desarrollo web y Meta Ads en Paraguay.">
+<meta name="keywords" content="automatización IA Paraguay, chatbot WhatsApp Asunción, SEO Paraguay, desarrollo web Paraguay, agencia marketing digital Asunción, inteligencia artificial empresas, sistemas a medida Paraguay, Meta Ads Paraguay, posicionamiento web Google, whiterabbit">
+<meta name="author" content="Whiterabbit">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Whiterabbit — Automatización con IA, SEO & Desarrollo en Paraguay">
+<meta property="og:description" content="Automatizamos procesos con IA, posicionamos tu web en Google, desarrollamos sistemas a medida y hacemos crecer tu negocio con marketing inteligente.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://whiterabbit.com.py">
+<meta property="og:locale" content="es_PY">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://whiterabbit.com.py">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Whiterabbit",
+  "description": "Agencia de automatización con IA, SEO, desarrollo web y marketing digital en Asunción, Paraguay",
+  "url": "https://whiterabbit.com.py",
+  "areaServed": {"@type": "Country", "name": "Paraguay"},
+  "address": {"@type": "PostalAddress", "addressLocality": "Asunción", "addressCountry": "PY"},
+  "serviceType": ["Automatización con IA", "SEO", "Desarrollo Web", "Marketing Digital", "Chatbots", "Meta Ads"],
+  "knowsAbout": ["Inteligencia Artificial", "Machine Learning", "SEO Técnico", "Desarrollo de Software", "Marketing Digital"],
+  "sameAs": []
 }
-html { scroll-behavior: smooth; }
-body { font-family: var(--font-display); background: var(--black); color: var(--white); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--dark); } ::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.2); border-radius: 3px; }
-::selection { background: var(--cyan-dim); color: var(--cyan); }
-.noise-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,240,255,0.04) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 20%, rgba(123,47,255,0.03) 0%, transparent 50%); }
-.grid-overlay { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03; background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 60px 60px; }
-.cursor-glow { position: fixed; width: 300px; height: 300px; border-radius: 50%; pointer-events: none; z-index: 0; background: radial-gradient(circle, rgba(0,240,255,0.04), transparent 70%); transform: translate(-50%, -50%); transition: opacity 0.3s; }
-.navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.25rem 3rem; display: flex; align-items: center; justify-content: space-between; background: rgba(5,5,8,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid var(--dark-border); transition: all 0.3s; }
-.navbar.scrolled { padding: 0.8rem 3rem; background: rgba(5,5,8,0.92); }
-.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--white); }
-.logo-icon { width: 38px; height: 38px; } .logo-icon svg { width: 100%; height: 100%; }
-.logo-text { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; }
-.logo-text span { background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.nav-links { display: flex; align-items: center; gap: 2rem; }
-.nav-links a { color: var(--muted); text-decoration: none; font-size: 0.88rem; font-weight: 400; transition: color 0.3s; letter-spacing: 0.02em; }
-.nav-links a:hover { color: var(--cyan); }
-.nav-cta { padding: 0.6rem 1.5rem; background: transparent; border: 1px solid rgba(0,240,255,0.3); border-radius: 6px; color: var(--cyan) !important; font-weight: 500 !important; transition: all 0.3s !important; cursor: pointer; }
-.nav-cta:hover { background: var(--cyan-dim) !important; border-color: var(--cyan) !important; box-shadow: 0 0 20px rgba(0,240,255,0.15); }
-.hero { position: relative; z-index: 1; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 8rem 3rem 4rem; overflow: hidden; }
-.hero-content { text-align: center; max-width: 860px; animation: fadeUp 1s ease-out; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-.hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: 100px; font-size: 0.78rem; font-family: var(--font-mono); color: var(--cyan); letter-spacing: 0.04em; margin-bottom: 2rem; animation: fadeUp 1s ease-out 0.2s both; }
-.hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 10px var(--cyan); animation: pulse 2s ease-in-out infinite; }
-@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
-.hero h1 { font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.5rem; animation: fadeUp 1s ease-out 0.3s both; }
-.gradient-text { background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.hero-sub { font-size: 1.15rem; color: var(--muted); max-width: 580px; margin: 0 auto 2.5rem; line-height: 1.7; font-weight: 300; animation: fadeUp 1s ease-out 0.5s both; }
-.hero-ctas { display: flex; align-items: center; justify-content: center; gap: 1rem; animation: fadeUp 1s ease-out 0.7s both; }
-.btn-primary { display: inline-flex; align-items: center; gap: 8px; padding: 0.9rem 2.2rem; background: var(--gradient); border: none; border-radius: 8px; color: var(--black); font-weight: 600; font-size: 0.95rem; font-family: var(--font-display); cursor: pointer; text-decoration: none; transition: all 0.3s; box-shadow: 0 0 30px rgba(0,240,255,0.2); }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(0,240,255,0.3); }
-.btn-secondary { display: inline-flex; align-items: center; gap: 8px; padding: 0.9rem 2.2rem; background: transparent; border: 1px solid var(--dark-border); border-radius: 8px; color: var(--white); font-weight: 500; font-size: 0.95rem; font-family: var(--font-display); cursor: pointer; text-decoration: none; transition: all 0.3s; }
-.btn-secondary:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.03); }
-.hero-orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; animation: float 8s ease-in-out infinite; }
-.hero-orb-1 { width: 400px; height: 400px; background: rgba(0,240,255,0.08); top: 10%; left: -5%; }
-.hero-orb-2 { width: 350px; height: 350px; background: rgba(123,47,255,0.07); bottom: 5%; right: -5%; animation-delay: -4s; }
-@keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -20px); } }
-.rabbit-container { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); width: 280px; height: 380px; display: flex; align-items: center; justify-content: center; opacity: 0.12; }
-.rabbit-silhouette { font-size: 12rem; line-height: 1; background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: blur(1px); }
-.stats-bar { position: relative; z-index: 1; display: flex; justify-content: center; gap: 4rem; padding: 3rem; border-top: 1px solid var(--dark-border); border-bottom: 1px solid var(--dark-border); background: var(--dark); }
-.stat-item { text-align: center; } .stat-number { font-size: 2.2rem; font-weight: 800; background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.04em; }
-section { position: relative; z-index: 1; padding: 7rem 3rem; }
-.section-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--cyan); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
-.section-title { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; line-height: 1.15; }
-.section-sub { font-size: 1.05rem; color: var(--muted); max-width: 560px; line-height: 1.7; font-weight: 300; }
-.problem-section { background: var(--dark); border-top: 1px solid var(--dark-border); }
-.problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1100px; margin: 3rem auto 0; }
-.problem-list { display: flex; flex-direction: column; gap: 1.2rem; }
-.problem-item { display: flex; align-items: flex-start; gap: 14px; padding: 1.2rem 1.4rem; background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: 10px; transition: all 0.3s; }
-.problem-item:hover { border-color: rgba(0,240,255,0.15); background: rgba(0,240,255,0.02); }
-.problem-icon { width: 36px; height: 36px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,80,80,0.08); border: 1px solid rgba(255,80,80,0.15); border-radius: 8px; font-size: 1rem; color: #ff5050; }
-.problem-text { font-size: 0.92rem; color: var(--muted); line-height: 1.6; } .problem-text strong { color: var(--white); font-weight: 600; }
-.solution-card { padding: 2.5rem; background: var(--dark-card); border: 1px solid rgba(0,240,255,0.1); border-radius: 16px; position: relative; overflow: hidden; }
-.solution-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient); }
-.solution-card h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
-.solution-card p { font-size: 0.95rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
-.solution-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.metric { padding: 1rem; background: rgba(0,240,255,0.03); border: 1px solid rgba(0,240,255,0.08); border-radius: 8px; }
-.metric-value { font-size: 1.5rem; font-weight: 700; color: var(--cyan); } .metric-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
-.services-section { max-width: 1200px; margin: 0 auto; }
-.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
-.service-card { padding: 2rem; background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: 14px; position: relative; overflow: hidden; transition: all 0.4s; }
-.service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 0; transition: height 0.4s; }
-.service-card:nth-child(1)::before { background: linear-gradient(180deg, rgba(0,240,255,0.08), transparent); }
-.service-card:nth-child(2)::before { background: linear-gradient(180deg, rgba(123,47,255,0.08), transparent); }
-.service-card:nth-child(3)::before { background: linear-gradient(180deg, rgba(0,240,255,0.04), rgba(123,47,255,0.04)); }
-.service-card:hover::before { height: 100%; } .service-card:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-4px); }
-.service-number { font-family: var(--font-mono); font-size: 0.72rem; color: var(--cyan); letter-spacing: 0.06em; margin-bottom: 1.5rem; opacity: 0.6; }
-.service-icon-wrap { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem; border-radius: 10px; }
-.service-card:nth-child(1) .service-icon-wrap { background: var(--cyan-dim); border: 1px solid rgba(0,240,255,0.2); }
-.service-card:nth-child(2) .service-icon-wrap { background: var(--violet-dim); border: 1px solid rgba(123,47,255,0.2); }
-.service-card:nth-child(3) .service-icon-wrap { background: linear-gradient(135deg, var(--cyan-dim), var(--violet-dim)); border: 1px solid rgba(0,240,255,0.15); }
-.service-icon-wrap svg { width: 22px; height: 22px; }
-.service-card h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.7rem; }
-.service-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
-.service-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.service-tag { padding: 4px 12px; font-size: 0.72rem; font-family: var(--font-mono); background: rgba(255,255,255,0.03); border: 1px solid var(--dark-border); border-radius: 100px; color: var(--muted); }
-.cases-section { background: var(--dark); border-top: 1px solid var(--dark-border); }
-.cases-content { max-width: 1100px; margin: 3rem auto 0; }
-.cases-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-.case-card { background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: 14px; overflow: hidden; transition: all 0.4s; }
-.case-card:hover { border-color: rgba(0,240,255,0.15); transform: translateY(-3px); }
-.case-visual { height: 180px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-.case-card:nth-child(1) .case-visual { background: linear-gradient(135deg, rgba(0,240,255,0.06), rgba(123,47,255,0.06)); }
-.case-card:nth-child(2) .case-visual { background: linear-gradient(135deg, rgba(123,47,255,0.06), rgba(0,240,255,0.04)); }
-.case-card:nth-child(3) .case-visual { background: linear-gradient(135deg, rgba(0,240,255,0.04), rgba(0,200,100,0.04)); }
-.case-card:nth-child(4) .case-visual { background: linear-gradient(135deg, rgba(123,47,255,0.04), rgba(255,100,50,0.04)); }
-.case-visual-icon { font-size: 3rem; opacity: 0.35; }
-.case-visual-grid { position: absolute; inset: 0; opacity: 0.06; background-image: linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 20px 20px; }
-.case-before-after { position: absolute; bottom: 12px; left: 12px; right: 12px; display: flex; gap: 8px; }
-.case-ba-item { flex: 1; padding: 8px 10px; border-radius: 8px; font-size: 0.7rem; font-family: var(--font-mono); text-align: center; }
-.case-before { background: rgba(255,80,80,0.1); border: 1px solid rgba(255,80,80,0.2); color: #ff6b6b; }
-.case-after { background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.2); color: var(--cyan); }
-.case-ba-value { font-size: 1.05rem; font-weight: 700; display: block; }
-.case-body { padding: 1.4rem; }
-.case-industry { font-family: var(--font-mono); font-size: 0.68rem; color: var(--cyan); letter-spacing: 0.06em; margin-bottom: 0.4rem; opacity: 0.7; }
-.case-body h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; }
-.case-body p { font-size: 0.83rem; color: var(--muted); line-height: 1.6; margin-bottom: 0.8rem; }
-.case-results { display: flex; gap: 1rem; }
-.case-result { display: flex; align-items: center; gap: 6px; font-size: 0.76rem; }
-.case-result-icon { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.15); color: var(--cyan); }
-.case-result-text { color: var(--muted); } .case-result-text strong { color: var(--white); }
-.calc-section { border-top: 1px solid var(--dark-border); }
-.calc-content { max-width: 900px; margin: 3rem auto 0; }
-.calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
-.calc-inputs { display: flex; flex-direction: column; gap: 1.6rem; }
-.calc-input-group label { display: block; font-size: 0.88rem; color: var(--muted); margin-bottom: 0.5rem; }
-.calc-input-group label strong { color: var(--white); font-weight: 500; }
-.calc-slider-row { display: flex; align-items: center; gap: 12px; }
-.calc-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; background: var(--dark-card); border-radius: 2px; outline: none; border: 1px solid var(--dark-border); }
-.calc-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--gradient); cursor: pointer; border: 2px solid var(--black); box-shadow: 0 0 12px rgba(0,240,255,0.3); }
-.calc-slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--gradient); cursor: pointer; border: 2px solid var(--black); }
-.calc-value { min-width: 56px; text-align: right; font-family: var(--font-mono); font-size: 0.88rem; font-weight: 500; color: var(--cyan); }
-.calc-results { background: var(--dark-card); border: 1px solid rgba(0,240,255,0.1); border-radius: 16px; padding: 2rem; position: relative; overflow: hidden; }
-.calc-results::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient); }
-.calc-results-title { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.5rem; }
-.calc-result-item { margin-bottom: 1.2rem; }
-.calc-result-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 2px; }
-.calc-result-value { font-size: 1.8rem; font-weight: 800; }
-.calc-result-value.cyan { color: var(--cyan); }
-.calc-result-value.gradient { background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.calc-result-sub { font-size: 0.75rem; color: var(--muted); margin-top: 2px; font-family: var(--font-mono); }
-.calc-divider { height: 1px; background: var(--dark-border); margin: 1rem 0; }
-.calc-cta-mini { display: inline-flex; align-items: center; gap: 6px; margin-top: 0.8rem; padding: 0.55rem 1.1rem; background: var(--cyan-dim); border: 1px solid rgba(0,240,255,0.2); border-radius: 8px; color: var(--cyan); font-size: 0.82rem; font-weight: 500; text-decoration: none; transition: all 0.3s; }
-.calc-cta-mini:hover { background: rgba(0,240,255,0.2); }
-.process-section { background: var(--dark); border-top: 1px solid var(--dark-border); border-bottom: 1px solid var(--dark-border); }
-.process-content { max-width: 1100px; margin: 3rem auto 0; }
-.process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
-.process-line { position: absolute; top: 36px; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, var(--cyan), var(--violet)); opacity: 0.3; }
-.process-step { text-align: center; position: relative; padding: 0 1rem; }
-.step-number { width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; border-radius: 50%; background: var(--dark-card); border: 1px solid var(--dark-border); font-family: var(--font-mono); font-size: 1.1rem; font-weight: 600; color: var(--cyan); position: relative; z-index: 2; transition: all 0.3s; }
-.process-step:hover .step-number { border-color: var(--cyan); box-shadow: 0 0 25px rgba(0,240,255,0.15); }
-.step-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; } .step-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
-.tech-marquee { position: relative; z-index: 1; padding: 2rem 0; overflow: hidden; border-bottom: 1px solid var(--dark-border); background: var(--dark); }
-.marquee-track { display: flex; gap: 3rem; animation: marquee 30s linear infinite; width: max-content; }
-@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-.marquee-item { font-family: var(--font-mono); font-size: 0.82rem; color: var(--muted); white-space: nowrap; letter-spacing: 0.04em; display: flex; align-items: center; gap: 8px; opacity: 0.5; }
-.marquee-item::before { content: ''; width: 4px; height: 4px; background: var(--cyan); border-radius: 50%; opacity: 0.5; }
-.faq-section { border-top: 1px solid var(--dark-border); }
-.faq-content { max-width: 760px; margin: 3rem auto 0; }
-.faq-item { border: 1px solid var(--dark-border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; background: var(--dark-card); transition: all 0.3s; }
-.faq-item:hover { border-color: rgba(0,240,255,0.12); }
-.faq-item.active { border-color: rgba(0,240,255,0.2); }
-.faq-question { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 1.4rem; cursor: pointer; gap: 1rem; font-size: 0.92rem; font-weight: 500; color: var(--white); transition: color 0.3s; user-select: none; }
-.faq-question:hover { color: var(--cyan); }
-.faq-chevron { width: 18px; height: 18px; flex-shrink: 0; transition: transform 0.3s; color: var(--muted); }
-.faq-item.active .faq-chevron { transform: rotate(180deg); color: var(--cyan); }
-.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; padding: 0 1.4rem; }
-.faq-item.active .faq-answer { max-height: 300px; padding: 0 1.4rem 1.1rem; }
-.faq-answer p { font-size: 0.86rem; color: var(--muted); line-height: 1.7; }
-.chatbot-toggle { position: fixed; bottom: 2rem; right: 5.5rem; z-index: 998; width: 56px; height: 56px; border-radius: 50%; background: var(--gradient); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 25px rgba(0,240,255,0.3); transition: all 0.3s; animation: fadeUp 1s ease-out 1.8s both; }
-.chatbot-toggle:hover { transform: scale(1.1); box-shadow: 0 4px 35px rgba(0,240,255,0.5); }
-.chatbot-toggle svg { width: 26px; height: 26px; stroke: var(--black); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.chatbot-toggle.active { background: var(--dark-card); border: 1px solid var(--dark-border); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-.chatbot-toggle.active svg { stroke: var(--muted); }
-.chatbot-window { position: fixed; bottom: 6rem; right: 2rem; z-index: 997; width: 380px; max-height: 520px; background: var(--dark-surface); border: 1px solid var(--dark-border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.5); transform: translateY(20px) scale(0.95); opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-.chatbot-window.open { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
-.chatbot-header { padding: 1rem 1.2rem; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--dark-border); background: var(--dark-card); }
-.chatbot-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
-.chatbot-header-info h4 { font-size: 0.88rem; font-weight: 600; } .chatbot-header-info p { font-size: 0.72rem; color: var(--muted); display: flex; align-items: center; gap: 4px; }
-.chatbot-header-info p::before { content: ''; width: 5px; height: 5px; background: #25D366; border-radius: 50%; }
-.chatbot-messages { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 8px; min-height: 280px; }
-.chatbot-messages::-webkit-scrollbar { width: 3px; } .chatbot-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-.chat-msg { max-width: 85%; padding: 0.65rem 0.9rem; border-radius: 12px; font-size: 0.83rem; line-height: 1.5; animation: msgIn 0.3s ease-out; }
-@keyframes msgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-.chat-msg.bot { background: var(--dark-card); border: 1px solid var(--dark-border); color: var(--white); align-self: flex-start; border-bottom-left-radius: 4px; }
-.chat-msg.user { background: rgba(0,240,255,0.1); border: 1px solid rgba(0,240,255,0.15); color: var(--cyan); align-self: flex-end; border-bottom-right-radius: 4px; }
-.chat-msg.typing .dots { display: inline-flex; gap: 4px; } .chat-msg.typing .dots span { width: 6px; height: 6px; background: var(--muted); border-radius: 50%; animation: typing 1.2s ease-in-out infinite; }
-.chat-msg.typing .dots span:nth-child(2) { animation-delay: 0.15s; } .chat-msg.typing .dots span:nth-child(3) { animation-delay: 0.3s; }
-@keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
-.chat-quick-replies { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 1rem 0.5rem; }
-.chat-quick-btn { padding: 5px 12px; font-size: 0.73rem; font-family: var(--font-display); background: transparent; border: 1px solid rgba(0,240,255,0.2); border-radius: 100px; color: var(--cyan); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-.chat-quick-btn:hover { background: var(--cyan-dim); border-color: var(--cyan); }
-.chatbot-input-area { padding: 0.7rem 1rem; border-top: 1px solid var(--dark-border); display: flex; gap: 8px; background: var(--dark-card); }
-.chatbot-input { flex: 1; padding: 0.55rem 0.9rem; background: var(--dark-surface); border: 1px solid var(--dark-border); border-radius: 8px; color: var(--white); font-size: 0.83rem; font-family: var(--font-display); outline: none; transition: border-color 0.3s; }
-.chatbot-input:focus { border-color: rgba(0,240,255,0.3); } .chatbot-input::placeholder { color: rgba(255,255,255,0.2); }
-.chatbot-send { width: 36px; height: 36px; border-radius: 8px; background: var(--gradient); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
-.chatbot-send:hover { transform: scale(1.05); } .chatbot-send svg { width: 15px; height: 15px; fill: var(--black); }
-.cta-section { text-align: center; background: var(--black); position: relative; overflow: hidden; }
-.cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,240,255,0.04), transparent); }
-.cta-content { position: relative; z-index: 1; }
-.cta-title { font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 1rem; letter-spacing: -0.02em; }
-.cta-sub { font-size: 1.05rem; color: var(--muted); margin-bottom: 2.5rem; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.7; }
-.cta-buttons { display: flex; align-items: center; justify-content: center; gap: 1rem; }
-.btn-whatsapp { display: inline-flex; align-items: center; gap: 10px; padding: 1rem 2.5rem; background: #25D366; border: none; border-radius: 8px; color: #fff; font-weight: 600; font-size: 1rem; font-family: var(--font-display); cursor: pointer; text-decoration: none; transition: all 0.3s; box-shadow: 0 0 30px rgba(37,211,102,0.2); }
-.btn-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(37,211,102,0.3); } .btn-whatsapp svg { width: 20px; height: 20px; }
-.footer { position: relative; z-index: 1; padding: 3rem; border-top: 1px solid var(--dark-border); display: flex; align-items: center; justify-content: space-between; background: var(--dark); }
-.footer-left { font-size: 0.82rem; color: var(--muted); } .footer-right { display: flex; gap: 2rem; }
-.footer-right a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.3s; } .footer-right a:hover { color: var(--cyan); }
-.wa-float { position: fixed; bottom: 2rem; right: 2rem; z-index: 999; width: 56px; height: 56px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; box-shadow: 0 4px 20px rgba(37,211,102,0.3); transition: all 0.3s; animation: fadeUp 1s ease-out 1.5s both; }
-.wa-float:hover { transform: scale(1.1); box-shadow: 0 4px 30px rgba(37,211,102,0.5); } .wa-float svg { width: 28px; height: 28px; fill: #fff; }
-.reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal.visible { opacity: 1; transform: translateY(0); }
-@media (max-width: 768px) {
-  .navbar { padding: 1rem 1.5rem; } .nav-links { display: none; }
-  section { padding: 4rem 1.5rem; } .hero { padding: 7rem 1.5rem 3rem; } .hero h1 { font-size: 2.4rem; }
-  .stats-bar { flex-wrap: wrap; gap: 2rem; padding: 2rem 1.5rem; }
-  .problem-grid, .calc-layout { grid-template-columns: 1fr; gap: 2rem; }
-  .services-grid, .cases-grid { grid-template-columns: 1fr; }
-  .process-steps { grid-template-columns: 1fr 1fr; gap: 2rem; } .process-line { display: none; }
-  .cta-buttons { flex-direction: column; }
-  .footer { flex-direction: column; gap: 1rem; text-align: center; }
-  .rabbit-container { display: none; }
-  .chatbot-window { width: calc(100vw - 2rem); right: 1rem; bottom: 5rem; max-height: 70vh; }
-  .chatbot-toggle { right: 4.5rem; }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#030305;--surface:#08080d;--card:#0c0c14;
+  --border:rgba(255,255,255,0.05);
+  --white:#eeeef3;--muted:#55556a;--dim:#2a2a3a;
+  --cyan:#00e8ff;--violet:#8b3dff;--magenta:#ff3d8b;
+  --display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'Space Mono',monospace;
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:var(--body);background:var(--bg);color:var(--white);-webkit-font-smoothing:antialiased;cursor:none}
+::selection{background:rgba(0,232,255,0.15);color:var(--cyan)}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:rgba(0,232,255,0.12);border-radius:2px}
+
+/* ── CUSTOM CURSOR ── */
+.cursor{position:fixed;width:20px;height:20px;border:1.5px solid var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transition:width 0.2s,height 0.2s,border-color 0.2s,transform 0.1s;transform:translate(-50%,-50%);mix-blend-mode:difference}
+.cursor.hover{width:50px;height:50px;border-color:var(--magenta)}
+.cursor-dot{position:fixed;width:4px;height:4px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:background 0.2s}
+
+/* ── CANVAS BG ── */
+#particleCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 3rem;display:flex;align-items:center;justify-content:space-between;transition:all 0.4s}
+.nav.scrolled{background:rgba(3,3,5,0.85);backdrop-filter:blur(24px) saturate(1.2);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--white)}
+.nav-logo-mark{width:36px;height:36px;position:relative;display:flex;align-items:center;justify-content:center}
+.nav-logo-mark::before{content:'';position:absolute;inset:0;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--violet));opacity:0.9;transition:transform 0.3s}
+.nav-logo:hover .nav-logo-mark::before{transform:rotate(45deg) scale(1.05)}
+.nav-logo-letter{font-family:var(--display);font-weight:800;font-size:1.1rem;color:var(--bg);position:relative;z-index:1}
+.nav-brand{font-family:var(--display);font-size:1.15rem;font-weight:700;letter-spacing:-0.03em}
+.nav-brand em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;align-items:center;gap:2.5rem}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.82rem;font-weight:400;transition:color 0.3s;position:relative}
+.nav-links a:hover{color:var(--white)}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--cyan);transition:width 0.3s}
+.nav-links a:hover::after{width:100%}
+.nav-cta{padding:0.55rem 1.4rem;border:1px solid rgba(0,232,255,0.25);border-radius:6px;color:var(--cyan) !important;font-weight:500 !important;transition:all 0.3s !important}
+.nav-cta:hover{background:rgba(0,232,255,0.08) !important;border-color:var(--cyan) !important}
+.nav-cta::after{display:none !important}
+
+/* ── HERO ── */
+.hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;padding:0 3rem;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;max-width:1300px;margin:0 auto;width:100%}
+.hero-left{position:relative;z-index:2}
+.hero-overline{font-family:var(--mono);font-size:0.72rem;color:var(--cyan);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px;opacity:0;animation:slideUp 0.8s 0.3s ease-out forwards}
+.hero-overline::before{content:'';width:24px;height:1px;background:var(--cyan)}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero h1{font-family:var(--display);font-size:clamp(3rem,5.5vw,4.8rem);font-weight:800;line-height:1;letter-spacing:-0.04em;margin-bottom:1.5rem}
+.hero h1 .line{display:block;overflow:hidden}
+.hero h1 .line span{display:inline-block;opacity:0;animation:slideUp 0.8s ease-out forwards}
+.hero h1 .line:nth-child(1) span{animation-delay:0.4s}
+.hero h1 .line:nth-child(2) span{animation-delay:0.55s}
+.hero h1 .line:nth-child(3) span{animation-delay:0.7s}
+.hero h1 .gradient{background:linear-gradient(135deg,var(--cyan) 0%,var(--violet) 50%,var(--magenta) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% 200%;animation:gradientShift 4s ease-in-out infinite}
+@keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hero-desc{font-size:1.05rem;color:var(--muted);line-height:1.8;max-width:480px;font-weight:300;margin-bottom:2.5rem;opacity:0;animation:slideUp 0.8s 0.85s ease-out forwards}
+.hero-ctas{display:flex;gap:1rem;opacity:0;animation:slideUp 0.8s 1s ease-out forwards}
+.btn-glow{position:relative;display:inline-flex;align-items:center;gap:8px;padding:0.85rem 2rem;border:none;border-radius:8px;font-family:var(--body);font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;overflow:hidden;transition:transform 0.3s}
+.btn-glow::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--cyan),var(--violet));z-index:0;transition:opacity 0.3s}
+.btn-glow::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--violet),var(--magenta));z-index:0;opacity:0;transition:opacity 0.3s}
+.btn-glow:hover::after{opacity:1}
+.btn-glow:hover{transform:translateY(-2px)}
+.btn-glow span{position:relative;z-index:1;color:var(--bg)}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;padding:0.85rem 2rem;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--white);font-family:var(--body);font-size:0.9rem;font-weight:500;cursor:pointer;text-decoration:none;transition:all 0.3s}
+.btn-outline:hover{border-color:rgba(255,255,255,0.12);background:rgba(255,255,255,0.02)}
+
+/* ── HERO RIGHT: NEON RABBIT ── */
+.hero-right{position:relative;height:550px;display:flex;align-items:center;justify-content:center}
+.rabbit-scene{position:relative;width:420px;height:520px;display:flex;align-items:center;justify-content:center}
+.rabbit-svg{width:340px;height:480px;position:relative;z-index:2;filter:drop-shadow(0 0 20px rgba(0,232,255,0.3)) drop-shadow(0 0 60px rgba(0,232,255,0.1));animation:rabbitFloat 5s ease-in-out infinite}
+@keyframes rabbitFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.rabbit-svg .neon-stroke{fill:none;stroke:var(--cyan);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rabbit-svg .neon-fill{fill:rgba(0,232,255,0.03);stroke:var(--cyan);stroke-width:1.2}
+.rabbit-svg .neon-eye{fill:var(--cyan);filter:drop-shadow(0 0 6px var(--cyan))}
+.rabbit-svg .neon-glow{fill:none;stroke:rgba(0,232,255,0.15);stroke-width:4;stroke-linecap:round}
+.rabbit-svg .circuit-line{fill:none;stroke:rgba(0,232,255,0.25);stroke-width:0.8;stroke-dasharray:4 3}
+.rabbit-svg .circuit-dot{fill:var(--cyan);r:2;filter:drop-shadow(0 0 4px var(--cyan))}
+.rabbit-svg .inner-glow{fill:none;stroke:rgba(0,232,255,0.08);stroke-width:6}
+.rabbit-pulse{animation:neonPulse 3s ease-in-out infinite}
+@keyframes neonPulse{0%,100%{opacity:1;filter:drop-shadow(0 0 20px rgba(0,232,255,0.3)) drop-shadow(0 0 60px rgba(0,232,255,0.1))}50%{opacity:0.85;filter:drop-shadow(0 0 30px rgba(0,232,255,0.5)) drop-shadow(0 0 80px rgba(0,232,255,0.15))}}
+.rabbit-ring{position:absolute;border-radius:50%;border:1px solid;animation:rabbitOrbit linear infinite}
+.rabbit-ring:nth-child(1){inset:-20px;border-color:rgba(0,232,255,0.08);animation-duration:25s}
+.rabbit-ring:nth-child(2){inset:10px;border-color:rgba(139,61,255,0.06);animation-duration:20s;animation-direction:reverse}
+.rabbit-ring:nth-child(3){inset:40px;border-color:rgba(0,232,255,0.04);animation-duration:30s}
+@keyframes rabbitOrbit{0%{transform:rotate(0deg);border-radius:50%}25%{border-radius:45% 55% 55% 45%}50%{transform:rotate(180deg);border-radius:50% 45% 50% 55%}75%{border-radius:55% 45% 45% 55%}100%{transform:rotate(360deg);border-radius:50%}}
+.orbit-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 25px rgba(0,232,255,0.3)}
+.orbit-dot:nth-child(5){animation:orb1 9s linear infinite}
+.orbit-dot:nth-child(6){animation:orb2 13s linear infinite;background:var(--violet);box-shadow:0 0 10px var(--violet)}
+.orbit-dot:nth-child(7){animation:orb3 11s linear infinite;background:var(--magenta);box-shadow:0 0 10px var(--magenta);width:4px;height:4px}
+@keyframes orb1{0%{transform:rotate(0deg) translateX(220px) rotate(0deg)}100%{transform:rotate(360deg) translateX(220px) rotate(-360deg)}}
+@keyframes orb2{0%{transform:rotate(90deg) translateX(180px) rotate(-90deg)}100%{transform:rotate(450deg) translateX(180px) rotate(-450deg)}}
+@keyframes orb3{0%{transform:rotate(200deg) translateX(195px) rotate(-200deg)}100%{transform:rotate(560deg) translateX(195px) rotate(-560deg)}}
+.hero-float-tag{position:absolute;padding:6px 14px;border-radius:6px;font-family:var(--mono);font-size:0.68rem;letter-spacing:0.03em;border:1px solid var(--border);background:rgba(8,8,13,0.7);backdrop-filter:blur(8px);color:var(--muted);animation:floatTag 6s ease-in-out infinite;white-space:nowrap;z-index:3}
+.hero-float-tag:nth-child(8){top:5%;right:0%;animation-delay:0s;color:var(--cyan);border-color:rgba(0,232,255,0.15)}
+.hero-float-tag:nth-child(9){bottom:15%;right:5%;animation-delay:-2s;color:var(--violet);border-color:rgba(139,61,255,0.15)}
+@keyframes floatTag{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* ── CODE REVEAL (desintegration) ── */
+.code-reveal{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.6s ease;pointer-events:none}
+.code-reveal pre{background:transparent;padding:1.5rem;font-family:var(--mono);font-size:0.72rem;line-height:1.8;color:var(--muted);text-align:left;white-space:pre;max-width:320px}
+.code-reveal .c-key{color:var(--cyan)}
+.code-reveal .c-prop{color:var(--magenta)}
+.code-reveal .c-val{color:var(--violet)}
+.code-reveal .c-num{color:var(--amber,#f59e0b)}
+.code-reveal .c-cmt{color:var(--dim);font-style:italic}
+.rabbit-scene.revealing .code-reveal{opacity:1}
+.rabbit-scene.revealing .rabbit-svg{opacity:0.06;filter:blur(6px) drop-shadow(0 0 40px rgba(0,232,255,0.2));transform:scale(1.03);transition:all 0.6s ease}
+.rabbit-scene.revealing .rabbit-ring{opacity:0.02;transition:opacity 0.6s}
+.rabbit-scene.revealing .orbit-dot{opacity:0;transition:opacity 0.3s}
+.rabbit-scene.revealing .hero-float-tag{opacity:0;transition:opacity 0.3s}
+.rabbit-svg{transition:all 0.6s ease}
+.rabbit-ring{transition:opacity 0.6s}
+
+/* ── MARQUEE ── */
+.marquee-section{position:relative;z-index:1;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1rem 0;overflow:hidden;background:var(--surface)}
+.marquee-track{display:flex;gap:4rem;animation:scroll 35s linear infinite;width:max-content}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.marquee-item{font-family:var(--mono);font-size:0.78rem;color:var(--dim);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.marquee-item::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--cyan);opacity:0.4}
+
+/* ── SECTIONS ── */
+section{position:relative;z-index:1;padding:8rem 3rem}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-overline{font-family:var(--mono);font-size:0.7rem;color:var(--cyan);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:10px}
+.section-overline::before{content:'';width:20px;height:1px;background:var(--cyan)}
+.section-title{font-family:var(--display);font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-0.03em;line-height:1.1;margin-bottom:1rem}
+.section-desc{font-size:0.95rem;color:var(--muted);max-width:520px;line-height:1.7;font-weight:300}
+
+/* ── SERVICES with CSS ART ICONS ── */
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-top:3.5rem}
+.service-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;position:relative;overflow:hidden;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);cursor:default}
+.service-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.4s}
+.service-card:nth-child(1)::before{background:radial-gradient(circle at 30% 20%,rgba(0,232,255,0.06),transparent 60%)}
+.service-card:nth-child(2)::before{background:radial-gradient(circle at 70% 20%,rgba(139,61,255,0.06),transparent 60%)}
+.service-card:nth-child(3)::before{background:radial-gradient(circle at 50% 20%,rgba(255,61,139,0.06),transparent 60%)}
+.service-card:nth-child(4)::before{background:radial-gradient(circle at 40% 20%,rgba(34,197,94,0.06),transparent 60%)}
+.service-card:hover::before{opacity:1}
+.service-card:hover{border-color:rgba(255,255,255,0.08);transform:translateY(-6px)}
+.service-icon{width:56px;height:56px;position:relative;margin-bottom:1.5rem}
+.service-icon-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+
+/* CSS Art Icons */
+.icon-bot{position:relative;width:56px;height:56px}
+.icon-bot .head{position:absolute;width:28px;height:22px;border:1.5px solid var(--cyan);border-radius:6px;top:14px;left:14px}
+.icon-bot .eye{position:absolute;width:4px;height:4px;background:var(--cyan);border-radius:50%;top:21px;box-shadow:0 0 8px var(--cyan)}
+.icon-bot .eye.l{left:20px}.icon-bot .eye.r{left:32px}
+.icon-bot .antenna{position:absolute;width:1.5px;height:10px;background:var(--cyan);top:4px;left:27px}
+.icon-bot .antenna::after{content:'';position:absolute;top:-3px;left:-2px;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.icon-bot .body{position:absolute;width:20px;height:14px;border:1.5px solid var(--cyan);border-radius:0 0 4px 4px;top:36px;left:18px;opacity:0.5}
+
+.icon-code{position:relative;width:56px;height:56px}
+.icon-code .bracket{position:absolute;font-family:var(--mono);font-size:1.8rem;font-weight:700;top:12px}
+.icon-code .bracket.l{left:8px;color:var(--violet)}
+.icon-code .bracket.r{right:8px;color:var(--violet)}
+.icon-code .line{position:absolute;height:1.5px;border-radius:1px;left:20px}
+.icon-code .line:nth-child(3){top:22px;width:16px;background:var(--violet)}
+.icon-code .line:nth-child(4){top:28px;width:12px;background:rgba(139,61,255,0.5);left:24px}
+.icon-code .line:nth-child(5){top:34px;width:18px;background:rgba(139,61,255,0.3)}
+
+.icon-chart{position:relative;width:56px;height:56px}
+.icon-chart .bar{position:absolute;bottom:12px;width:6px;border-radius:2px 2px 0 0}
+.icon-chart .bar:nth-child(1){left:10px;height:14px;background:rgba(255,61,139,0.3)}
+.icon-chart .bar:nth-child(2){left:20px;height:22px;background:rgba(255,61,139,0.5)}
+.icon-chart .bar:nth-child(3){left:30px;height:30px;background:var(--magenta);box-shadow:0 0 12px rgba(255,61,139,0.3)}
+.icon-chart .bar:nth-child(4){left:40px;height:18px;background:rgba(255,61,139,0.4)}
+.icon-chart .trend{position:absolute;top:10px;left:8px;width:40px;height:20px;border-bottom:1.5px solid var(--magenta);border-right:none;border-radius:0;clip-path:polygon(0 100%,30% 30%,60% 70%,100% 0,100% 100%);background:rgba(255,61,139,0.05)}
+
+.icon-seo{position:relative;width:56px;height:56px}
+.icon-seo .lens{position:absolute;width:22px;height:22px;border:1.5px solid #22c55e;border-radius:50%;top:10px;left:10px}
+.icon-seo .lens::after{content:'';position:absolute;bottom:-8px;right:-8px;width:12px;height:1.5px;background:#22c55e;transform:rotate(45deg);transform-origin:left}
+.icon-seo .rank{position:absolute;font-family:var(--mono);font-size:0.65rem;font-weight:700;color:#22c55e;right:8px;top:12px;text-shadow:0 0 8px rgba(34,197,94,0.5)}
+.icon-seo .arrow-up{position:absolute;bottom:12px;left:22px;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:8px solid #22c55e;filter:drop-shadow(0 0 4px rgba(34,197,94,0.4))}
+
+.service-num{font-family:var(--mono);font-size:0.68rem;color:var(--dim);margin-bottom:1.5rem;letter-spacing:0.06em}
+.service-card h3{font-family:var(--display);font-size:1.2rem;font-weight:600;margin-bottom:0.6rem;letter-spacing:-0.01em}
+.service-card p{font-size:0.85rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem}
+.service-tags{display:flex;flex-wrap:wrap;gap:6px}
+.service-tag{padding:3px 10px;font-size:0.68rem;font-family:var(--mono);border-radius:100px;border:1px solid var(--border);color:var(--dim);letter-spacing:0.02em}
+
+/* ── PROCESS ── */
+.process-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:3.5rem;position:relative}
+.process-connector{position:absolute;top:28px;left:12.5%;right:12.5%;height:1px;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--magenta));opacity:0.2}
+.process-step{text-align:center;position:relative;padding:0 1rem}
+.step-orb{width:56px;height:56px;margin:0 auto 1.2rem;position:relative;display:flex;align-items:center;justify-content:center}
+.step-orb::before{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid var(--border);transition:all 0.3s}
+.step-orb::after{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--card);z-index:0}
+.process-step:hover .step-orb::before{border-color:var(--cyan);box-shadow:0 0 20px rgba(0,232,255,0.1)}
+.step-num{font-family:var(--mono);font-size:0.85rem;font-weight:700;color:var(--cyan);position:relative;z-index:1}
+.step-title{font-family:var(--display);font-size:0.95rem;font-weight:600;margin-bottom:0.3rem}
+.step-desc{font-size:0.78rem;color:var(--muted);line-height:1.5}
+
+/* ── CTA ── */
+.cta-section{text-align:center;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 50% 50%,rgba(0,232,255,0.03),transparent),radial-gradient(ellipse 40% 40% at 60% 40%,rgba(139,61,255,0.02),transparent)}
+.cta-inner{position:relative;z-index:1}
+.cta-title{font-family:var(--display);font-size:clamp(2.2rem,4.5vw,3.2rem);font-weight:700;letter-spacing:-0.03em;margin-bottom:1rem}
+.cta-desc{font-size:1rem;color:var(--muted);max-width:460px;margin:0 auto 2.5rem;line-height:1.7;font-weight:300}
+.cta-buttons{display:flex;justify-content:center;gap:1rem}
+.btn-wa{display:inline-flex;align-items:center;gap:10px;padding:0.9rem 2.2rem;background:#25D366;border:none;border-radius:8px;color:#fff;font-weight:600;font-size:0.95rem;font-family:var(--body);cursor:pointer;text-decoration:none;transition:all 0.3s;box-shadow:0 0 25px rgba(37,211,102,0.15)}
+.btn-wa:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(37,211,102,0.25)}
+.btn-wa svg{width:18px;height:18px}
+
+/* ── FOOTER ── */
+.footer{position:relative;z-index:1;padding:2.5rem 3rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface)}
+.footer-left{font-size:0.78rem;color:var(--dim)}
+.footer-right{display:flex;gap:2rem}
+.footer-right a{color:var(--dim);text-decoration:none;font-size:0.78rem;transition:color 0.3s}
+.footer-right a:hover{color:var(--cyan)}
+
+/* ── WA FLOAT ── */
+.wa-float{position:fixed;bottom:2rem;right:2rem;z-index:999;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.25);transition:all 0.3s;opacity:0;animation:slideUp 0.6s 2s ease-out forwards}
+.wa-float:hover{transform:scale(1.1);box-shadow:0 4px 30px rgba(37,211,102,0.4)}
+.wa-float svg{width:26px;height:26px;fill:#fff}
+
+/* ── CODE FLASHLIGHT CANVAS ── */
+#codeCanvas{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0.9}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:all 0.7s cubic-bezier(0.16,1,0.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── GLITCH TEXT (CSS only) ── */
+.glitch{position:relative;display:inline-block}
+.glitch::before,.glitch::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden}
+.glitch::before{color:var(--cyan);z-index:-1;animation:glitch1 3s infinite linear alternate-reverse;clip-path:polygon(0 0,100% 0,100% 35%,0 35%)}
+.glitch::after{color:var(--magenta);z-index:-2;animation:glitch2 2s infinite linear alternate-reverse;clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%)}
+@keyframes glitch1{0%,90%{transform:translate(0)}92%{transform:translate(-2px,1px)}94%{transform:translate(2px,-1px)}96%{transform:translate(-1px,2px)}98%{transform:translate(1px,-2px)}100%{transform:translate(0)}}
+@keyframes glitch2{0%,88%{transform:translate(0)}90%{transform:translate(2px,1px)}93%{transform:translate(-2px,-1px)}96%{transform:translate(1px,2px)}100%{transform:translate(0)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  body{cursor:auto}
+  .cursor,.cursor-dot{display:none}
+  .nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  section{padding:5rem 1.5rem}
+  .hero{padding:0 1.5rem}
+  .hero-grid{grid-template-columns:1fr;gap:2rem}
+  .hero-right{height:350px;order:-1}
+  .rabbit-scene{width:300px;height:400px}
+  .rabbit-svg{width:250px;height:350px}
+  .hero h1{font-size:2.5rem}
+  .services-grid{grid-template-columns:1fr 1fr}
+  .process-steps{grid-template-columns:1fr 1fr;gap:2rem}
+  .process-connector{display:none}
+  .cta-buttons{flex-direction:column;align-items:center}
+  .footer{flex-direction:column;gap:1rem;text-align:center}
+}
+@media(max-width:480px){
+  .hero h1{font-size:2rem}
+  .metrics-mini{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
-<div class="noise-bg"></div><div class="grid-overlay"></div><div class="cursor-glow" id="cursorGlow"></div>
 
-<nav class="navbar" id="navbar">
-  <a href="#" class="logo"><div class="logo-icon"><svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="8" fill="url(#lg)"/><defs><linearGradient id="lg" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#00F0FF"/><stop offset="1" stop-color="#7B2FFF"/></linearGradient></defs><path d="M16 8C16 8 14 14 14 18C14 22 16 24 20 28C24 24 26 22 26 18C26 14 24 8 24 8" stroke="#050508" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="17" cy="17" r="1.5" fill="#050508"/><circle cx="23" cy="17" r="1.5" fill="#050508"/><path d="M18 21C18 21 19 22.5 20 22.5C21 22.5 22 21 22 21" stroke="#050508" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg></div><div class="logo-text">white<span>rabbit</span></div></a>
-  <div class="nav-links"><a href="#servicios">Servicios</a><a href="#casos">Casos</a><a href="#calculadora">Calculadora</a><a href="#faq">FAQ</a><a href="#contacto" class="nav-cta">Hablemos</a></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<canvas id="particleCanvas"></canvas>
+<canvas id="codeCanvas"></canvas>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark"><span class="nav-logo-letter">W</span></div>
+    <div class="nav-brand">white<em>rabbit</em></div>
+  </a>
+  <div class="nav-links">
+    <a href="#servicios">Servicios</a>
+    <a href="#proceso">Proceso</a>
+    <a href="#contacto">Contacto</a>
+    <a href="#contacto" class="nav-cta">Hablemos</a>
+  </div>
 </nav>
 
-<section class="hero" id="inicio">
-  <div class="hero-orb hero-orb-1"></div><div class="hero-orb hero-orb-2"></div>
-  <div class="hero-content">
-    <div class="hero-badge"><span>Automatización & IA en Paraguay</span></div>
-    <h1>Tu empresa merece<br><span class="gradient-text">trabajar en el futuro</span></h1>
-    <p class="hero-sub">Automatizamos tus procesos con inteligencia artificial, construimos sistemas a medida y hacemos crecer tu negocio con marketing inteligente.</p>
-    <div class="hero-ctas">
-      <a href="#contacto" class="btn-primary"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Hablemos por WhatsApp</a>
-      <a href="#servicios" class="btn-secondary">Ver servicios <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg></a>
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-overline">Automatización & IA en Paraguay</div>
+      <h1>
+        <div class="line"><span>Hacemos que</span></div>
+        <div class="line"><span>tu negocio</span></div>
+        <div class="line"><span class="gradient glitch" data-text="evolucione">evolucione</span></div>
+      </h1>
+      <p class="hero-desc">Automatizamos procesos con inteligencia artificial, posicionamos tu web en Google, construimos sistemas a medida y potenciamos tu crecimiento con marketing digital en Paraguay.</p>
+      <div class="hero-ctas">
+        <a href="#contacto" class="btn-glow"><span>Empezar ahora</span></a>
+        <a href="#servicios" class="btn-outline">Ver servicios →</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="rabbit-scene" id="rabbitScene">
+        <div class="rabbit-ring"></div>
+        <div class="rabbit-ring"></div>
+        <div class="rabbit-ring"></div>
+        <!-- Code reveal overlay -->
+        <div class="code-reveal" id="codeReveal"><pre><code><span class="c-cmt">// Whiterabbit — Asunción, PY</span>
+
+<span class="c-key">.rabbit</span> {
+  <span class="c-prop">stroke</span>: <span class="c-val">#00e8ff</span>;
+  <span class="c-prop">animation</span>: <span class="c-val">breathe 3.5s
+    infinite</span>;
+  <span class="c-prop">filter</span>: <span class="c-val">drop-shadow(
+    0 0 20px cyan)</span>;
+}
+
+<span class="c-key">const</span> <span class="c-val">whiterabbit</span> = {
+  <span class="c-prop">ia</span>: <span class="c-val">true</span>,
+  <span class="c-prop">seo</span>: <span class="c-val">"página 1"</span>,
+  <span class="c-prop">chatbots</span>: <span class="c-val">24/7</span>,
+  <span class="c-prop">país</span>: <span class="c-val">"Paraguay"</span>,
+};
+
+<span class="c-cmt">/* hecho con código puro
+   follow the white rabbit */</span></code></pre></div>
+        <!-- Neon rabbit SVG — animated humanoid -->
+        <svg class="rabbit-svg rabbit-pulse" viewBox="0 0 300 460" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="glowStrong"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <!-- ══ BODY (behind head) ══ -->
+          <g id="rabbitBody">
+            <!-- Body shape — torso (closer to head) -->
+            <ellipse cx="150" cy="312" rx="52" ry="60" fill="rgba(0,232,255,0.015)" stroke="var(--cyan)" stroke-width="1.5" opacity="0.9"/>
+            <!-- Neck connector -->
+            <path d="M132 254 Q150 260 168 254" stroke="var(--cyan)" stroke-width="1" opacity="0.3" fill="none"/>
+            <!-- Chest emblem -->
+            <text x="150" y="318" text-anchor="middle" font-family="Syne,sans-serif" font-weight="800" font-size="20" fill="none" stroke="var(--cyan)" stroke-width="0.7" opacity="0.35">W</text>
+            <!-- Circuit patterns on body -->
+            <path d="M122 295 L122 315 L137 315 L137 340" fill="none" stroke="rgba(0,232,255,0.25)" stroke-width="0.8" stroke-dasharray="4 3"/>
+            <circle cx="122" cy="295" r="2" fill="var(--cyan)" filter="url(#glow)"/>
+            <circle cx="137" cy="340" r="2" fill="var(--cyan)" filter="url(#glow)"/>
+            <path d="M178 300 L178 320 L163 320 L163 345" fill="none" stroke="rgba(0,232,255,0.25)" stroke-width="0.8" stroke-dasharray="4 3"/>
+            <circle cx="178" cy="300" r="2" fill="var(--cyan)" filter="url(#glow)"/>
+            <circle cx="163" cy="345" r="2" fill="var(--cyan)" filter="url(#glow)"/>
+            <path d="M128 360 L150 360 L150 375 L172 375" fill="none" stroke="rgba(0,232,255,0.2)" stroke-width="0.8" stroke-dasharray="4 3"/>
+            <circle cx="128" cy="360" r="1.5" fill="var(--cyan)" filter="url(#glow)"/>
+            <circle cx="172" cy="375" r="1.5" fill="var(--cyan)" filter="url(#glow)"/>
+            <!-- Left arm — flush to body -->
+            <path d="M100 298 Q94 316 95 346 Q96 356 100 360" stroke="var(--cyan)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+            <circle cx="100" cy="363" r="6" fill="rgba(0,232,255,0.03)" stroke="var(--cyan)" stroke-width="1.1"/>
+            <!-- Right arm — flush to body, very subtle sway -->
+            <g style="transform-origin:200px 298px">
+              <path d="M200 298 Q206 316 205 346 Q204 356 200 360" stroke="var(--cyan)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+              <circle cx="200" cy="363" r="6" fill="rgba(0,232,255,0.03)" stroke="var(--cyan)" stroke-width="1.1"/>
+              <animateTransform attributeName="transform" type="rotate" values="0 200 298;-1.5 200 298;0 200 298;1 200 298;0 200 298" dur="5s" repeatCount="indefinite"/>
+            </g>
+            <!-- Legs -->
+            <path d="M128 388 L125 410" stroke="var(--cyan)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+            <path d="M172 388 L175 410" stroke="var(--cyan)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+            <!-- Feet -->
+            <ellipse cx="122" cy="418" rx="18" ry="7" fill="rgba(0,232,255,0.03)" stroke="var(--cyan)" stroke-width="1.2"/>
+            <ellipse cx="178" cy="418" rx="18" ry="7" fill="rgba(0,232,255,0.03)" stroke="var(--cyan)" stroke-width="1.2"/>
+            <!-- Breathing animation on body -->
+            <animateTransform attributeName="transform" type="scale" values="1 1;1.008 1.012;1 1" dur="3.5s" repeatCount="indefinite" additive="sum"/>
+          </g>
+
+          <!-- ══ HEAD GROUP (separate from body, with subtle tilt) ══ -->
+          <g id="rabbitHead" style="transform-origin:150px 200px">
+            <animateTransform attributeName="transform" type="rotate" values="0 150 200;-2 150 200;0 150 200;1.5 150 200;0 150 200" dur="6s" repeatCount="indefinite"/>
+
+            <!-- Ears with independent wiggle -->
+            <!-- Left ear -->
+            <g id="leftEar" style="transform-origin:120px 155px">
+              <animateTransform attributeName="transform" type="rotate" values="0 120 155;-4 120 155;0 120 155;2 120 155;0 120 155" dur="5s" repeatCount="indefinite"/>
+              <path d="M108 155 Q107 75 116 32 Q120 12 130 12 Q138 12 140 38 Q141 65 140 115" stroke="var(--cyan)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <path d="M118 145 Q117 88 122 48 Q125 28 132 28 Q136 30 137 52 Q138 78 137 125 Z" fill="rgba(0,232,255,0.025)" stroke="rgba(0,232,255,0.4)" stroke-width="0.6"/>
+              <!-- Inner ear circuit -->
+              <path d="M126 125 Q126 82 128 52" fill="none" stroke="rgba(0,232,255,0.3)" stroke-width="0.8" stroke-dasharray="3 3"/>
+              <circle cx="128" cy="52" r="2" fill="var(--cyan)" filter="url(#glow)"/>
+              <circle cx="126" cy="92" r="1.5" fill="var(--cyan)" filter="url(#glow)"/>
+            </g>
+            <!-- Right ear -->
+            <g id="rightEar" style="transform-origin:180px 155px">
+              <animateTransform attributeName="transform" type="rotate" values="0 180 155;3 180 155;0 180 155;-3 180 155;0 180 155" dur="4.2s" repeatCount="indefinite"/>
+              <path d="M192 155 Q193 75 184 32 Q180 12 170 12 Q162 12 160 38 Q159 65 160 115" stroke="var(--cyan)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <path d="M182 145 Q183 88 178 48 Q175 28 168 28 Q164 30 163 52 Q162 78 163 125 Z" fill="rgba(0,232,255,0.025)" stroke="rgba(0,232,255,0.4)" stroke-width="0.6"/>
+              <path d="M174 125 Q174 82 172 52" fill="none" stroke="rgba(0,232,255,0.3)" stroke-width="0.8" stroke-dasharray="3 3"/>
+              <circle cx="172" cy="52" r="2" fill="var(--cyan)" filter="url(#glow)"/>
+              <circle cx="174" cy="92" r="1.5" fill="var(--cyan)" filter="url(#glow)"/>
+            </g>
+
+            <!-- Head shape -->
+            <ellipse cx="150" cy="195" rx="58" ry="52" fill="rgba(0,232,255,0.02)" stroke="var(--cyan)" stroke-width="1.8"/>
+
+            <!-- Cheeks subtle glow -->
+            <circle cx="105" cy="205" r="12" fill="rgba(0,232,255,0.02)" stroke="none"/>
+            <circle cx="195" cy="205" r="12" fill="rgba(0,232,255,0.02)" stroke="none"/>
+
+            <!-- Eye sockets -->
+            <ellipse cx="128" cy="188" rx="14" ry="13" fill="rgba(0,232,255,0.04)" stroke="rgba(0,232,255,0.25)" stroke-width="0.8"/>
+            <ellipse cx="172" cy="188" rx="14" ry="13" fill="rgba(0,232,255,0.04)" stroke="rgba(0,232,255,0.25)" stroke-width="0.8"/>
+
+            <!-- Eyes — open state with blink -->
+            <g id="eyesOpen">
+              <circle cx="128" cy="188" r="6" fill="var(--cyan)" filter="url(#glowStrong)">
+                <animate attributeName="r" values="6;5.5;6" dur="3s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="172" cy="188" r="6" fill="var(--cyan)" filter="url(#glowStrong)">
+                <animate attributeName="r" values="6;5.5;6" dur="3s" repeatCount="indefinite"/>
+              </circle>
+              <!-- Eye highlights -->
+              <circle cx="126" cy="186" r="2" fill="#fff" opacity="0.85"/>
+              <circle cx="170" cy="186" r="2" fill="#fff" opacity="0.85"/>
+              <circle cx="131" cy="190" r="1" fill="#fff" opacity="0.5"/>
+              <circle cx="175" cy="190" r="1" fill="#fff" opacity="0.5"/>
+              <!-- Blink: hide eyes briefly -->
+              <animate attributeName="opacity" values="1;1;1;1;1;0;1;1;1;1;1;1;1;1;0;0;1;1;1;1" dur="5s" repeatCount="indefinite"/>
+            </g>
+            <!-- Eyes — closed state (thin line) shown during blink -->
+            <g id="eyesClosed" opacity="0">
+              <line x1="118" y1="188" x2="138" y2="188" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="162" y1="188" x2="182" y2="188" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round"/>
+              <animate attributeName="opacity" values="0;0;0;0;0;1;0;0;0;0;0;0;0;0;1;1;0;0;0;0" dur="5s" repeatCount="indefinite"/>
+            </g>
+
+            <!-- Nose -->
+            <ellipse cx="150" cy="210" rx="5" ry="3.5" fill="rgba(0,232,255,0.2)" stroke="var(--cyan)" stroke-width="1" filter="url(#glow)"/>
+
+            <!-- Mouth — slight smile -->
+            <path d="M150 214 Q150 221 142 222" stroke="var(--cyan)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            <path d="M150 214 Q150 221 158 222" stroke="var(--cyan)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+            <!-- Whiskers — animated subtle sway -->
+            <g id="whiskersLeft" style="transform-origin:110px 207px">
+              <animateTransform attributeName="transform" type="rotate" values="0 110 207;-2 110 207;0 110 207;1 110 207;0 110 207" dur="4s" repeatCount="indefinite"/>
+              <line x1="95" y1="200" x2="115" y2="205" stroke="rgba(0,232,255,0.35)" stroke-width="0.8" stroke-linecap="round"/>
+              <line x1="93" y1="208" x2="114" y2="209" stroke="rgba(0,232,255,0.28)" stroke-width="0.8" stroke-linecap="round"/>
+              <line x1="96" y1="216" x2="115" y2="213" stroke="rgba(0,232,255,0.2)" stroke-width="0.8" stroke-linecap="round"/>
+            </g>
+            <g id="whiskersRight" style="transform-origin:190px 207px">
+              <animateTransform attributeName="transform" type="rotate" values="0 190 207;2 190 207;0 190 207;-1 190 207;0 190 207" dur="4.3s" repeatCount="indefinite"/>
+              <line x1="205" y1="200" x2="185" y2="205" stroke="rgba(0,232,255,0.35)" stroke-width="0.8" stroke-linecap="round"/>
+              <line x1="207" y1="208" x2="186" y2="209" stroke="rgba(0,232,255,0.28)" stroke-width="0.8" stroke-linecap="round"/>
+              <line x1="204" y1="216" x2="185" y2="213" stroke="rgba(0,232,255,0.2)" stroke-width="0.8" stroke-linecap="round"/>
+            </g>
+          </g>
+
+        </svg>
+        <!-- Orbit dots -->
+        <div class="orbit-dot"></div>
+        <div class="orbit-dot"></div>
+        <div class="orbit-dot"></div>
+      </div>
     </div>
   </div>
-  <div class="rabbit-container"><div class="rabbit-silhouette">🐇</div></div>
 </section>
 
-<div class="stats-bar reveal">
-  <div class="stat-item"><div class="stat-number" data-count="50">0+</div><div class="stat-label">Procesos automatizados</div></div>
-  <div class="stat-item"><div class="stat-number" data-count="80">0%</div><div class="stat-label">Reducción de tareas manuales</div></div>
-  <div class="stat-item"><div class="stat-number" data-count="24">0/7</div><div class="stat-label">Chatbots activos</div></div>
-  <div class="stat-item"><div class="stat-number">2x</div><div class="stat-label">Velocidad de entrega</div></div>
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">OpenAI</span><span class="marquee-item">Python</span><span class="marquee-item">React</span><span class="marquee-item">Node.js</span><span class="marquee-item">Meta API</span><span class="marquee-item">WhatsApp Business</span><span class="marquee-item">PostgreSQL</span><span class="marquee-item">AWS</span><span class="marquee-item">Langchain</span><span class="marquee-item">Next.js</span><span class="marquee-item">n8n</span><span class="marquee-item">Make</span><span class="marquee-item">Stripe</span><span class="marquee-item">Vercel</span>
+    <span class="marquee-item">OpenAI</span><span class="marquee-item">Python</span><span class="marquee-item">React</span><span class="marquee-item">Node.js</span><span class="marquee-item">Meta API</span><span class="marquee-item">WhatsApp Business</span><span class="marquee-item">PostgreSQL</span><span class="marquee-item">AWS</span><span class="marquee-item">Langchain</span><span class="marquee-item">Next.js</span><span class="marquee-item">n8n</span><span class="marquee-item">Make</span><span class="marquee-item">Stripe</span><span class="marquee-item">Vercel</span>
+  </div>
 </div>
 
-<section class="problem-section">
-  <div class="problem-grid reveal">
-    <div>
-      <div class="section-label">// el problema</div>
-      <div class="section-title">Tu equipo pierde horas<br>en tareas repetitivas</div>
-      <div class="problem-list" style="margin-top:1.5rem">
-        <div class="problem-item"><div class="problem-icon">⏱</div><div class="problem-text"><strong>Procesos manuales</strong> que consumen 20+ horas semanales de tu equipo</div></div>
-        <div class="problem-item"><div class="problem-icon">💬</div><div class="problem-text"><strong>Consultas sin responder</strong> — clientes esperando horas por una respuesta</div></div>
-        <div class="problem-item"><div class="problem-icon">📊</div><div class="problem-text"><strong>Marketing a ciegas</strong> — gastando en ads sin datos ni automatización</div></div>
-        <div class="problem-item"><div class="problem-icon">⚙️</div><div class="problem-text"><strong>Sistemas desconectados</strong> — Excel, WhatsApp, email, todo por separado</div></div>
-      </div>
+<!-- ═══ SERVICES ═══ -->
+<section id="servicios" style="position:relative">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-overline">Nuestros servicios</div>
+      <div class="section-title">Cuatro pilares.<br>Un solo objetivo.</div>
+      <div class="section-desc">Cada servicio resuelve un problema real de tu negocio. Combinados, lo transforman por completo.</div>
     </div>
-    <div>
-      <div class="solution-card">
-        <div class="section-label">// la solución</div>
-        <h3>Whiterabbit <span class="gradient-text">automatiza todo</span></h3>
-        <p>Conectamos tus sistemas, ponemos IA a trabajar y liberamos a tu equipo para que se enfoque en lo que importa.</p>
-        <div class="solution-metrics">
-          <div class="metric"><div class="metric-value">-70%</div><div class="metric-label">Tiempo en tareas repetitivas</div></div>
-          <div class="metric"><div class="metric-value">&lt;1min</div><div class="metric-label">Respuesta a clientes</div></div>
-          <div class="metric"><div class="metric-value">3x</div><div class="metric-label">ROI en marketing</div></div>
-          <div class="metric"><div class="metric-value">100%</div><div class="metric-label">Sistemas integrados</div></div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <div class="icon-bot">
+            <div class="antenna"></div>
+            <div class="head"></div>
+            <div class="eye l"></div>
+            <div class="eye r"></div>
+            <div class="body"></div>
+          </div>
         </div>
+        <div class="service-num">001</div>
+        <h3>Automatización inteligente</h3>
+        <p>Chatbots con IA que atienden 24/7, automatización de procesos e integraciones que conectan todo tu ecosistema.</p>
+        <div class="service-tags"><span class="service-tag">Chatbots IA</span><span class="service-tag">RPA</span><span class="service-tag">WhatsApp Bot</span></div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <div class="icon-seo">
+            <div class="lens"></div>
+            <div class="rank">#1</div>
+            <div class="arrow-up"></div>
+          </div>
+        </div>
+        <div class="service-num">002</div>
+        <h3>SEO & posicionamiento</h3>
+        <p>Llevamos tu web a la primera página de Google. Auditorías técnicas, optimización continua y monitoreo con IA.</p>
+        <div class="service-tags"><span class="service-tag">SEO Técnico</span><span class="service-tag">Rankings</span><span class="service-tag">Auditorías</span></div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <div class="icon-code">
+            <span class="bracket l">&lt;</span>
+            <span class="bracket r">/&gt;</span>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+        </div>
+        <div class="service-num">003</div>
+        <h3>Desarrollo a medida</h3>
+        <p>Sistemas web, apps y plataformas desde cero. Código limpio, arquitectura escalable y diseño que impresiona.</p>
+        <div class="service-tags"><span class="service-tag">Sistemas</span><span class="service-tag">Apps</span><span class="service-tag">E-commerce</span></div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <div class="icon-chart">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="trend"></div>
+          </div>
+        </div>
+        <div class="service-num">004</div>
+        <h3>Growth & marketing</h3>
+        <p>Meta Ads automatizados, funnels de conversión y estrategia digital basada en datos reales.</p>
+        <div class="service-tags"><span class="service-tag">Meta Ads</span><span class="service-tag">Funnels</span><span class="service-tag">Analytics</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="servicios">
-  <div class="services-section">
-    <div class="reveal"><div class="section-label">// servicios</div><div class="section-title">Tres pilares,<br>un solo objetivo</div><div class="section-sub">Cada servicio resuelve un problema específico. Combinados, transforman tu empresa.</div></div>
-    <div class="services-grid reveal">
-      <div class="service-card"><div class="service-number">001</div><div class="service-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="1.5" stroke-linecap="round"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M8 14h8l2 8H6l2-8z"/><circle cx="12" cy="6" r="1"/></svg></div><h3>Automatización inteligente</h3><p>Chatbots con IA que atienden 24/7, automatización de procesos empresariales e integraciones que conectan todo tu ecosistema digital.</p><div class="service-tags"><span class="service-tag">Chatbots IA</span><span class="service-tag">RPA</span><span class="service-tag">Integraciones</span><span class="service-tag">WhatsApp Bot</span></div></div>
-      <div class="service-card"><div class="service-number">002</div><div class="service-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="#7B2FFF" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10l3 3 5-5"/></svg></div><h3>Desarrollo a medida</h3><p>Sistemas web, aplicaciones y plataformas desde cero. Código limpio, arquitectura escalable y diseño que impresiona.</p><div class="service-tags"><span class="service-tag">Sistemas Web</span><span class="service-tag">Apps</span><span class="service-tag">Landing Pages</span><span class="service-tag">E-commerce</span></div></div>
-      <div class="service-card"><div class="service-number">003</div><div class="service-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="url(#sg)" stroke-width="1.5" stroke-linecap="round"><defs><linearGradient id="sg" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#00F0FF"/><stop offset="1" stop-color="#7B2FFF"/></linearGradient></defs><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h3>Growth & marketing</h3><p>Campañas en Meta Ads automatizadas, funnels de conversión y estrategia digital basada en datos.</p><div class="service-tags"><span class="service-tag">Meta Ads</span><span class="service-tag">Funnels</span><span class="service-tag">Estrategia</span><span class="service-tag">Analytics</span></div></div>
+<!-- ═══ PROCESS ═══ -->
+<section class="process-section" id="proceso" style="position:relative">
+  <div class="section-inner">
+    <div style="text-align:center" class="reveal">
+      <div class="section-overline" style="justify-content:center">Cómo trabajamos</div>
+      <div class="section-title">Del problema a la solución</div>
+      <div class="section-desc" style="margin:0 auto">Simple, rápido y transparente.</div>
+    </div>
+    <div class="process-steps reveal">
+      <div class="process-connector"></div>
+      <div class="process-step"><div class="step-orb"><span class="step-num">01</span></div><div class="step-title">Hablamos</div><div class="step-desc">Entendemos tu negocio y tus objetivos.</div></div>
+      <div class="process-step"><div class="step-orb"><span class="step-num">02</span></div><div class="step-title">Diseñamos</div><div class="step-desc">Estrategia y arquitectura de la solución.</div></div>
+      <div class="process-step"><div class="step-orb"><span class="step-num">03</span></div><div class="step-title">Construimos</div><div class="step-desc">Desarrollo, pruebas e iteración.</div></div>
+      <div class="process-step"><div class="step-orb"><span class="step-num">04</span></div><div class="step-title">Lanzamos</div><div class="step-desc">Deploy, capacitación y soporte continuo.</div></div>
     </div>
   </div>
 </section>
 
-<section class="cases-section" id="casos">
-  <div style="text-align:center" class="reveal"><div class="section-label">// casos de éxito</div><div class="section-title">Resultados que hablan<br><span class="gradient-text">por sí solos</span></div><div class="section-sub" style="margin:0 auto">Cada proyecto tiene un antes y un después.</div></div>
-  <div class="cases-content"><div class="cases-grid reveal">
-    <div class="case-card"><div class="case-visual"><div class="case-visual-grid"></div><div class="case-visual-icon">🏪</div><div class="case-before-after"><div class="case-ba-item case-before"><span class="case-ba-value">4 hrs</span>Respuesta</div><div class="case-ba-item case-after"><span class="case-ba-value">30 seg</span>Respuesta</div></div></div><div class="case-body"><div class="case-industry">RETAIL / E-COMMERCE</div><h3>Chatbot de atención para cadena retail</h3><p>Bot con IA en WhatsApp que resuelve el 85% de consultas sin intervención humana.</p><div class="case-results"><div class="case-result"><div class="case-result-icon">↑</div><div class="case-result-text"><strong>85%</strong> automatizado</div></div><div class="case-result"><div class="case-result-icon">↓</div><div class="case-result-text"><strong>-60%</strong> carga equipo</div></div></div></div></div>
-    <div class="case-card"><div class="case-visual"><div class="case-visual-grid"></div><div class="case-visual-icon">🏗️</div><div class="case-before-after"><div class="case-ba-item case-before"><span class="case-ba-value">Excel</span>Gestión manual</div><div class="case-ba-item case-after"><span class="case-ba-value">Sistema</span>100% digital</div></div></div><div class="case-body"><div class="case-industry">CONSTRUCCIÓN</div><h3>Sistema de gestión de obra</h3><p>Sistema web a medida con seguimiento en tiempo real de obras y presupuestos.</p><div class="case-results"><div class="case-result"><div class="case-result-icon">↑</div><div class="case-result-text"><strong>40%</strong> productividad</div></div><div class="case-result"><div class="case-result-icon">↓</div><div class="case-result-text"><strong>0</strong> errores datos</div></div></div></div></div>
-    <div class="case-card"><div class="case-visual"><div class="case-visual-grid"></div><div class="case-visual-icon">🍽️</div><div class="case-before-after"><div class="case-ba-item case-before"><span class="case-ba-value">₲ 2M</span>Costo/lead</div><div class="case-ba-item case-after"><span class="case-ba-value">₲ 600K</span>Costo/lead</div></div></div><div class="case-body"><div class="case-industry">GASTRONOMÍA</div><h3>Automatización de Meta Ads</h3><p>Campañas automatizadas con reglas inteligentes que optimizan presupuesto 24/7.</p><div class="case-results"><div class="case-result"><div class="case-result-icon">↑</div><div class="case-result-text"><strong>3.2x</strong> ROAS</div></div><div class="case-result"><div class="case-result-icon">↓</div><div class="case-result-text"><strong>-70%</strong> costo/lead</div></div></div></div></div>
-    <div class="case-card"><div class="case-visual"><div class="case-visual-grid"></div><div class="case-visual-icon">🏥</div><div class="case-before-after"><div class="case-ba-item case-before"><span class="case-ba-value">Manual</span>Agendamiento</div><div class="case-ba-item case-after"><span class="case-ba-value">Bot 24/7</span>Automático</div></div></div><div class="case-body"><div class="case-industry">SALUD</div><h3>Bot de agendamiento de citas</h3><p>Bot en WhatsApp que agenda, confirma y recuerda turnos automáticamente.</p><div class="case-results"><div class="case-result"><div class="case-result-icon">↑</div><div class="case-result-text"><strong>95%</strong> confirmados</div></div><div class="case-result"><div class="case-result-icon">↓</div><div class="case-result-text"><strong>-80%</strong> ausencias</div></div></div></div></div>
-  </div></div>
-</section>
-
-<section class="calc-section" id="calculadora">
-  <div style="text-align:center" class="reveal"><div class="section-label">// calculadora de ahorro</div><div class="section-title">¿Cuánto podrías ahorrar<br><span class="gradient-text">automatizando?</span></div><div class="section-sub" style="margin:0 auto">Mové los controles y descubrí cuánto tiempo y dinero recupera tu empresa.</div></div>
-  <div class="calc-content reveal"><div class="calc-layout">
-    <div class="calc-inputs">
-      <div class="calc-input-group"><label><strong>Empleados</strong> en tareas repetitivas</label><div class="calc-slider-row"><input type="range" class="calc-slider" id="calcEmp" min="1" max="50" value="5" oninput="updateCalc()"><div class="calc-value" id="vEmp">5</div></div></div>
-      <div class="calc-input-group"><label><strong>Horas semanales</strong> en tareas manuales (por persona)</label><div class="calc-slider-row"><input type="range" class="calc-slider" id="calcHrs" min="2" max="40" value="15" oninput="updateCalc()"><div class="calc-value" id="vHrs">15 hs</div></div></div>
-      <div class="calc-input-group"><label><strong>Costo hora</strong> promedio del empleado (₲)</label><div class="calc-slider-row"><input type="range" class="calc-slider" id="calcCost" min="20000" max="200000" step="5000" value="50000" oninput="updateCalc()"><div class="calc-value" id="vCost">₲ 50K</div></div></div>
-      <div class="calc-input-group"><label><strong>% automatizable</strong> de esas tareas</label><div class="calc-slider-row"><input type="range" class="calc-slider" id="calcAuto" min="20" max="90" value="70" oninput="updateCalc()"><div class="calc-value" id="vAuto">70%</div></div></div>
-    </div>
-    <div class="calc-results">
-      <div class="calc-results-title">Tu ahorro estimado con Whiterabbit</div>
-      <div class="calc-result-item"><div class="calc-result-label">Horas recuperadas por semana</div><div class="calc-result-value cyan" id="rHrs">52.5 hs</div><div class="calc-result-sub" id="rHrsSub">= 6.6 días laborales</div></div>
-      <div class="calc-divider"></div>
-      <div class="calc-result-item"><div class="calc-result-label">Ahorro mensual estimado</div><div class="calc-result-value gradient" id="rMonth">₲ 10.5 millones</div><div class="calc-result-sub" id="rMonthSub">≈ USD 1,400/mes</div></div>
-      <div class="calc-divider"></div>
-      <div class="calc-result-item"><div class="calc-result-label">Ahorro anual estimado</div><div class="calc-result-value gradient" id="rYear">₲ 126 millones</div><div class="calc-result-sub" id="rYearSub">≈ USD 16,800/año</div></div>
-      <a href="#contacto" class="calc-cta-mini">Quiero ahorrar esto <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg></a>
-    </div>
-  </div></div>
-</section>
-
-<section class="process-section" id="proceso">
-  <div style="text-align:center" class="reveal"><div class="section-label">// cómo trabajamos</div><div class="section-title">Del problema a la solución<br>en 4 pasos</div><div class="section-sub" style="margin:0 auto">Simple, rápido y transparente.</div></div>
-  <div class="process-content reveal"><div class="process-steps"><div class="process-line"></div>
-    <div class="process-step"><div class="step-number">01</div><div class="step-title">Hablamos</div><div class="step-desc">Entendemos tu negocio, tus dolores y tus objetivos.</div></div>
-    <div class="process-step"><div class="step-number">02</div><div class="step-title">Diseñamos</div><div class="step-desc">Creamos la estrategia y arquitectura de la solución.</div></div>
-    <div class="process-step"><div class="step-number">03</div><div class="step-title">Construimos</div><div class="step-desc">Desarrollamos, probamos e iteramos hasta que quede perfecto.</div></div>
-    <div class="process-step"><div class="step-number">04</div><div class="step-title">Lanzamos</div><div class="step-desc">Deploy, capacitación y soporte continuo.</div></div>
-  </div></div>
-</section>
-
-<div class="tech-marquee"><div class="marquee-track">
-  <span class="marquee-item">OpenAI</span><span class="marquee-item">Python</span><span class="marquee-item">React</span><span class="marquee-item">Node.js</span><span class="marquee-item">Meta API</span><span class="marquee-item">WhatsApp Business</span><span class="marquee-item">PostgreSQL</span><span class="marquee-item">AWS</span><span class="marquee-item">Langchain</span><span class="marquee-item">Next.js</span><span class="marquee-item">Tailwind</span><span class="marquee-item">Stripe</span><span class="marquee-item">Make</span><span class="marquee-item">n8n</span>
-  <span class="marquee-item">OpenAI</span><span class="marquee-item">Python</span><span class="marquee-item">React</span><span class="marquee-item">Node.js</span><span class="marquee-item">Meta API</span><span class="marquee-item">WhatsApp Business</span><span class="marquee-item">PostgreSQL</span><span class="marquee-item">AWS</span><span class="marquee-item">Langchain</span><span class="marquee-item">Next.js</span><span class="marquee-item">Tailwind</span><span class="marquee-item">Stripe</span><span class="marquee-item">Make</span><span class="marquee-item">n8n</span>
-</div></div>
-
-<section class="faq-section" id="faq">
-  <div style="text-align:center" class="reveal"><div class="section-label">// preguntas frecuentes</div><div class="section-title">Todo lo que necesitás<br><span class="gradient-text">saber</span></div></div>
-  <div class="faq-content reveal">
-    <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">¿Cuánto cuesta un proyecto con Whiterabbit?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div><div class="faq-answer"><p>Cada proyecto es diferente. Un chatbot básico arranca desde ₲ 3.000.000, y los sistemas a medida dependen de la complejidad. La primera consulta es 100% gratis — hablemos y te damos un presupuesto en 48hs.</p></div></div>
-    <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">¿Cuánto tiempo lleva implementar una solución?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div><div class="faq-answer"><p>Un chatbot puede estar en 1-2 semanas. Un sistema web, entre 4-8 semanas. Automatización de ads, en 3-5 días. Nos movemos rápido — velocidad sin sacrificar calidad.</p></div></div>
-    <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">¿Funciona para mi rubro / industria?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div><div class="faq-answer"><p>Sí. Trabajamos con retail, salud, construcción, gastronomía, inmobiliarias, educación y más. Si tu empresa tiene procesos repetitivos o necesita presencia digital — podemos ayudarte.</p></div></div>
-    <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">¿Qué pasa después de entregar el proyecto?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div><div class="faq-answer"><p>No te dejamos solo. Ofrecemos soporte continuo, mantenimiento y optimización. Tenemos planes mensuales que se ajustan a cada cliente.</p></div></div>
-    <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">¿La IA va a reemplazar a mis empleados?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div><div class="faq-answer"><p>No. La IA libera a tu equipo de tareas repetitivas para que se enfoquen en trabajo de mayor valor. Automatizar no es reemplazar personas — es potenciarlas.</p></div></div>
-    <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">¿Puedo ver un demo antes de contratar?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div><div class="faq-answer"><p>¡Por supuesto! El chatbot de esta página es un ejemplo. En la primera reunión te mostramos demos personalizados para tu industria.</p></div></div>
-  </div>
-</section>
-
-<section class="cta-section" id="contacto">
-  <div class="cta-content reveal">
-    <div class="section-label">// empecemos</div>
-    <div class="cta-title">¿Listo para entrar<br><span class="gradient-text">a la madriguera?</span></div>
-    <div class="cta-sub">Contanos sobre tu proyecto. La primera consulta es gratis y en menos de 48hs tenés una propuesta.</div>
+<!-- ═══ CTA ═══ -->
+<section class="cta-section" id="contacto" style="position:relative">
+  <div class="cta-inner reveal">
+    <div class="section-overline" style="justify-content:center">Empecemos</div>
+    <div class="cta-title">¿Listo para entrar<br><span class="gradient">a la madriguera?</span></div>
+    <div class="cta-desc">La primera consulta es gratis. En menos de 48hs tenés una propuesta en tus manos.</div>
     <div class="cta-buttons">
-      <a href="https://wa.me/595XXXXXXXXX?text=Hola%20Whiterabbit!%20Quiero%20saber%20más" class="btn-whatsapp" target="_blank"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Escribinos por WhatsApp</a>
-      <a href="mailto:hola@whiterabbit.com.py" class="btn-secondary">O mandanos un email <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg></a>
+      <a href="https://wa.me/595XXXXXXXXX?text=Hola%20Whiterabbit!" class="btn-wa" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Escribinos por WhatsApp
+      </a>
+      <a href="mailto:hola@whiterabbit.com.py" class="btn-outline">O mandanos un email →</a>
     </div>
   </div>
 </section>
 
-<footer class="footer"><div class="footer-left">&copy; 2026 Whiterabbit — Asunción, Paraguay</div><div class="footer-right"><a href="#">Instagram</a><a href="#">LinkedIn</a><a href="#">GitHub</a></div></footer>
+<!-- ═══ SEO SEMANTIC CONTENT (accessible to crawlers) ═══ -->
+<section aria-label="Servicios de Whiterabbit en Paraguay" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0">
+  <h2>Whiterabbit — Agencia de Automatización con IA en Paraguay</h2>
+  <p>Whiterabbit es una agencia tecnológica en Asunción, Paraguay especializada en automatización de procesos empresariales con inteligencia artificial. Ofrecemos servicios de chatbots con IA para WhatsApp Business, desarrollo de sistemas web a medida, posicionamiento SEO en Google, y marketing digital con Meta Ads automatizados.</p>
+  <h3>Servicios de automatización con IA en Asunción</h3>
+  <p>Desarrollamos chatbots inteligentes que atienden a tus clientes 24/7 por WhatsApp, Instagram y tu sitio web. Automatizamos procesos empresariales repetitivos con RPA e integraciones inteligentes, conectando tu CRM, facturación, email y redes sociales en un ecosistema unificado.</p>
+  <h3>SEO y posicionamiento web en Paraguay</h3>
+  <p>Llevamos tu página web a la primera página de Google con estrategias de SEO técnico, auditorías continuas de Core Web Vitals, optimización de contenido y monitoreo de rankings con inteligencia artificial. Servicio de SEO mensual para empresas paraguayas.</p>
+  <h3>Desarrollo web y sistemas a medida en Paraguay</h3>
+  <p>Construimos sistemas web, aplicaciones y plataformas desde cero con código limpio y arquitectura escalable. Landing pages, e-commerce, sistemas de gestión y aplicaciones empresariales para PyMEs y empresas medianas en Paraguay.</p>
+  <h3>Marketing digital y Meta Ads en Asunción</h3>
+  <p>Automatizamos campañas publicitarias en Meta Ads (Facebook e Instagram) con reglas inteligentes que optimizan el presupuesto 24/7. Funnels de conversión, estrategia digital y analítica avanzada para maximizar el retorno de inversión.</p>
+  <h3>¿Por qué elegir Whiterabbit?</h3>
+  <ul>
+    <li>Expertise en inteligencia artificial y automatización</li>
+    <li>Velocidad de entrega — chatbots en 1-2 semanas, sistemas en 4-8 semanas</li>
+    <li>Atención personalizada para el mercado paraguayo</li>
+    <li>Consulta inicial gratuita con propuesta en 48 horas</li>
+    <li>Soporte continuo post-entrega</li>
+  </ul>
+  <p>Contactanos por WhatsApp para una consulta gratuita. Whiterabbit — Hacemos que tu negocio evolucione. Asunción, Paraguay.</p>
+</section>
 
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="footer-left">&copy; 2026 Whiterabbit — Asunción, Paraguay</div>
+  <div class="footer-right"><a href="#">Instagram</a><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+</footer>
+
+<!-- ═══ WA FLOAT ═══ -->
 <a href="https://wa.me/595XXXXXXXXX" target="_blank" class="wa-float"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
 
-<button class="chatbot-toggle" id="chatbotToggle" onclick="toggleChat()">
-  <svg viewBox="0 0 24 24" id="chatIcon"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-</button>
-<div class="chatbot-window" id="chatbotWindow">
-  <div class="chatbot-header"><div class="chatbot-avatar">🐇</div><div class="chatbot-header-info"><h4>Whiterabbit Bot</h4><p>Online ahora</p></div></div>
-  <div class="chatbot-messages" id="chatMessages"></div>
-  <div class="chat-quick-replies" id="quickReplies"></div>
-  <div class="chatbot-input-area"><input type="text" class="chatbot-input" id="chatInput" placeholder="Escribí tu mensaje..." onkeydown="if(event.key==='Enter')sendChat()"><button class="chatbot-send" onclick="sendChat()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button></div>
-</div>
-
 <script>
-const navbar=document.getElementById('navbar');
-window.addEventListener('scroll',()=>{navbar.classList.toggle('scrolled',window.scrollY>50)});
-const reveals=document.querySelectorAll('.reveal');
-const rObs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.15,rootMargin:'0px 0px -40px 0px'});
-reveals.forEach(el=>rObs.observe(el));
-if(window.matchMedia('(pointer:fine)').matches){const g=document.getElementById('cursorGlow');document.addEventListener('mousemove',e=>{g.style.left=e.clientX+'px';g.style.top=e.clientY+'px'})}
-const counters=document.querySelectorAll('.stat-number[data-count]');
-const cObs=new IntersectionObserver(e=>{e.forEach(x=>{if(!x.isIntersecting)return;const el=x.target,t=parseInt(el.dataset.count),s=el.textContent.replace(/[0-9]/g,'');let c=0;const st=t/40;const ti=setInterval(()=>{c+=st;if(c>=t){c=t;clearInterval(ti)}el.textContent=Math.floor(c)+s},30);cObs.unobserve(el)})},{threshold:.5});
-counters.forEach(el=>cObs.observe(el));
-document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
+// ── PARTICLE SYSTEM ──
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let mouse = { x: 0, y: 0 };
+let W, H;
 
-function updateCalc(){
-  const e=+document.getElementById('calcEmp').value,h=+document.getElementById('calcHrs').value,c=+document.getElementById('calcCost').value,a=+document.getElementById('calcAuto').value;
-  document.getElementById('vEmp').textContent=e;document.getElementById('vHrs').textContent=h+' hs';document.getElementById('vCost').textContent='₲ '+(c/1000)+'K';document.getElementById('vAuto').textContent=a+'%';
-  const sh=e*h*(a/100),sm=sh*c*4,sy=sm*12,rate=7500;
-  document.getElementById('rHrs').textContent=sh.toFixed(1)+' hs';document.getElementById('rHrsSub').textContent='= '+(sh/8).toFixed(1)+' días laborales';
-  document.getElementById('rMonth').textContent='₲ '+fGs(sm);document.getElementById('rMonthSub').textContent='≈ USD '+fU(sm/rate)+'/mes';
-  document.getElementById('rYear').textContent='₲ '+fGs(sy);document.getElementById('rYearSub').textContent='≈ USD '+fU(sy/rate)+'/año';
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
 }
-function fGs(n){if(n>=1e9)return(n/1e9).toFixed(1).replace('.0','')+' mil M';if(n>=1e6)return(n/1e6).toFixed(1).replace('.0','')+' millones';if(n>=1e3)return Math.round(n/1e3).toLocaleString()+'K';return Math.round(n).toLocaleString()}
-function fU(n){return Math.round(n).toLocaleString()}
-updateCalc();
+resize();
+window.addEventListener('resize', resize);
 
-function toggleFaq(el){const i=el.parentElement,w=i.classList.contains('active');document.querySelectorAll('.faq-item').forEach(x=>x.classList.remove('active'));if(!w)i.classList.add('active')}
+class Particle {
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.size = Math.random() * 1.5 + 0.3;
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.speedY = (Math.random() - 0.5) * 0.3;
+    this.opacity = Math.random() * 0.4 + 0.05;
+    this.hue = Math.random() > 0.5 ? 185 : 270;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    const dx = mouse.x - this.x;
+    const dy = mouse.y - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 120) {
+      const force = (120 - dist) / 120;
+      this.x -= dx * force * 0.008;
+      this.y -= dy * force * 0.008;
+      this.opacity = Math.min(0.8, this.opacity + 0.02);
+    } else {
+      this.opacity += (0.15 - this.opacity) * 0.01;
+    }
+    if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${this.hue}, 100%, 65%, ${this.opacity})`;
+    ctx.fill();
+  }
+}
 
-const chatM=document.getElementById('chatMessages'),qR=document.getElementById('quickReplies'),cI=document.getElementById('chatInput');
-let chatOpen=false,chatInit=false;
-function toggleChat(){chatOpen=!chatOpen;document.getElementById('chatbotWindow').classList.toggle('open',chatOpen);document.getElementById('chatbotToggle').classList.toggle('active',chatOpen);const i=document.getElementById('chatIcon');if(chatOpen){i.innerHTML='<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';if(!chatInit){chatInit=true;initChat()}}else{i.innerHTML='<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>'}}
-function addMsg(t,s,d=0){return new Promise(r=>{setTimeout(()=>{const div=document.createElement('div');div.className='chat-msg '+s;div.innerHTML=t;chatM.appendChild(div);chatM.scrollTop=chatM.scrollHeight;r()},d)})}
-function showTyping(){const d=document.createElement('div');d.className='chat-msg bot typing';d.id='typInd';d.innerHTML='<div class="dots"><span></span><span></span><span></span></div>';chatM.appendChild(d);chatM.scrollTop=chatM.scrollHeight}
-function hideTyping(){const t=document.getElementById('typInd');if(t)t.remove()}
-function showQR(reps){qR.innerHTML='';reps.forEach(r=>{const b=document.createElement('button');b.className='chat-quick-btn';b.textContent=r.text;b.onclick=()=>handleQR(r.key);qR.appendChild(b)})}
-function clearQR(){qR.innerHTML=''}
-async function initChat(){await addMsg('¡Hola! Soy el bot de Whiterabbit 🐇','bot',400);showTyping();await new Promise(r=>setTimeout(r,900));hideTyping();await addMsg('Estoy acá para ayudarte a entender cómo podemos potenciar tu negocio. ¿Qué te interesa?','bot');showQR([{text:'💬 Quiero un chatbot',key:'chatbot'},{text:'⚙️ Automatizar procesos',key:'automation'},{text:'📊 Marketing digital',key:'marketing'},{text:'💰 Ver precios',key:'pricing'}])}
-const resp={chatbot:{msg:'Nuestros chatbots con IA atienden 24/7 por WhatsApp, Instagram o tu web. Resuelven consultas, agendan citas y hasta cierran ventas. El 85% de consultas se resuelven sin intervención humana.',fu:'¿Querés saber cuánto cuesta o ver un caso?',reps:[{text:'💰 Precios',key:'pricing'},{text:'📋 Caso de éxito',key:'case'},{text:'📞 Hablar con el equipo',key:'contact'}]},automation:{msg:'Conectamos tus herramientas (CRM, WhatsApp, facturación, email) y creamos flujos automáticos. Nuestros clientes recuperan +20 horas semanales.',fu:'Probá nuestra calculadora de ahorro en la web, o hablá directo con el equipo.',reps:[{text:'🧮 Ver calculadora',key:'calculator'},{text:'💰 Precios',key:'pricing'},{text:'📞 Contacto',key:'contact'}]},marketing:{msg:'Automatizamos Meta Ads con reglas inteligentes: optimizan presupuesto, pausan ads malos y escalan los buenos — 24/7. Promedio 3x ROAS.',fu:'¿Te interesa ver resultados o hablar de tu caso?',reps:[{text:'📋 Caso de éxito',key:'case'},{text:'📞 Contacto',key:'contact'}]},pricing:{msg:'Precios según proyecto:<br><br>• <strong>Chatbot IA:</strong> desde ₲ 3.000.000<br>• <strong>Automatización:</strong> desde ₲ 2.500.000<br>• <strong>Sistema web:</strong> desde ₲ 8.000.000<br>• <strong>Marketing:</strong> desde ₲ 1.500.000/mes<br><br>Consulta inicial 100% gratis.',fu:'¿Agendamos una consulta gratuita?',reps:[{text:'📞 Sí, hablemos',key:'contact'},{text:'🔙 Ver servicios',key:'services'}]},case:{msg:'Caso real: cadena retail en Asunción pasó de responder en <strong>4 horas</strong> a <strong>30 segundos</strong> con nuestro chatbot. 85% de consultas automatizadas, equipo enfocado en ventas.',fu:'¿Te gustaría algo similar?',reps:[{text:'📞 Sí, hablemos',key:'contact'},{text:'💰 Precios',key:'pricing'}]},contact:{msg:'¡Genial! La forma más rápida es por WhatsApp:<br><br><a href="https://wa.me/595XXXXXXXXX?text=Hola%20Whiterabbit!" target="_blank" style="color:var(--cyan);text-decoration:underline">👉 Abrir WhatsApp</a><br><br>Te responde una persona real del equipo.',fu:'',reps:[]},calculator:{msg:'¡Buena idea! Scrolleá hacia abajo en la web y encontrá la <strong>Calculadora de Ahorro</strong>. Mové los controles y vas a ver cuánto podés recuperar.',fu:'',reps:[{text:'📞 Contacto',key:'contact'},{text:'💰 Precios',key:'pricing'}]},services:{msg:'Nuestros 3 pilares:<br><br>🤖 <strong>Automatización inteligente</strong> — Chatbots, RPA, integraciones<br>💻 <strong>Desarrollo a medida</strong> — Sistemas, apps, webs<br>📈 <strong>Growth & marketing</strong> — Meta Ads, funnels, estrategia',fu:'¿Cuál te interesa más?',reps:[{text:'💬 Chatbots',key:'chatbot'},{text:'⚙️ Desarrollo',key:'automation'},{text:'📊 Marketing',key:'marketing'}]}};
-const labels={chatbot:'Quiero un chatbot',automation:'Automatizar procesos',marketing:'Marketing digital',pricing:'Ver precios',case:'Ver caso de éxito',contact:'Hablar con el equipo',calculator:'Ver calculadora',services:'Ver servicios'};
-async function handleQR(k){clearQR();const d=resp[k];if(!d)return;await addMsg(labels[k]||k,'user');showTyping();await new Promise(r=>setTimeout(r,700+Math.random()*500));hideTyping();await addMsg(d.msg,'bot');if(d.fu){showTyping();await new Promise(r=>setTimeout(r,500));hideTyping();await addMsg(d.fu,'bot')}if(d.reps.length)showQR(d.reps)}
-function sendChat(){const t=cI.value.trim();if(!t)return;cI.value='';clearQR();addMsg(t,'user');const l=t.toLowerCase();let k='services';if(l.match(/chatbot|bot|whatsapp|atenc/))k='chatbot';else if(l.match(/automat|proceso|integr|rpa/))k='automation';else if(l.match(/market|ads|meta|anuncio|publicidad|funnel/))k='marketing';else if(l.match(/precio|costo|cuanto|cuánto|cotiz|presupuesto/))k='pricing';else if(l.match(/caso|ejemplo|resultado|portfolio/))k='case';else if(l.match(/hablar|contacto|reunión|reunion|agenda|llamar/))k='contact';else if(l.match(/calcul|ahorro/))k='calculator';const d=resp[k];showTyping();setTimeout(async()=>{hideTyping();await addMsg(d.msg,'bot');if(d.fu){showTyping();await new Promise(r=>setTimeout(r,500));hideTyping();await addMsg(d.fu,'bot')}if(d.reps.length)showQR(d.reps)},900+Math.random()*700)}
+for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+function connectParticles() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(0, 232, 255, ${0.03 * (1 - dist / 100)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  connectParticles();
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ── CUSTOM CURSOR ──
+const cursor = document.getElementById('cursor');
+const dot = document.getElementById('cursorDot');
+let cx = 0, cy = 0, dx = 0, dy = 0;
+
+document.addEventListener('mousemove', e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+  dx = e.clientX;
+  dy = e.clientY;
+  dot.style.left = e.clientX + 'px';
+  dot.style.top = e.clientY + 'px';
+});
+
+function animateCursor() {
+  cx += (dx - cx) * 0.12;
+  cy += (dy - cy) * 0.12;
+  cursor.style.left = cx + 'px';
+  cursor.style.top = cy + 'px';
+  requestAnimationFrame(animateCursor);
+}
+if (window.matchMedia('(pointer:fine)').matches) animateCursor();
+
+document.querySelectorAll('a, button, .service-card, .process-step').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+});
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ── REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const rObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+reveals.forEach(el => rObs.observe(el));
+
+// ── CODE FLASHLIGHT CANVAS ──
+const codeCanvas = document.getElementById('codeCanvas');
+const cCtx = codeCanvas.getContext('2d');
+let cW, cH, codeMx = -500, codeMy = -500;
+
+const codeSnippets = [
+  // Brand + core keywords
+  'whiterabbit.automate("tu negocio en Asunción");',
+  'const seo = await whiterabbit.posicionar("Paraguay");',
+  '// Automatización con IA en Paraguay — whiterabbit.com.py',
+  'chatbot.deploy({ canal: "WhatsApp", ciudad: "Asunción" });',
+  'whiterabbit.seo.audit("tu-web.com.py");',
+  'const ranking = google.getPosition("página 1");',
+  '// Desarrollo web a medida en Paraguay',
+  'await whiterabbit.crearSistema({ stack: "next.js" });',
+  'metaAds.optimize({ roas: 3.2, mercado: "Paraguay" });',
+  '// Chatbot con IA para empresas paraguayas',
+  'whiterabbit.marketing.automatizar("Meta Ads");',
+  'const resultado = await seo.llevarAPagina1(cliente);',
+  '// Agencia de inteligencia artificial en Asunción',
+  'bot.responder24x7({ idioma: "guaraní", canal: "wa" });',
+  'await whiterabbit.integrar(crm, whatsapp, facturación);',
+  '// SEO técnico y posicionamiento web en Paraguay',
+  'const leads = funnel.convertir({ costo: "↓70%" });',
+  'whiterabbit.analizar({ coreWebVitals: true });',
+  '// Sistemas a medida para PyMEs en Paraguay',
+  'automatización.ejecutar({ horas_ahorradas: 20 });',
+  'const web = await whiterabbit.diseñar("landing");',
+  '// Marketing digital automatizado en Asunción',
+  'seo.monitorear({ keywords: 50, posición: "top 3" });',
+  'whiterabbit.escalar(negocio, { velocidad: "2x" });',
+  '// Desarrollo de chatbots WhatsApp en Paraguay',
+  'const ia = require("whiterabbit/inteligencia");',
+  'proceso.automatizar({ manual: false, ia: true });',
+  '// Posicionamiento Google primera página Paraguay',
+  'whiterabbit.consulta({ costo: "gratis", respuesta: "48hs" });',
+  'await deploy({ plataforma: "vercel", país: "py" });',
+  '// El conejo blanco te lleva al futuro digital',
+  'growth.hack({ adSpend: "optimizado", roi: "3x" });',
+  'whiterabbit.transform(empresaTradicional, empresaDigital);',
+  '// Automatización de procesos empresariales Asunción',
+  'const clientes = await whiterabbit.satisfechos();',
+  'seo.indexar({ páginas: "todas", velocidad: "rápido" });',
+  '// Hacemos que tu negocio evolucione — whiterabbit',
+  'if (necesitasIA) return whiterabbit.start();',
+  '// Agencia tech #1 en Paraguay — follow the rabbit',
+];
+
+let codeLines = [];
+
+function initCodeLines() {
+  cW = codeCanvas.width = window.innerWidth;
+  cH = codeCanvas.height = document.documentElement.scrollHeight;
+  codeLines = [];
+  const lineH = 22;
+  const cols = Math.ceil(cW / 380);
+  const rows = Math.ceil(cH / lineH);
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const snippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+      codeLines.push({
+        text: snippet,
+        x: c * 380 + (r % 2) * 120 + Math.random() * 40 - 20,
+        y: r * lineH + Math.random() * 6,
+        color: Math.random() > 0.6 ? '#00e8ff' : Math.random() > 0.5 ? '#8b3dff' : '#ff3d8b',
+      });
+    }
+  }
+}
+initCodeLines();
+window.addEventListener('resize', initCodeLines);
+
+let resizeCodeTimer;
+const bodyObs = new MutationObserver(() => {
+  clearTimeout(resizeCodeTimer);
+  resizeCodeTimer = setTimeout(initCodeLines, 300);
+});
+bodyObs.observe(document.body, { childList: true, subtree: true });
+
+document.addEventListener('mousemove', e => {
+  codeMx = e.clientX;
+  codeMy = e.clientY + window.scrollY;
+});
+
+function drawCodeCanvas() {
+  cCtx.clearRect(0, 0, cW, cH);
+  const scrollY = window.scrollY;
+  const viewTop = scrollY;
+  const viewBot = scrollY + window.innerHeight;
+  const radius = 200;
+  const my = codeMy;
+  const mx = codeMx;
+
+  cCtx.font = '12px "Space Mono", monospace';
+  cCtx.textBaseline = 'middle';
+
+  for (let i = 0; i < codeLines.length; i++) {
+    const ln = codeLines[i];
+    if (ln.y < viewTop - 50 || ln.y > viewBot + 50) continue;
+
+    const ddx = ln.x + 100 - mx;
+    const ddy = ln.y - my;
+    const dist = Math.sqrt(ddx * ddx + ddy * ddy);
+
+    if (dist < radius) {
+      const intensity = 1 - (dist / radius);
+      const alpha = intensity * intensity * 0.35;
+      cCtx.fillStyle = ln.color.replace(')', `,${alpha})`).replace('rgb', 'rgba').replace('#00e8ff', `rgba(0,232,255,${alpha})`).replace('#8b3dff', `rgba(139,61,255,${alpha})`).replace('#ff3d8b', `rgba(255,61,139,${alpha})`);
+      // Simple color to rgba
+      if (ln.color === '#00e8ff') cCtx.fillStyle = `rgba(0,232,255,${alpha})`;
+      else if (ln.color === '#8b3dff') cCtx.fillStyle = `rgba(139,61,255,${alpha})`;
+      else cCtx.fillStyle = `rgba(255,61,139,${alpha})`;
+      cCtx.fillText(ln.text, ln.x, ln.y - scrollY);
+    }
+  }
+  requestAnimationFrame(drawCodeCanvas);
+}
+if (window.matchMedia('(pointer:fine)').matches) drawCodeCanvas();
+
+// ── SMOOTH SCROLL ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ── RABBIT DESINTEGRATION ──
+const rabbitScene = document.getElementById('rabbitScene');
+let revealTimeout;
+
+// Desktop: scroll-based reveal
+const heroSection = document.querySelector('.hero');
+window.addEventListener('scroll', () => {
+  const heroBottom = heroSection.getBoundingClientRect().bottom;
+  const threshold = window.innerHeight * 0.4;
+  if (heroBottom < threshold) {
+    rabbitScene.classList.add('revealing');
+  } else {
+    rabbitScene.classList.remove('revealing');
+  }
+});
+
+// Mobile: touch to toggle
+rabbitScene.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  rabbitScene.classList.add('revealing');
+  clearTimeout(revealTimeout);
+  revealTimeout = setTimeout(() => rabbitScene.classList.remove('revealing'), 3000);
+}, { passive: false });
+
+// Desktop: hover on rabbit to reveal
+rabbitScene.addEventListener('mouseenter', () => {
+  rabbitScene.classList.add('revealing');
+});
+rabbitScene.addEventListener('mouseleave', () => {
+  rabbitScene.classList.remove('revealing');
+});
 </script>
 </body>
 </html>
