@@ -303,6 +303,33 @@ async def contact(req: ContactRequest):
         except Exception as e:
             print(f"[EMAIL WELCOME ERROR] {e}")
 
+    # Notify admin about new message
+    if RESEND_API_KEY:
+        try:
+            async with httpx.AsyncClient() as client:
+                await client.post(
+                    "https://api.resend.com/emails",
+                    headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
+                    json={
+                        "from": "WhiteRabbit <hola@whiterabbit.com.py>",
+                        "to": ["info@whiterabbit.com.py"],
+                        "subject": f"Nuevo lead: {name}",
+                        "html": email_base(f"""
+                            <h2>Nuevo mensaje desde la landing</h2>
+                            <p><span class="highlight">Nombre:</span> {name}</p>
+                            <p><span class="highlight">Email:</span> {email}</p>
+                            <div class="quote-box"><p>{message}</p></div>
+                            <p style="margin-top:24px">
+                                <a href="https://whiterabbit-diagnostic-production.up.railway.app/dashboard" class="cta-btn">Ver en el dashboard</a>
+                            </p>
+                        """),
+                    },
+                    timeout=10,
+                )
+                print(f"[EMAIL ADMIN NOTIFY] new lead from {email}")
+        except Exception as e:
+            print(f"[EMAIL ADMIN NOTIFY ERROR] {e}")
+
     return {"success": True, "message": "Mensaje recibido. Te respondemos pronto!"}
 
 
