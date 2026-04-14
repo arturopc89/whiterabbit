@@ -234,6 +234,7 @@ async def upsert_lead(
     # Upsert: on conflict (email) update
     resp = await c.post(
         "/leads",
+        params={"on_conflict": "email"},
         json=data,
         headers={
             "Prefer": "return=representation,resolution=merge-duplicates",

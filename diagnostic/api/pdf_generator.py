@@ -76,7 +76,7 @@ class WRReport(FPDF):
         self.set_fill_color(*fill)
         self.set_draw_color(220, 220, 230)
         self.set_line_width(0.2)
-        self.round_rect(x, y, w, h, 3, 'FD')
+        self.rect(x, y, w, h, 'FD')
 
     def score_circle(self, score: int, x: float, y: float):
         """Draw the health score circle."""
@@ -201,7 +201,7 @@ def generate_report_pdf(
             # Impact badge
             pdf.set_fill_color(*impact_color)
             pdf.set_draw_color(*impact_color)
-            pdf.round_rect(21, issue_y + 3, 18, 6, 1.5, 'F')
+            pdf.rect(21, issue_y + 3, 18, 6, 'F')
             pdf.set_font("Helvetica", "B", 6)
             pdf.set_text_color(*WHITE)
             pdf.set_xy(21, issue_y + 4)
@@ -319,7 +319,7 @@ def generate_report_pdf(
     pdf.set_fill_color(*DARK)
     pdf.set_draw_color(*CYAN)
     pdf.set_line_width(0.5)
-    pdf.round_rect(18, pdf.get_y(), 174, 80, 6, 'FD')
+    pdf.rect(18, pdf.get_y(), 174, 80, 'FD')
 
     cta_y = pdf.get_y()
     pdf.set_font("Helvetica", "B", 16)
@@ -337,7 +337,7 @@ def generate_report_pdf(
     # WA button
     pdf.set_fill_color(37, 211, 102)
     pdf.set_draw_color(37, 211, 102)
-    pdf.round_rect(64, cta_y + 45, 82, 14, 4, 'F')
+    pdf.rect(64, cta_y + 45, 82, 14, 'F')
     pdf.set_font("Helvetica", "B", 9)
     pdf.set_text_color(*WHITE)
     pdf.set_xy(64, cta_y + 48)
