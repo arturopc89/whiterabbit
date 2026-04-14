@@ -354,6 +354,36 @@ section{position:relative;z-index:1;padding:8rem 3rem}
 .diag-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
 .diag-hint{font-size:0.75rem;color:var(--dim);font-family:var(--mono);text-align:center}
 
+/* Email gate (shown during loading) */
+.diag-gate{display:none;max-width:500px;margin:2rem auto 0;background:var(--card);border:1px solid rgba(0,232,255,0.2);border-radius:14px;padding:1.8rem;text-align:center;animation:fadeInUp 0.4s ease-out}
+.diag-gate.active{display:block}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.diag-gate-icon{font-size:2rem;margin-bottom:0.6rem}
+.diag-gate-title{font-family:var(--display);font-size:1rem;font-weight:600;margin-bottom:0.4rem;color:var(--white)}
+.diag-gate-sub{font-size:0.8rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.5}
+.diag-gate-row{display:flex;gap:10px}
+.diag-gate-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.75rem 1rem;color:var(--white);font-family:var(--body);font-size:0.9rem;outline:none;transition:border-color 0.3s}
+.diag-gate-input:focus{border-color:rgba(0,232,255,0.4)}
+.diag-gate-input::placeholder{color:var(--dim)}
+.diag-gate-btn{padding:0.75rem 1.4rem;background:linear-gradient(135deg,var(--cyan),var(--violet));border:none;border-radius:8px;color:#030305;font-family:var(--display);font-weight:700;font-size:0.85rem;cursor:pointer;white-space:nowrap;transition:all 0.3s}
+.diag-gate-btn:hover{transform:translateY(-1px);box-shadow:0 0 20px rgba(0,232,255,0.2)}
+.diag-gate-skip{display:block;margin-top:0.8rem;font-size:0.72rem;color:var(--dim);cursor:pointer;font-family:var(--mono);transition:color 0.2s;background:none;border:none;padding:0}
+.diag-gate-skip:hover{color:var(--muted)}
+.diag-gate-ok{display:none;align-items:center;justify-content:center;gap:8px;color:var(--cyan);font-size:0.85rem;font-family:var(--mono);margin-top:0.5rem}
+.diag-gate-ok.show{display:flex}
+/* Post-results email banner (for users who skipped) */
+.diag-email-banner{display:none;margin:2rem 0 0;background:linear-gradient(135deg,rgba(0,232,255,0.06),rgba(139,61,255,0.06));border:1px solid rgba(0,232,255,0.15);border-radius:12px;padding:1.2rem 1.6rem;align-items:center;gap:1rem;flex-wrap:wrap}
+.diag-email-banner.show{display:flex}
+.diag-email-banner-text{flex:1;min-width:200px}
+.diag-email-banner-text strong{display:block;font-size:0.9rem;margin-bottom:0.2rem}
+.diag-email-banner-text span{font-size:0.78rem;color:var(--muted)}
+.diag-email-banner-row{display:flex;gap:8px;flex-shrink:0}
+.diag-email-banner-input{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.9rem;color:var(--white);font-family:var(--body);font-size:0.85rem;outline:none;width:210px;transition:border-color 0.3s}
+.diag-email-banner-input:focus{border-color:rgba(0,232,255,0.4)}
+.diag-email-banner-input::placeholder{color:var(--dim)}
+.diag-email-banner-btn{padding:0.6rem 1.1rem;background:var(--cyan);border:none;border-radius:8px;color:#030305;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:var(--display);white-space:nowrap;transition:all 0.2s}
+.diag-email-banner-btn:hover{background:#33eeff}
+
 /* Diagnostic loading */
 .diag-loading{display:none;text-align:center;padding:3rem 0}
 .diag-loading.active{display:block}
@@ -939,6 +969,19 @@ section{position:relative;z-index:1;padding:8rem 3rem}
       <div class="diag-hint">Gratis. Sin registro. Resultados en ~30 segundos.</div>
     </div>
 
+    <!-- Email gate: shown during loading -->
+    <div class="diag-gate" id="diagGate">
+      <div class="diag-gate-icon">📬</div>
+      <div class="diag-gate-title">Tu análisis está corriendo...</div>
+      <div class="diag-gate-sub">Dejanos tu email y te enviamos el reporte completo<br>con recomendaciones personalizadas para tu negocio.</div>
+      <div class="diag-gate-row">
+        <input type="email" class="diag-gate-input" id="diagGateEmail" placeholder="tu@email.com" autocomplete="email">
+        <button class="diag-gate-btn" onclick="submitGateEmail()">Enviar</button>
+      </div>
+      <div class="diag-gate-ok" id="diagGateOk">✓ ¡Listo! Te enviamos el reporte cuando esté.</div>
+      <button class="diag-gate-skip" onclick="skipGate()">Saltar, solo quiero ver los resultados →</button>
+    </div>
+
     <div class="diag-loading" id="diagLoading">
       <div class="diag-spinner"></div>
       <div class="diag-loading-text">
@@ -988,6 +1031,18 @@ section{position:relative;z-index:1;padding:8rem 3rem}
       <div class="diag-traffic reveal" id="diagTraffic">
         <div class="diag-traffic-label">Potencial de crecimiento estimado</div>
         <div class="diag-traffic-val" id="diagTrafficVal"></div>
+      </div>
+
+      <!-- Email banner (shown if user skipped gate) -->
+      <div class="diag-email-banner" id="diagEmailBanner">
+        <div class="diag-email-banner-text">
+          <strong>📧 Guardá tu reporte</strong>
+          <span>Te lo enviamos por email para que lo tengas a mano.</span>
+        </div>
+        <div class="diag-email-banner-row">
+          <input type="email" class="diag-email-banner-input" id="diagBannerEmail" placeholder="tu@email.com">
+          <button class="diag-email-banner-btn" onclick="submitBannerEmail()">Enviar</button>
+        </div>
       </div>
 
       <!-- CTA -->
@@ -1397,6 +1452,11 @@ document.getElementById('diagUrl').addEventListener('keydown', e => {
   if (e.key === 'Enter') runDiagnostic();
 });
 
+// ── Gate state ──
+let diagCapturedEmail = null;
+let diagGateSkipped = false;
+let diagPendingData = null; // holds result if it arrived before email submit
+
 async function runDiagnostic() {
   gtag('event','diagnostic_started',{event_category:'diagnostic'});
   const urlInput = document.getElementById('diagUrl');
@@ -1405,57 +1465,123 @@ async function runDiagnostic() {
   const results = document.getElementById('diagResults');
   const errorEl = document.getElementById('diagError');
   const stepEl = document.getElementById('diagStep');
+  const gate = document.getElementById('diagGate');
 
   const url = urlInput.value.trim();
   if (!url) { urlInput.focus(); return; }
 
-  // Reset
+  // Reset state
+  diagCapturedEmail = null;
+  diagGateSkipped = false;
+  diagPendingData = null;
   btn.disabled = true;
   btn.textContent = 'Analizando...';
   results.classList.remove('active');
   errorEl.classList.remove('active');
+  document.getElementById('diagEmailBanner').classList.remove('show');
+  document.getElementById('diagGateOk').classList.remove('show');
+  document.getElementById('diagGateEmail').value = '';
+
+  // Show loading + gate
   loading.classList.add('active');
+  setTimeout(() => gate.classList.add('active'), 600);
+
   diagStepIdx = 0;
   stepEl.textContent = diagSteps[0];
-
-  // Rotate loading steps
   diagStepInterval = setInterval(() => {
     diagStepIdx = (diagStepIdx + 1) % diagSteps.length;
     stepEl.style.opacity = 0;
-    setTimeout(() => {
-      stepEl.textContent = diagSteps[diagStepIdx];
-      stepEl.style.opacity = 1;
-    }, 200);
+    setTimeout(() => { stepEl.textContent = diagSteps[diagStepIdx]; stepEl.style.opacity = 1; }, 200);
   }, 3500);
 
   try {
     const resp = await fetch(DIAG_API + '/api/diagnose', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url }),
+      body: JSON.stringify({ url, email: diagCapturedEmail }),
     });
-
     if (!resp.ok) {
       const err = await resp.json().catch(() => ({}));
       throw new Error(err.detail || 'Error del servidor');
     }
-
     const data = await resp.json();
+    if (!data.success) throw new Error(data.error || 'No se pudo analizar el sitio');
 
-    if (!data.success) {
-      throw new Error(data.error || 'No se pudo analizar el sitio');
+    if (diagCapturedEmail || diagGateSkipped) {
+      // Email already captured or user skipped — show results immediately
+      _showDiagResults(data);
+    } else {
+      // Waiting for email — store data and wait
+      diagPendingData = data;
     }
-
-    renderDiagResults(data);
   } catch (err) {
     errorEl.textContent = err.message || 'Error de conexión. Intentá de nuevo.';
     errorEl.classList.add('active');
+    gate.classList.remove('active');
   } finally {
     clearInterval(diagStepInterval);
     loading.classList.remove('active');
     btn.disabled = false;
     btn.textContent = 'Analizar';
   }
+}
+
+async function submitGateEmail() {
+  const input = document.getElementById('diagGateEmail');
+  const email = input.value.trim();
+  if (!email || !email.includes('@')) { input.focus(); input.style.borderColor='var(--magenta)'; setTimeout(()=>input.style.borderColor='',1500); return; }
+
+  diagCapturedEmail = email;
+  gtag('event','email_captured',{event_category:'diagnostic',event_label:'gate'});
+
+  // Save to Supabase async (fire and forget)
+  const url = document.getElementById('diagUrl').value.trim();
+  fetch(DIAG_API + '/api/capture-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, url_diagnosed: url, source_page: 'landing' }),
+  }).catch(() => {});
+
+  // Show confirmation
+  document.getElementById('diagGateOk').classList.add('show');
+  document.querySelector('.diag-gate-skip').style.display = 'none';
+  input.disabled = true;
+  document.querySelector('.diag-gate-btn').disabled = true;
+
+  // If diagnostic already finished, show results now
+  if (diagPendingData) {
+    setTimeout(() => _showDiagResults(diagPendingData), 800);
+  }
+}
+
+function skipGate() {
+  diagGateSkipped = true;
+  document.getElementById('diagGate').classList.remove('active');
+  gtag('event','gate_skipped',{event_category:'diagnostic'});
+  if (diagPendingData) _showDiagResults(diagPendingData);
+}
+
+function _showDiagResults(data) {
+  document.getElementById('diagGate').classList.remove('active');
+  renderDiagResults(data);
+  // Show banner if user skipped (didn't give email)
+  if (diagGateSkipped) {
+    setTimeout(() => document.getElementById('diagEmailBanner').classList.add('show'), 1200);
+  }
+}
+
+async function submitBannerEmail() {
+  const input = document.getElementById('diagBannerEmail');
+  const email = input.value.trim();
+  if (!email || !email.includes('@')) { input.focus(); return; }
+  const url = document.getElementById('diagUrl').value.trim();
+  gtag('event','email_captured',{event_category:'diagnostic',event_label:'banner'});
+  await fetch(DIAG_API + '/api/capture-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, url_diagnosed: url, source_page: 'landing' }),
+  }).catch(() => {});
+  document.getElementById('diagEmailBanner').innerHTML = '<span style="color:var(--cyan);font-family:var(--mono);font-size:0.85rem">✓ ¡Listo! Te enviamos el reporte.</span>';
 }
 
 function getScoreColor(score) {
@@ -1720,4 +1846,4 @@ async function submitContact() {
 }
 </script>
 </body>
-</html>d
+</html>
