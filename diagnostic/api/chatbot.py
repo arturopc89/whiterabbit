@@ -29,7 +29,7 @@ Whiterabbit ofrece 4 servicios principales:
 - Soporte continuo post-entrega
 
 ## Contacto
-- WhatsApp: wa.me/595XXXXXXXXX (canal principal)
+- WhatsApp: wa.me/595971185578 (canal principal)
 - Web: www.whiterabbit.com.py
 - Ubicación: Asunción, Paraguay
 

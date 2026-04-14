@@ -59,7 +59,7 @@ def email_base(content: str) -> str:
   </div>
   <div class="footer">
     <p>WhiteRabbit — Automatización & IA en Paraguay</p>
-    <p style="margin-top:8px"><a href="https://www.whiterabbit.com.py">www.whiterabbit.com.py</a> · <a href="https://wa.me/595XXXXXXXXX">WhatsApp</a></p>
+    <p style="margin-top:8px"><a href="https://www.whiterabbit.com.py">www.whiterabbit.com.py</a> · <a href="https://wa.me/595971185578">WhatsApp</a></p>
   </div>
 </div></body></html>"""
 
@@ -72,7 +72,7 @@ def email_welcome(name: str) -> str:
     <div class="divider"></div>
     <p>Mientras tanto, si querés agendar algo más directo:</p>
     <p style="text-align:center;margin-top:24px">
-      <a href="https://wa.me/595XXXXXXXXX?text=Hola%20WhiteRabbit!%20Acabo%20de%20dejarles%20un%20mensaje%20en%20la%20web" class="cta-btn">💬 Escribinos por WhatsApp</a>
+      <a href="https://wa.me/595971185578?text=Hola%20WhiteRabbit!%20Acabo%20de%20dejarles%20un%20mensaje%20en%20la%20web" class="cta-btn">💬 Escribinos por WhatsApp</a>
     </p>
     <div class="divider"></div>
     <p style="color:#55556a;font-size:13px">Este es un mensaje automático. Un humano real te va a responder pronto — probablemente con café en mano ☕</p>
@@ -90,7 +90,7 @@ def email_reply(name: str, reply_text: str, original_message: str) -> str:
     <div class="divider"></div>
     <p>¿Querés seguir la conversación?</p>
     <p style="text-align:center;margin-top:16px">
-      <a href="https://wa.me/595XXXXXXXXX" class="cta-btn">💬 Respondenos por WhatsApp</a>
+      <a href="https://wa.me/595971185578" class="cta-btn">💬 Respondenos por WhatsApp</a>
     </p>
     <p style="text-align:center;margin-top:12px">
       <span style="color:#55556a;font-size:13px">O simplemente respondé este email</span>
