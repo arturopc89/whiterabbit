@@ -62,6 +62,13 @@ class WRReport(FPDF):
         self.set_auto_page_break(auto=True, margin=20)
         self.set_margins(18, 18, 18)
 
+    # ── Auto-sanitize ALL text going into the PDF ──
+    def cell(self, w=0, h=0, txt="", border=0, ln=0, align="", fill=False, link="", **kw):
+        return super().cell(w, h, _safe(str(txt)) if txt else "", border, ln, align, fill, link, **kw)
+
+    def multi_cell(self, w, h, txt="", border=0, align="J", fill=False, split_only=False, link="", **kw):
+        return super().multi_cell(w, h, _safe(str(txt)) if txt else "", border, align, fill, split_only, link, **kw)
+
     def header(self):
         # White background strip
         self.set_fill_color(*DARK)
@@ -195,10 +202,10 @@ def generate_report_pdf(
         pdf.section_title("Rendimiento técnico (PageSpeed Mobile)", VIOLET)
 
         metrics = [
-            ("Performance", f"{pagespeed.get('score', '—')}/100"),
-            ("LCP", f"{round(pagespeed['lcp']/1000, 1)}s" if pagespeed.get("lcp") else "—"),
-            ("CLS", f"{round(pagespeed['cls'], 2)}" if pagespeed.get("cls") is not None else "—"),
-            ("INP", f"{pagespeed['inp']}ms" if pagespeed.get("inp") else "—"),
+            ("Performance", f"{pagespeed.get('score', '-')}/100"),
+            ("LCP", f"{round(pagespeed['lcp']/1000, 1)}s" if pagespeed.get("lcp") else "-"),
+            ("CLS", f"{round(pagespeed['cls'], 2)}" if pagespeed.get("cls") is not None else "-"),
+            ("INP", f"{pagespeed['inp']}ms" if pagespeed.get("inp") else "-"),
         ]
 
         mx = 18
