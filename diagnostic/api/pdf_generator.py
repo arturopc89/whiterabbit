@@ -11,6 +11,36 @@ import io
 from typing import Optional
 from fpdf import FPDF
 
+# ── Text sanitizer ──
+# Helvetica (Latin-1) supports Spanish accents but NOT em/en dashes,
+# smart quotes, or other Unicode outside Latin-1.
+_REPLACEMENTS = {
+    "\u2014": "-",   # em dash —
+    "\u2013": "-",   # en dash –
+    "\u2012": "-",   # figure dash
+    "\u2018": "'",   # left single quote '
+    "\u2019": "'",   # right single quote '
+    "\u201c": '"',   # left double quote "
+    "\u201d": '"',   # right double quote "
+    "\u2026": "...", # ellipsis …
+    "\u00b7": "-",   # middle dot ·
+    "\u2022": "-",   # bullet •
+    "\u2192": "->",  # arrow →
+    "\u00d7": "x",   # multiplication sign ×
+    "\u2260": "!=",  # not equal ≠
+}
+
+def _safe(text: str, max_len: int = 9999) -> str:
+    """Sanitize text to Latin-1 charset for fpdf2 Helvetica compatibility."""
+    if not text:
+        return ""
+    for char, replacement in _REPLACEMENTS.items():
+        text = text.replace(char, replacement)
+    # Encode/decode to catch any remaining non-Latin-1 chars
+    text = text.encode("latin-1", errors="replace").decode("latin-1")
+    return text[:max_len]
+
+
 # ── Brand colors (RGB) ──
 CYAN = (0, 200, 230)        # Lighter cyan for print
 VIOLET = (100, 50, 200)     # Violet
@@ -114,12 +144,12 @@ def generate_report_pdf(
     """Generate a branded PDF report. Returns PDF bytes."""
 
     health_score = report.get("health_score", 0) or 0
-    business_type = report.get("business_type", "")
-    summary = report.get("summary", "")
+    business_type = _safe(report.get("business_type", ""))
+    summary = _safe(report.get("summary", ""))
     critical_issues = report.get("critical_issues", []) or []
     opportunities = report.get("opportunities", []) or []
     automation_proposals = report.get("automation_proposals", []) or []
-    traffic_estimate = report.get("traffic_estimate", "")
+    traffic_estimate = _safe(report.get("traffic_estimate", ""))
 
     pdf = WRReport(site_url=url)
     pdf.add_page()
@@ -211,13 +241,13 @@ def generate_report_pdf(
             pdf.set_font("Helvetica", "B", 8.5)
             pdf.set_text_color(*DARK)
             pdf.set_xy(43, issue_y + 3)
-            pdf.cell(147, 5, issue.get("issue", "")[:80], ln=1)
+            pdf.cell(147, 5, _safe(issue.get("issue", ""), 80), ln=1)
 
             # Explanation
             pdf.set_font("Helvetica", "", 7.5)
             pdf.set_text_color(*MUTED)
             pdf.set_xy(43, issue_y + 9)
-            pdf.cell(147, 5, issue.get("explanation", "")[:100], ln=1)
+            pdf.cell(147, 5, _safe(issue.get("explanation", ""), 100), ln=1)
 
             pdf.set_y(issue_y + 21)
 
@@ -245,19 +275,19 @@ def generate_report_pdf(
             pdf.set_font("Helvetica", "B", 8.5)
             pdf.set_text_color(*DARK)
             pdf.set_xy(24, opp_y + 3)
-            pdf.cell(168, 5, opp.get("title", "")[:85], ln=1)
+            pdf.cell(168, 5, _safe(opp.get("title", ""), 85), ln=1)
 
             # Impact
             pdf.set_font("Helvetica", "I", 7.5)
             pdf.set_text_color(*CYAN)
             pdf.set_xy(24, opp_y + 9)
-            pdf.cell(168, 4, opp.get("estimated_impact", "")[:90], ln=1)
+            pdf.cell(168, 4, _safe(opp.get("estimated_impact", ""), 90), ln=1)
 
             # Fix
             pdf.set_font("Helvetica", "", 7)
             pdf.set_text_color(*MUTED)
             pdf.set_xy(24, opp_y + 14)
-            pdf.cell(168, 4, opp.get("how_to_fix", "")[:100], ln=1)
+            pdf.cell(168, 4, _safe(opp.get("how_to_fix", ""), 100), ln=1)
 
             pdf.set_y(opp_y + 23)
 
@@ -284,12 +314,12 @@ def generate_report_pdf(
             pdf.set_font("Helvetica", "B", 8.5)
             pdf.set_text_color(*DARK)
             pdf.set_xy(24, prop_y + 3)
-            pdf.cell(168, 5, prop.get("title", "")[:85], ln=1)
+            pdf.cell(168, 5, _safe(prop.get("title", ""), 85), ln=1)
 
             pdf.set_font("Helvetica", "", 7.5)
             pdf.set_text_color(*MUTED)
             pdf.set_xy(24, prop_y + 10)
-            pdf.multi_cell(162, 4, prop.get("description", "")[:150])
+            pdf.multi_cell(162, 4, _safe(prop.get("description", ""), 150))
 
             pdf.set_y(prop_y + 25)
 
@@ -308,7 +338,7 @@ def generate_report_pdf(
         pdf.set_font("Helvetica", "", 8)
         pdf.set_text_color(*DARK)
         pdf.set_xy(22, est_y + 10)
-        pdf.cell(166, 5, str(traffic_estimate)[:120], ln=1)
+        pdf.cell(166, 5, _safe(str(traffic_estimate), 120), ln=1)
         pdf.set_y(est_y + 22)
 
     # ── CTA PAGE ──
