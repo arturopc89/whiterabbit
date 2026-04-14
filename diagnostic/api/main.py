@@ -250,6 +250,163 @@ async def health():
 
 
 # ══════════════════════════════════════════════════════════
+# ── EMAIL CAPTURE (diagnostic gate) ──
+# ══════════════════════════════════════════════════════════
+
+class EmailCaptureRequest(BaseModel):
+    email: EmailStr
+    url_diagnosed: str = ""
+    source_page: str = "landing"
+    utm_source: str = ""
+    utm_medium: str = ""
+    utm_campaign: str = ""
+
+
+@app.post("/api/capture-email")
+async def capture_email(req: EmailCaptureRequest, request: Request):
+    """Capture email from the diagnostic gate (no report data yet)."""
+    email = req.email.strip().lower()
+    import hashlib
+    client_ip = request.headers.get("x-forwarded-for", request.client.host if request.client else "")
+    ip_hash = hashlib.sha256(client_ip.encode()).hexdigest()[:16] if client_ip else None
+    try:
+        await db.capture_email(
+            email=email,
+            url_diagnosed=req.url_diagnosed[:500] if req.url_diagnosed else None,
+            source_page=req.source_page,
+            utm_source=req.utm_source or None,
+            utm_medium=req.utm_medium or None,
+            utm_campaign=req.utm_campaign or None,
+            ip_hash=ip_hash,
+        )
+        await db.upsert_lead(email=email, source="diagnostic")
+    except Exception as e:
+        print(f"[EMAIL CAPTURE ERROR] {e}")
+    return {"success": True}
+
+
+class SendReportRequest(BaseModel):
+    email: EmailStr
+    url: str
+    report: dict
+    pagespeed: dict = {}
+
+
+@app.post("/api/send-report")
+async def send_report(req: SendReportRequest):
+    """Generate branded PDF report and send it via email."""
+    from pdf_generator import generate_report_pdf
+    import base64
+
+    email = req.email.strip().lower()
+    url = req.url.strip()
+
+    # Save capture to DB
+    try:
+        await db.capture_email(email=email, url_diagnosed=url, source_page="landing")
+        await db.upsert_lead(email=email, source="diagnostic")
+    except Exception as e:
+        print(f"[SEND REPORT DB ERROR] {e}")
+
+    if not RESEND_API_KEY:
+        return {"success": False, "error": "Email no configurado"}
+
+    # Generate PDF
+    try:
+        pdf_bytes = generate_report_pdf(
+            url=url,
+            report=req.report,
+            pagespeed=req.pagespeed,
+        )
+        pdf_b64 = base64.b64encode(pdf_bytes).decode()
+    except Exception as e:
+        print(f"[PDF GENERATION ERROR] {e}")
+        return {"success": False, "error": f"Error generando PDF: {str(e)[:100]}"}
+
+    # Build email content
+    health_score = req.report.get("health_score", 0) or 0
+    score_label = "🟢 Excelente" if health_score >= 80 else ("🟡 Mejorable" if health_score >= 50 else "🔴 Crítico")
+    issues_count = len(req.report.get("critical_issues", []) or [])
+
+    html = email_base(f"""
+        <h2>Tu reporte de diagnóstico está listo 🐇</h2>
+        <p>Analizamos <span class="highlight">{url}</span> y esto es lo que encontramos:</p>
+        <div style="text-align:center;margin:24px 0">
+          <div style="display:inline-block;background:#0c0c14;border:1px solid rgba(0,232,255,0.2);border-radius:12px;padding:20px 40px">
+            <div style="font-size:48px;font-weight:700;color:{'#22c55e' if health_score >= 80 else ('#f59e0b' if health_score >= 50 else '#ef4444')}">{health_score}</div>
+            <div style="font-size:11px;color:#55556a;letter-spacing:2px;text-transform:uppercase">Health Score</div>
+            <div style="margin-top:8px;font-size:14px;color:#eeeef3">{score_label}</div>
+          </div>
+        </div>
+        <p>Encontramos <span class="highlight">{issues_count} problema{'s' if issues_count != 1 else ''} crítico{'s' if issues_count != 1 else ''}</span> y oportunidades de mejora detalladas en tu reporte adjunto.</p>
+        <div class="divider"></div>
+        <p>El reporte completo con análisis, oportunidades y propuestas personalizadas está adjunto en PDF. Si querés que lo implementemos juntos:</p>
+        <p style="text-align:center;margin-top:20px">
+          <a href="https://wa.me/595971185578?text=Hola%20WhiteRabbit!%20Vi%20mi%20reporte%20de%20diagnóstico%20y%20quiero%20saber%20más." class="cta-btn">💬 Hablemos por WhatsApp</a>
+        </p>
+        <div class="divider"></div>
+        <p style="color:#55556a;font-size:12px">Este reporte fue generado automáticamente por el agente de diagnóstico de WhiteRabbit para {url}</p>
+    """)
+
+    # Send via Resend with PDF attachment
+    try:
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(
+                "https://api.resend.com/emails",
+                headers={
+                    "Authorization": f"Bearer {RESEND_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "from": "WhiteRabbit <hola@whiterabbit.com.py>",
+                    "to": [email],
+                    "subject": f"Tu reporte WhiteRabbit — {url} (Score: {health_score}/100)",
+                    "html": html,
+                    "attachments": [{
+                        "filename": f"reporte-whiterabbit-{url.replace('https://','').replace('http://','').replace('/','').replace('.','_')[:30]}.pdf",
+                        "content": pdf_b64,
+                    }],
+                },
+                timeout=30,
+            )
+            print(f"[SEND REPORT] to={email} status={resp.status_code}")
+            if resp.status_code not in (200, 201):
+                return {"success": False, "error": f"Resend error: {resp.text[:200]}"}
+    except Exception as e:
+        print(f"[SEND REPORT EMAIL ERROR] {e}")
+        return {"success": False, "error": str(e)[:100]}
+
+    # Notify admin
+    if RESEND_API_KEY:
+        try:
+            async with httpx.AsyncClient() as client:
+                await client.post(
+                    "https://api.resend.com/emails",
+                    headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
+                    json={
+                        "from": "WhiteRabbit <hola@whiterabbit.com.py>",
+                        "to": ["info@whiterabbit.com.py"],
+                        "subject": f"Nuevo lead del diagnóstico: {email} — Score {health_score}",
+                        "html": email_base(f"""
+                            <h2>Nuevo lead — reporte enviado</h2>
+                            <p><span class="highlight">Email:</span> {email}</p>
+                            <p><span class="highlight">URL analizada:</span> {url}</p>
+                            <p><span class="highlight">Health Score:</span> {health_score}/100</p>
+                            <p><span class="highlight">Problemas críticos:</span> {issues_count}</p>
+                            <p style="margin-top:24px">
+                                <a href="https://whiterabbit-diagnostic-production.up.railway.app/dashboard" class="cta-btn">Ver en el dashboard</a>
+                            </p>
+                        """),
+                    },
+                    timeout=10,
+                )
+        except Exception as e:
+            print(f"[ADMIN NOTIFY ERROR] {e}")
+
+    return {"success": True}
+
+
+# ══════════════════════════════════════════════════════════
 # ── CONTACT FORM & MESSAGES ──
 # ══════════════════════════════════════════════════════════
 

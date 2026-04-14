@@ -1507,8 +1507,12 @@ async function runDiagnostic() {
     const data = await resp.json();
     if (!data.success) throw new Error(data.error || 'No se pudo analizar el sitio');
 
-    if (diagCapturedEmail || diagGateSkipped) {
-      // Email already captured or user skipped — show results immediately
+    if (diagCapturedEmail) {
+      // Email already captured — send report + show results
+      _sendReportEmail(diagCapturedEmail, data);
+      _showDiagResults(data);
+    } else if (diagGateSkipped) {
+      // User skipped gate — show results without sending email
       _showDiagResults(data);
     } else {
       // Waiting for email — store data and wait
@@ -1534,23 +1538,35 @@ async function submitGateEmail() {
   diagCapturedEmail = email;
   gtag('event','email_captured',{event_category:'diagnostic',event_label:'gate'});
 
-  // Save to Supabase async (fire and forget)
-  const url = document.getElementById('diagUrl').value.trim();
-  fetch(DIAG_API + '/api/capture-email', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, url_diagnosed: url, source_page: 'landing' }),
-  }).catch(() => {});
-
-  // Show confirmation
+  // Show confirmation immediately
   document.getElementById('diagGateOk').classList.add('show');
   document.querySelector('.diag-gate-skip').style.display = 'none';
   input.disabled = true;
   document.querySelector('.diag-gate-btn').disabled = true;
 
-  // If diagnostic already finished, show results now
+  // If diagnostic already finished, send report + show results
   if (diagPendingData) {
+    _sendReportEmail(email, diagPendingData);
     setTimeout(() => _showDiagResults(diagPendingData), 800);
+  }
+  // If not, _sendReportEmail will be called when diagPendingData arrives (see runDiagnostic)
+}
+
+async function _sendReportEmail(email, data) {
+  const url = document.getElementById('diagUrl').value.trim();
+  try {
+    await fetch(DIAG_API + '/api/send-report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        url,
+        report: data.report || {},
+        pagespeed: data.pagespeed || {},
+      }),
+    });
+  } catch(e) {
+    console.warn('[send-report]', e);
   }
 }
 
@@ -1574,14 +1590,12 @@ async function submitBannerEmail() {
   const input = document.getElementById('diagBannerEmail');
   const email = input.value.trim();
   if (!email || !email.includes('@')) { input.focus(); return; }
-  const url = document.getElementById('diagUrl').value.trim();
   gtag('event','email_captured',{event_category:'diagnostic',event_label:'banner'});
-  await fetch(DIAG_API + '/api/capture-email', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, url_diagnosed: url, source_page: 'landing' }),
-  }).catch(() => {});
-  document.getElementById('diagEmailBanner').innerHTML = '<span style="color:var(--cyan);font-family:var(--mono);font-size:0.85rem">✓ ¡Listo! Te enviamos el reporte.</span>';
+  document.getElementById('diagEmailBanner').innerHTML = '<span style="color:var(--cyan);font-family:var(--mono);font-size:0.85rem">✓ ¡Listo! Te enviamos el reporte en segundos.</span>';
+  // Send full report if available
+  if (diagPendingData || document.getElementById('diagResults').classList.contains('active')) {
+    _sendReportEmail(email, diagPendingData || {report:{},pagespeed:{}});
+  }
 }
 
 function getScoreColor(score) {
