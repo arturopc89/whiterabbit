@@ -76,7 +76,7 @@ Reglas:
     for attempt in range(max_retries):
         try:
             message = client.messages.create(
-                model="claude-haiku-4-5-20251001",  # Haiku: faster + cheaper + less prone to overload
+                model="claude-sonnet-4-20250514",
                 max_tokens=2000,
                 messages=[{"role": "user", "content": prompt}],
             )

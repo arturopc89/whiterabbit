@@ -109,23 +109,25 @@ class WRReport(FPDF):
         self.rect(x, y, w, h, 'FD')
 
     def score_circle(self, score: int, x: float, y: float):
-        """Draw the health score circle."""
+        """Draw the health score as a bordered box (circle-like via ellipse)."""
         color = GREEN if score >= 80 else (AMBER if score >= 50 else RED)
         r = 18
-        # Outer ring
+        # Background square with colored border
+        self.set_fill_color(245, 246, 250)
         self.set_draw_color(*color)
         self.set_line_width(2.5)
-        self.circle(x, y, r * 2)
-        # Score number
-        self.set_font("Helvetica", "B", 22)
+        # Use ellipse: (x_top_left, y_top_left, width, height, style)
+        self.ellipse(x - r, y - r, r * 2, r * 2, style='FD')
+        # Score number centered
+        self.set_font("Helvetica", "B", 24)
         self.set_text_color(*color)
-        self.set_xy(x - r, y - r * 0.55)
-        self.cell(r * 2, r, str(score), align="C")
-        # Label
+        self.set_xy(x - r, y - 8)
+        self.cell(r * 2, 12, str(score), align="C", ln=0)
+        # Label below
         self.set_font("Helvetica", "", 6)
         self.set_text_color(*MUTED)
-        self.set_xy(x - r, y + r * 0.4)
-        self.cell(r * 2, 5, "HEALTH SCORE", align="C")
+        self.set_xy(x - r, y + 7)
+        self.cell(r * 2, 5, "HEALTH SCORE", align="C", ln=0)
 
     def impact_badge(self, impact: str) -> tuple:
         """Return color for impact badge."""
