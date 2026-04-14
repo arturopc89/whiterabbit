@@ -1,9 +1,10 @@
 """FastAPI backend for WhiteRabbit web diagnostic tool."""
 
+from __future__ import annotations
+
 import json
 import os
 import re
-import sqlite3
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 
@@ -17,11 +18,11 @@ from crawler import crawl_site
 from pagespeed import get_pagespeed
 from ai_analyzer import analyze_with_claude
 from chatbot import chat_response
+import db  # ← NEW: PostgreSQL via asyncpg
 
 # ── Config ──
 DASHBOARD_TOKEN = os.getenv("DASHBOARD_TOKEN", "whiterabbit-admin-2024")
 RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
-DB_PATH = os.getenv("DB_PATH", "messages.db")
 
 # ── Email HTML Templates ──
 
@@ -112,46 +113,16 @@ app.add_middleware(
 )
 
 
-# ── SQLite setup ──
-def get_db():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA journal_mode=WAL")
-    return conn
-
-
-def init_db():
-    conn = get_db()
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL,
-            message TEXT NOT NULL,
-            created_at TEXT NOT NULL,
-            read INTEGER DEFAULT 0,
-            replied INTEGER DEFAULT 0,
-            reply_text TEXT,
-            replied_at TEXT
-        )
-    """)
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS diagnostics (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            url TEXT NOT NULL,
-            health_score INTEGER,
-            report_json TEXT,
-            crawl_summary TEXT,
-            created_at TEXT NOT NULL
-        )
-    """)
-    conn.commit()
-    conn.close()
-
+# ── Database setup (PostgreSQL via asyncpg) ──
 
 @app.on_event("startup")
 async def startup():
-    init_db()
+    await db.init_pool()
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    await db.close_pool()
 
 
 def verify_token(authorization: str | None):
@@ -228,17 +199,14 @@ async def diagnose(req: DiagnoseRequest):
 
     # Save diagnostic to database
     try:
-        now = datetime.now(timezone.utc).isoformat()
         health = report.get("health_score") if isinstance(report, dict) else None
         summary = report.get("summary", "") if isinstance(report, dict) else ""
-        report_str = json.dumps(report, ensure_ascii=False) if report else "{}"
-        conn = get_db()
-        conn.execute(
-            "INSERT INTO diagnostics (url, health_score, report_json, crawl_summary, created_at) VALUES (?, ?, ?, ?, ?)",
-            (url, health, report_str, summary[:500], now),
+        await db.insert_diagnostic(
+            url=url,
+            health_score=health,
+            report=report,
+            crawl_summary=summary,
         )
-        conn.commit()
-        conn.close()
     except Exception as e:
         print(f"[DIAG SAVE ERROR] {e}")
 
@@ -301,15 +269,14 @@ async def contact(req: ContactRequest):
     if not name or not email or not message:
         raise HTTPException(status_code=400, detail="Todos los campos son obligatorios")
 
-    now = datetime.now(timezone.utc).isoformat()
+    await db.insert_message(name, email, message)
 
-    conn = get_db()
-    conn.execute(
-        "INSERT INTO messages (name, email, message, created_at) VALUES (?, ?, ?, ?)",
-        (name, email, message, now),
-    )
-    conn.commit()
-    conn.close()
+    # Upsert lead for pipeline tracking
+    try:
+        lead_id = await db.upsert_lead(email=email, name=name, source="contact_form")
+        await db.add_lead_event(lead_id, "message_sent", {"message_preview": message[:200]})
+    except Exception as e:
+        print(f"[LEAD UPSERT ERROR] {e}")
 
     # Send auto-reply welcome email
     if RESEND_API_KEY:
@@ -364,26 +331,16 @@ async def contact(req: ContactRequest):
 async def list_messages(authorization: str | None = Header(default=None)):
     """List all messages (auth required)."""
     verify_token(authorization)
-
-    conn = get_db()
-    rows = conn.execute("SELECT * FROM messages ORDER BY created_at DESC").fetchall()
-    conn.close()
-
-    return [dict(r) for r in rows]
+    return await db.list_messages()
 
 
 @app.patch("/api/messages/{msg_id}/read")
 async def mark_read(msg_id: int, authorization: str | None = Header(default=None)):
     """Mark a message as read."""
     verify_token(authorization)
-
-    conn = get_db()
-    cur = conn.execute("UPDATE messages SET read = 1 WHERE id = ?", (msg_id,))
-    conn.commit()
-    if cur.rowcount == 0:
-        conn.close()
+    found = await db.mark_message_read(msg_id)
+    if not found:
         raise HTTPException(status_code=404, detail="Mensaje no encontrado")
-    conn.close()
     return {"success": True}
 
 
@@ -400,14 +357,9 @@ async def reply_message(msg_id: int, req: ReplyRequest, authorization: str | Non
     if not reply_text:
         raise HTTPException(status_code=400, detail="Respuesta vacía")
 
-    conn = get_db()
-    row = conn.execute("SELECT * FROM messages WHERE id = ?", (msg_id,)).fetchone()
-    if not row:
-        conn.close()
+    msg = await db.get_message(msg_id)
+    if not msg:
         raise HTTPException(status_code=404, detail="Mensaje no encontrado")
-
-    msg = dict(row)
-    now = datetime.now(timezone.utc).isoformat()
 
     # Try sending email via Resend
     email_sent = False
@@ -434,12 +386,7 @@ async def reply_message(msg_id: int, req: ReplyRequest, authorization: str | Non
             print(f"[EMAIL REPLY ERROR] {e}")
             email_sent = False
 
-    conn.execute(
-        "UPDATE messages SET replied = 1, reply_text = ?, replied_at = ?, read = 1 WHERE id = ?",
-        (reply_text, now, msg_id),
-    )
-    conn.commit()
-    conn.close()
+    await db.mark_message_replied(msg_id, reply_text)
 
     return {
         "success": True,
@@ -456,41 +403,24 @@ async def reply_message(msg_id: int, req: ReplyRequest, authorization: str | Non
 async def list_diagnostics(authorization: str | None = Header(default=None)):
     """List all diagnostics (auth required)."""
     verify_token(authorization)
-    conn = get_db()
-    rows = conn.execute("SELECT id, url, health_score, crawl_summary, created_at FROM diagnostics ORDER BY created_at DESC").fetchall()
-    conn.close()
-    return [dict(r) for r in rows]
+    return await db.list_diagnostics()
 
 
 @app.get("/api/diagnostics/{diag_id}")
-async def get_diagnostic(diag_id: int, authorization: str | None = Header(default=None)):
+async def get_diagnostic_detail(diag_id: int, authorization: str | None = Header(default=None)):
     """Get full diagnostic report (auth required)."""
     verify_token(authorization)
-    conn = get_db()
-    row = conn.execute("SELECT * FROM diagnostics WHERE id = ?", (diag_id,)).fetchone()
-    conn.close()
-    if not row:
+    result = await db.get_diagnostic(diag_id)
+    if not result:
         raise HTTPException(status_code=404, detail="Diagnostico no encontrado")
-    return dict(row)
+    return result
 
 
 @app.get("/api/stats")
 async def get_stats(authorization: str | None = Header(default=None)):
     """Return overview stats (auth required)."""
     verify_token(authorization)
-    conn = get_db()
-    total_leads = conn.execute("SELECT COUNT(*) FROM messages").fetchone()[0]
-    total_diagnostics = conn.execute("SELECT COUNT(*) FROM diagnostics").fetchone()[0]
-    unread_messages = conn.execute("SELECT COUNT(*) FROM messages WHERE read = 0").fetchone()[0]
-    total_replied = conn.execute("SELECT COUNT(*) FROM messages WHERE replied = 1").fetchone()[0]
-    response_rate = round((total_replied / total_leads * 100), 1) if total_leads > 0 else 0
-    conn.close()
-    return {
-        "total_leads": total_leads,
-        "total_diagnostics": total_diagnostics,
-        "unread_messages": unread_messages,
-        "response_rate": response_rate,
-    }
+    return await db.get_stats()
 
 
 # ══════════════════════════════════════════════════════════
