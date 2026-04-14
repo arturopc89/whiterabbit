@@ -1,5 +1,8 @@
 """Claude API integration — analyzes crawl + PageSpeed data and generates actionable report."""
 
+from __future__ import annotations
+
+import asyncio
 import os
 import json
 
@@ -7,11 +10,12 @@ import anthropic
 
 
 async def analyze_with_claude(crawl_data: dict, pagespeed_data: dict) -> dict:
-    """Send diagnostic data to Claude and get structured analysis."""
+    """Send diagnostic data to Claude and get structured analysis.
+
+    Retries up to 3 times with exponential backoff on overload (529) errors.
+    """
 
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-
-    # Build context for Claude
     site_url = crawl_data.get("url", "unknown")
 
     prompt = f"""Sos un experto en SEO y desarrollo web. Analizá los siguientes datos de diagnóstico del sitio {site_url} y generá un reporte accionable en español.
@@ -65,30 +69,59 @@ Reglas:
 - El health_score debe reflejar la realidad: un sitio sin meta tags, sin HTTPS, sin sitemap merece un score bajo
 - Las automation_proposals deben ser cosas que Whiterabbit (agencia de IA, SEO, dev web, marketing) puede implementar"""
 
-    message = client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=2000,
-        messages=[{"role": "user", "content": prompt}],
-    )
+    # ── Retry with exponential backoff ──
+    max_retries = 3
+    last_error = None
 
-    response_text = message.content[0].text.strip()
+    for attempt in range(max_retries):
+        try:
+            message = client.messages.create(
+                model="claude-haiku-4-5-20251001",  # Haiku: faster + cheaper + less prone to overload
+                max_tokens=2000,
+                messages=[{"role": "user", "content": prompt}],
+            )
 
-    # Parse JSON from response
-    try:
-        # Handle case where Claude wraps in ```json
-        if response_text.startswith("```"):
-            response_text = response_text.split("\n", 1)[1]
-            response_text = response_text.rsplit("```", 1)[0]
-        report = json.loads(response_text)
-    except json.JSONDecodeError:
-        report = {
-            "health_score": 0,
-            "business_type": "No determinado",
-            "summary": "No se pudo generar el análisis. Intentá de nuevo.",
-            "critical_issues": [],
-            "opportunities": [],
-            "automation_proposals": [],
-            "traffic_estimate": "No disponible",
-        }
+            response_text = message.content[0].text.strip()
 
-    return report
+            # Parse JSON from response
+            try:
+                if response_text.startswith("```"):
+                    response_text = response_text.split("\n", 1)[1]
+                    response_text = response_text.rsplit("```", 1)[0]
+                return json.loads(response_text)
+            except json.JSONDecodeError:
+                return {
+                    "health_score": 0,
+                    "business_type": "No determinado",
+                    "summary": "No se pudo parsear el análisis. Intentá de nuevo.",
+                    "critical_issues": [],
+                    "opportunities": [],
+                    "automation_proposals": [],
+                    "traffic_estimate": "No disponible",
+                }
+
+        except anthropic.APIStatusError as e:
+            last_error = e
+            if e.status_code == 529:
+                # Overloaded — wait and retry
+                wait = 2 ** attempt  # 1s, 2s, 4s
+                print(f"[CLAUDE OVERLOADED] attempt {attempt + 1}/{max_retries}, retrying in {wait}s")
+                await asyncio.sleep(wait)
+                continue
+            elif e.status_code in (429, 503):
+                wait = 2 ** (attempt + 1)
+                print(f"[CLAUDE RATE LIMIT] attempt {attempt + 1}/{max_retries}, retrying in {wait}s")
+                await asyncio.sleep(wait)
+                continue
+            else:
+                raise
+
+        except Exception as e:
+            last_error = e
+            if attempt < max_retries - 1:
+                await asyncio.sleep(2)
+                continue
+            raise
+
+    # All retries exhausted
+    raise Exception(f"Claude no disponible después de {max_retries} intentos: {last_error}")
