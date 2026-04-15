@@ -72,7 +72,7 @@ def email_welcome(name: str) -> str:
     <div class="divider"></div>
     <p>Mientras tanto, si querés agendar algo más directo:</p>
     <p style="text-align:center;margin-top:24px">
-      <a href="https://wa.me/595971185578?text=Hola%20WhiteRabbit!%20Acabo%20de%20dejarles%20un%20mensaje%20en%20la%20web" class="cta-btn">💬 Escribinos por WhatsApp</a>
+      <a href="https://wa.me/595971185578?text=Hola+WhiteRabbit!+Acabo+de+dejarles+un+mensaje+en+la+web" class="cta-btn">💬 Escribinos por WhatsApp</a>
     </p>
     <div class="divider"></div>
     <p style="color:#55556a;font-size:13px">Este es un mensaje automático. Un humano real te va a responder pronto — probablemente con café en mano ☕</p>
@@ -342,7 +342,7 @@ async def send_report(req: SendReportRequest):
         <div class="divider"></div>
         <p>El reporte completo con análisis, oportunidades y propuestas personalizadas está adjunto en PDF. Si querés que lo implementemos juntos:</p>
         <p style="text-align:center;margin-top:20px">
-          <a href="https://wa.me/595971185578?text=Hola%20WhiteRabbit!%20Vi%20mi%20reporte%20de%20diagnóstico%20y%20quiero%20saber%20más." class="cta-btn">💬 Hablemos por WhatsApp</a>
+          <a href="https://wa.me/595971185578?text=Hola+WhiteRabbit!+Vi+mi+reporte+de+diagnostico+y+quiero+saber+mas." class="cta-btn">💬 Hablemos por WhatsApp</a>
         </p>
         <div class="divider"></div>
         <p style="color:#55556a;font-size:12px">Este reporte fue generado automáticamente por el agente de diagnóstico de WhiteRabbit para {url}</p>
