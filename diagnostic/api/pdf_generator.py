@@ -1,391 +1,376 @@
 """WhiteRabbit — Branded PDF report generator using fpdf2.
 
-Generates a professional diagnostic report PDF with WhiteRabbit branding.
-Uses a clean white/light design (not dark — dark doesn't print well).
-Cyan and violet accents match the brand.
+Layout is fully dynamic — no fixed heights. Each section expands to fit content.
 """
 
 from __future__ import annotations
 
-import io
 from typing import Optional
 from fpdf import FPDF
+from datetime import date
 
-# ── Text sanitizer ──
-# Helvetica (Latin-1) supports Spanish accents but NOT em/en dashes,
-# smart quotes, or other Unicode outside Latin-1.
-_REPLACEMENTS = {
-    "\u2014": "-",   # em dash —
-    "\u2013": "-",   # en dash –
-    "\u2012": "-",   # figure dash
-    "\u2018": "'",   # left single quote '
-    "\u2019": "'",   # right single quote '
-    "\u201c": '"',   # left double quote "
-    "\u201d": '"',   # right double quote "
-    "\u2026": "...", # ellipsis …
-    "\u00b7": "-",   # middle dot ·
-    "\u2022": "-",   # bullet •
-    "\u2192": "->",  # arrow →
-    "\u00d7": "x",   # multiplication sign ×
-    "\u2260": "!=",  # not equal ≠
+# ── Colors ──
+CYAN   = (0, 200, 230)
+VIOLET = (100, 50, 200)
+DARK   = (20, 20, 30)
+MUTED  = (110, 110, 130)
+LIGHT  = (245, 246, 250)
+RED    = (210, 45, 45)
+AMBER  = (190, 120, 10)
+GREEN  = (25, 150, 70)
+WHITE  = (255, 255, 255)
+BORDER = (215, 215, 225)
+
+# ── Text sanitizer (Latin-1 / Helvetica safe) ──
+_FIXES = {
+    "\u2014": "-", "\u2013": "-", "\u2012": "-",
+    "\u2018": "'", "\u2019": "'",
+    "\u201c": '"', "\u201d": '"',
+    "\u2026": "...", "\u2022": "-", "\u2192": "->",
+    "\u00d7": "x",  "\u2260": "!=",
 }
 
-def _safe(text: str, max_len: int = 9999) -> str:
-    """Sanitize text to Latin-1 charset for fpdf2 Helvetica compatibility."""
+def _s(text, limit=9999):
     if not text:
         return ""
-    for char, replacement in _REPLACEMENTS.items():
-        text = text.replace(char, replacement)
-    # Encode/decode to catch any remaining non-Latin-1 chars
-    text = text.encode("latin-1", errors="replace").decode("latin-1")
-    return text[:max_len]
+    for c, r in _FIXES.items():
+        text = text.replace(c, r)
+    return text.encode("latin-1", errors="replace").decode("latin-1")[:limit]
 
 
-# ── Brand colors (RGB) ──
-CYAN = (0, 200, 230)        # Lighter cyan for print
-VIOLET = (100, 50, 200)     # Violet
-DARK = (15, 15, 25)         # Near-black text
-MUTED = (100, 100, 120)     # Secondary text
-LIGHT_BG = (245, 246, 250)  # Card backgrounds
-RED = (220, 50, 50)
-AMBER = (200, 130, 20)
-GREEN = (30, 160, 80)
-WHITE = (255, 255, 255)
-
-
-class WRReport(FPDF):
-    """Custom FPDF subclass with WhiteRabbit header/footer."""
-
-    def __init__(self, site_url: str = ""):
+class WR(FPDF):
+    def __init__(self, url=""):
         super().__init__()
-        self.site_url = site_url
-        self.set_auto_page_break(auto=True, margin=20)
-        self.set_margins(18, 18, 18)
+        self._url = url
+        self.set_auto_page_break(auto=True, margin=22)
+        self.set_margins(16, 20, 16)
 
-    # ── Auto-sanitize ALL text going into the PDF ──
+    # Auto-sanitize ALL text
     def cell(self, w=0, h=0, txt="", border=0, ln=0, align="", fill=False, link="", **kw):
-        return super().cell(w, h, _safe(str(txt)) if txt else "", border, ln, align, fill, link, **kw)
+        return super().cell(w, h, _s(str(txt)) if txt else "", border, ln, align, fill, link, **kw)
 
-    def multi_cell(self, w, h, txt="", border=0, align="J", fill=False, split_only=False, link="", **kw):
-        return super().multi_cell(w, h, _safe(str(txt)) if txt else "", border, align, fill, split_only, link, **kw)
+    def multi_cell(self, w, h, txt="", border=0, align="J", fill=False, **kw):
+        return super().multi_cell(w, h, _s(str(txt)) if txt else "", border, align, fill, **kw)
 
     def header(self):
-        # White background strip
+        # Dark header bar
         self.set_fill_color(*DARK)
-        self.rect(0, 0, 210, 18, 'F')
-
-        # Logo text — "white" + "rabbit"
-        self.set_y(5)
-        self.set_font("Helvetica", "B", 13)
-        self.set_text_color(240, 240, 243)
-        self.set_x(18)
-        self.cell(22, 8, "white", ln=0)
+        self.rect(0, 0, 210, 16, "F")
+        self.set_y(4)
+        self.set_font("Helvetica", "B", 12)
+        self.set_text_color(235, 235, 240)
+        self.set_x(16)
+        self.cell(12, 7, "white", ln=0)
         self.set_text_color(*CYAN)
-        self.cell(22, 8, "rabbit", ln=0)
-
-        # Right side — site URL
+        self.cell(15, 7, "rabbit", ln=0)
+        # URL right-aligned
         self.set_font("Helvetica", "", 7)
-        self.set_text_color(150, 150, 170)
-        self.cell(0, 8, self.site_url, align="R", ln=1)
-
-        self.ln(6)
-
-    def footer(self):
-        self.set_y(-14)
-        self.set_font("Helvetica", "", 7)
-        self.set_text_color(*MUTED)
-        self.cell(0, 8, f"whiterabbit.com.py  ·  Página {self.page_no()}", align="C")
-
-    # ── Helpers ──
-    def section_title(self, text: str, color: tuple = DARK):
-        self.set_font("Helvetica", "B", 11)
-        self.set_text_color(*color)
-        self.cell(0, 7, text, ln=1)
-        # Underline
-        x = self.get_x()
-        y = self.get_y()
-        self.set_draw_color(*color)
-        self.set_line_width(0.4)
-        self.line(18, y, 192, y)
+        self.set_text_color(140, 140, 160)
+        self.cell(0, 7, _s(self._url, 60), align="R", ln=1)
         self.ln(4)
 
-    def card(self, x: float, y: float, w: float, h: float, fill: tuple = LIGHT_BG):
-        self.set_fill_color(*fill)
-        self.set_draw_color(220, 220, 230)
-        self.set_line_width(0.2)
-        self.rect(x, y, w, h, 'FD')
+    def footer(self):
+        self.set_y(-13)
+        self.set_font("Helvetica", "", 7)
+        self.set_text_color(*MUTED)
+        self.cell(0, 6, f"whiterabbit.com.py  |  Pagina {self.page_no()}", align="C")
 
-    def score_circle(self, score: int, x: float, y: float):
-        """Draw the health score as a bordered box (circle-like via ellipse)."""
+    # ── Layout helpers ──
+    def hrule(self, color=BORDER, thickness=0.3):
+        y = self.get_y()
+        self.set_draw_color(*color)
+        self.set_line_width(thickness)
+        self.line(16, y, 194, y)
+        self.ln(3)
+
+    def section_heading(self, text, color=DARK):
+        self.ln(3)
+        self.set_font("Helvetica", "B", 10)
+        self.set_text_color(*color)
+        self.cell(0, 6, _s(text), ln=1)
+        self.hrule(color, 0.5)
+
+    def left_bar(self, color, x, y, h):
+        self.set_fill_color(*color)
+        self.rect(x, y, 2.5, h, "F")
+
+    def score_badge(self, score, x, y):
         color = GREEN if score >= 80 else (AMBER if score >= 50 else RED)
-        r = 18
-        # Background square with colored border
+        r = 17
         self.set_fill_color(245, 246, 250)
         self.set_draw_color(*color)
         self.set_line_width(2.5)
-        # Use ellipse: (x_top_left, y_top_left, width, height, style)
-        self.ellipse(x - r, y - r, r * 2, r * 2, style='FD')
-        # Score number centered
-        self.set_font("Helvetica", "B", 24)
+        self.ellipse(x - r, y - r, r * 2, r * 2, style="FD")
+        self.set_font("Helvetica", "B", 22)
         self.set_text_color(*color)
-        self.set_xy(x - r, y - 8)
-        self.cell(r * 2, 12, str(score), align="C", ln=0)
-        # Label below
+        self.set_xy(x - r, y - 7)
+        self.cell(r * 2, 10, str(score), align="C", ln=0)
         self.set_font("Helvetica", "", 6)
         self.set_text_color(*MUTED)
-        self.set_xy(x - r, y + 7)
-        self.cell(r * 2, 5, "HEALTH SCORE", align="C", ln=0)
+        self.set_xy(x - r, y + 5)
+        self.cell(r * 2, 4, "HEALTH SCORE", align="C", ln=0)
 
-    def impact_badge(self, impact: str) -> tuple:
-        """Return color for impact badge."""
-        if impact == "alto":
-            return RED
-        elif impact == "medio":
-            return AMBER
-        return GREEN
+    def impact_pill(self, impact, x, y):
+        color = RED if impact == "alto" else (AMBER if impact == "medio" else GREEN)
+        self.set_fill_color(*color)
+        self.rect(x, y, 16, 5.5, "F")
+        self.set_font("Helvetica", "B", 5.5)
+        self.set_text_color(*WHITE)
+        self.set_xy(x, y + 0.5)
+        self.cell(16, 4.5, impact.upper(), align="C", ln=0)
 
 
-def generate_report_pdf(
-    url: str,
-    report: dict,
-    pagespeed: Optional[dict] = None,
-) -> bytes:
-    """Generate a branded PDF report. Returns PDF bytes."""
+def generate_report_pdf(url: str, report: dict, pagespeed: Optional[dict] = None) -> bytes:
 
-    health_score = report.get("health_score", 0) or 0
-    business_type = _safe(report.get("business_type", ""))
-    summary = _safe(report.get("summary", ""))
-    critical_issues = report.get("critical_issues", []) or []
-    opportunities = report.get("opportunities", []) or []
-    automation_proposals = report.get("automation_proposals", []) or []
-    traffic_estimate = _safe(report.get("traffic_estimate", ""))
+    health_score   = int(report.get("health_score") or 0)
+    business_type  = _s(report.get("business_type", ""), 80)
+    summary        = _s(report.get("summary", ""), 400)
+    issues         = report.get("critical_issues", []) or []
+    opps           = report.get("opportunities", []) or []
+    proposals      = report.get("automation_proposals", []) or []
+    traffic        = _s(report.get("traffic_estimate", ""), 200)
 
-    pdf = WRReport(site_url=url)
+    pdf = WR(url=url)
     pdf.add_page()
 
-    # ── TITLE SECTION ──
-    pdf.set_font("Helvetica", "B", 20)
+    # ═══════════════════════════════════
+    # TITLE
+    # ═══════════════════════════════════
+    pdf.set_font("Helvetica", "B", 18)
     pdf.set_text_color(*DARK)
-    pdf.cell(0, 10, "Reporte de Diagnóstico Web", ln=1)
-
-    pdf.set_font("Helvetica", "", 9)
+    pdf.cell(0, 9, "Reporte de Diagnostico Web", ln=1)
+    pdf.set_font("Helvetica", "", 8)
     pdf.set_text_color(*MUTED)
-    from datetime import date
-    pdf.cell(0, 5, f"Análisis realizado el {date.today().strftime('%d/%m/%Y')}  ·  whiterabbit.com.py", ln=1)
+    pdf.cell(0, 5, f"Analisis realizado el {date.today().strftime('%d/%m/%Y')}  |  whiterabbit.com.py", ln=1)
     pdf.ln(4)
 
-    # ── SCORE + SUMMARY CARD ──
-    card_y = pdf.get_y()
-    pdf.card(18, card_y, 174, 44)
+    # ═══════════════════════════════════
+    # SCORE ROW
+    # ═══════════════════════════════════
+    score_y = pdf.get_y()
 
-    # Score circle on left
-    pdf.score_circle(health_score, 42, card_y + 22)
+    # Score circle (left)
+    pdf.score_badge(health_score, 38, score_y + 22)
 
-    # Summary on right
+    # Text (right of circle)
+    rx = 72
     if business_type:
-        pdf.set_font("Helvetica", "B", 9)
+        pdf.set_font("Helvetica", "B", 8.5)
         pdf.set_text_color(*CYAN)
-        pdf.set_xy(75, card_y + 5)
-        pdf.cell(115, 5, f"Tipo de negocio detectado: {business_type}", ln=1)
+        pdf.set_xy(rx, score_y)
+        pdf.multi_cell(120, 5, f"Negocio detectado: {business_type}", align="L")
 
     if summary:
-        pdf.set_font("Helvetica", "", 8.5)
+        pdf.set_font("Helvetica", "", 8)
         pdf.set_text_color(*DARK)
-        pdf.set_xy(75, card_y + 13)
-        pdf.multi_cell(115, 5, summary[:300], align="L")
+        pdf.set_xy(rx, pdf.get_y() + 1)
+        pdf.multi_cell(120, 4.5, summary, align="L")
 
-    pdf.set_y(card_y + 48)
+    # Make sure we're below the score circle
+    pdf.set_y(max(pdf.get_y(), score_y + 46))
+    pdf.ln(4)
+    pdf.hrule()
 
-    # ── PAGESPEED METRICS ──
-    if pagespeed and pagespeed.get("score") is not None:
-        pdf.ln(2)
-        pdf.section_title("Rendimiento técnico (PageSpeed Mobile)", VIOLET)
+    # ═══════════════════════════════════
+    # PAGESPEED
+    # ═══════════════════════════════════
+    ps = pagespeed or {}
+    if ps.get("score") is not None:
+        pdf.section_heading("Rendimiento tecnico (PageSpeed Mobile)", VIOLET)
 
-        metrics = [
-            ("Performance", f"{pagespeed.get('score', '-')}/100"),
-            ("LCP", f"{round(pagespeed['lcp']/1000, 1)}s" if pagespeed.get("lcp") else "-"),
-            ("CLS", f"{round(pagespeed['cls'], 2)}" if pagespeed.get("cls") is not None else "-"),
-            ("INP", f"{pagespeed['inp']}ms" if pagespeed.get("inp") else "-"),
+        labels = ["Performance", "LCP", "CLS", "INP"]
+        vals = [
+            f"{ps.get('score', '-')}/100",
+            f"{round(ps['lcp']/1000, 1)}s" if ps.get("lcp") else "-",
+            f"{round(ps['cls'], 2)}" if ps.get("cls") is not None else "-",
+            f"{ps['inp']}ms" if ps.get("inp") else "-",
         ]
 
-        mx = 18
-        mw = 40
         my = pdf.get_y()
-        for i, (label, val) in enumerate(metrics):
-            cx = mx + i * (mw + 4)
-            pdf.card(cx, my, mw, 20)
-            pdf.set_font("Helvetica", "B", 13)
+        mw = 42
+        for i, (label, val) in enumerate(zip(labels, vals)):
+            cx = 16 + i * (mw + 3)
+            pdf.set_fill_color(*LIGHT)
+            pdf.set_draw_color(*BORDER)
+            pdf.set_line_width(0.2)
+            pdf.rect(cx, my, mw, 18, "FD")
+            pdf.set_font("Helvetica", "B", 12)
             pdf.set_text_color(*DARK)
-            pdf.set_xy(cx, my + 3)
-            pdf.cell(mw, 8, str(val), align="C", ln=0)
-            pdf.set_font("Helvetica", "", 6.5)
+            pdf.set_xy(cx, my + 2)
+            pdf.cell(mw, 7, _s(val), align="C", ln=0)
+            pdf.set_font("Helvetica", "", 6)
             pdf.set_text_color(*MUTED)
-            pdf.set_xy(cx, my + 13)
-            pdf.cell(mw, 5, label.upper(), align="C", ln=0)
+            pdf.set_xy(cx, my + 11)
+            pdf.cell(mw, 4, label.upper(), align="C", ln=0)
 
-        pdf.set_y(my + 26)
+        pdf.set_y(my + 22)
 
-    # ── CRITICAL ISSUES ──
-    if critical_issues:
-        pdf.ln(2)
-        pdf.section_title(f"Problemas críticos ({len(critical_issues)} encontrados)", RED)
+    # ═══════════════════════════════════
+    # CRITICAL ISSUES
+    # ═══════════════════════════════════
+    if issues:
+        pdf.section_heading(f"Problemas criticos ({len(issues)} encontrados)", RED)
 
-        for issue in critical_issues[:5]:
+        for issue in issues[:5]:
+            if pdf.get_y() > 265:
+                pdf.add_page()
+
+            start_y = pdf.get_y()
             impact = issue.get("impact", "medio")
-            impact_color = pdf.impact_badge(impact)
-            issue_y = pdf.get_y()
 
-            pdf.card(18, issue_y, 174, 18)
-
-            # Impact badge
-            pdf.set_fill_color(*impact_color)
-            pdf.set_draw_color(*impact_color)
-            pdf.rect(21, issue_y + 3, 18, 6, 'F')
-            pdf.set_font("Helvetica", "B", 6)
-            pdf.set_text_color(*WHITE)
-            pdf.set_xy(21, issue_y + 4)
-            pdf.cell(18, 4, impact.upper(), align="C", ln=0)
+            # Impact pill
+            pdf.impact_pill(impact, 16, start_y + 1)
 
             # Issue title
             pdf.set_font("Helvetica", "B", 8.5)
             pdf.set_text_color(*DARK)
-            pdf.set_xy(43, issue_y + 3)
-            pdf.cell(147, 5, _safe(issue.get("issue", ""), 80), ln=1)
+            pdf.set_xy(35, start_y)
+            pdf.multi_cell(159, 5, _s(issue.get("issue", ""), 100), align="L")
 
             # Explanation
             pdf.set_font("Helvetica", "", 7.5)
             pdf.set_text_color(*MUTED)
-            pdf.set_xy(43, issue_y + 9)
-            pdf.cell(147, 5, _safe(issue.get("explanation", ""), 100), ln=1)
+            pdf.set_xy(35, pdf.get_y())
+            pdf.multi_cell(159, 4.5, _s(issue.get("explanation", ""), 180), align="L")
 
-            pdf.set_y(issue_y + 21)
+            pdf.ln(3)
+            # Light separator
+            sep_y = pdf.get_y()
+            pdf.set_draw_color(*BORDER)
+            pdf.set_line_width(0.15)
+            pdf.line(35, sep_y, 194, sep_y)
+            pdf.ln(3)
 
-    # ── OPPORTUNITIES ──
-    if opportunities:
-        pdf.ln(2)
-        if pdf.get_y() > 230:
+    # ═══════════════════════════════════
+    # OPPORTUNITIES
+    # ═══════════════════════════════════
+    if opps:
+        if pdf.get_y() > 220:
             pdf.add_page()
+        pdf.section_heading(f"Oportunidades de mejora (top {min(len(opps), 6)})", (0, 150, 180))
 
-        pdf.section_title(f"Oportunidades de mejora (top {min(len(opportunities), 6)})", (0, 150, 180))
-
-        for opp in opportunities[:6]:
-            opp_y = pdf.get_y()
-            if opp_y > 255:
+        for opp in opps[:6]:
+            if pdf.get_y() > 265:
                 pdf.add_page()
-                opp_y = pdf.get_y()
 
-            pdf.card(18, opp_y, 174, 20)
+            start_y = pdf.get_y()
 
             # Cyan left bar
-            pdf.set_fill_color(*CYAN)
-            pdf.rect(18, opp_y, 2.5, 20, 'F')
+            pdf.left_bar(CYAN, 16, start_y, 1)  # placeholder height
 
             # Title
             pdf.set_font("Helvetica", "B", 8.5)
             pdf.set_text_color(*DARK)
-            pdf.set_xy(24, opp_y + 3)
-            pdf.cell(168, 5, _safe(opp.get("title", ""), 85), ln=1)
+            pdf.set_xy(22, start_y)
+            pdf.multi_cell(172, 5, _s(opp.get("title", ""), 90), align="L")
 
             # Impact
             pdf.set_font("Helvetica", "I", 7.5)
             pdf.set_text_color(*CYAN)
-            pdf.set_xy(24, opp_y + 9)
-            pdf.cell(168, 4, _safe(opp.get("estimated_impact", ""), 90), ln=1)
+            pdf.set_xy(22, pdf.get_y())
+            pdf.multi_cell(172, 4.5, _s(opp.get("estimated_impact", ""), 100), align="L")
 
             # Fix
-            pdf.set_font("Helvetica", "", 7)
-            pdf.set_text_color(*MUTED)
-            pdf.set_xy(24, opp_y + 14)
-            pdf.cell(168, 4, _safe(opp.get("how_to_fix", ""), 100), ln=1)
-
-            pdf.set_y(opp_y + 23)
-
-    # ── AUTOMATION PROPOSALS ──
-    if automation_proposals:
-        pdf.ln(2)
-        if pdf.get_y() > 220:
-            pdf.add_page()
-
-        pdf.section_title("Lo que WhiteRabbit puede hacer por vos", VIOLET)
-
-        for prop in automation_proposals[:3]:
-            prop_y = pdf.get_y()
-            if prop_y > 255:
-                pdf.add_page()
-                prop_y = pdf.get_y()
-
-            pdf.card(18, prop_y, 174, 22)
-
-            # Violet left bar
-            pdf.set_fill_color(*VIOLET)
-            pdf.rect(18, prop_y, 2.5, 22, 'F')
-
-            pdf.set_font("Helvetica", "B", 8.5)
-            pdf.set_text_color(*DARK)
-            pdf.set_xy(24, prop_y + 3)
-            pdf.cell(168, 5, _safe(prop.get("title", ""), 85), ln=1)
-
             pdf.set_font("Helvetica", "", 7.5)
             pdf.set_text_color(*MUTED)
-            pdf.set_xy(24, prop_y + 10)
-            pdf.multi_cell(162, 4, _safe(prop.get("description", ""), 150))
+            pdf.set_xy(22, pdf.get_y())
+            pdf.multi_cell(172, 4.5, _s(opp.get("how_to_fix", ""), 150), align="L")
 
-            pdf.set_y(prop_y + 25)
+            end_y = pdf.get_y()
+            # Draw left bar with actual height
+            pdf.left_bar(CYAN, 16, start_y, end_y - start_y)
 
-    # ── TRAFFIC ESTIMATE ──
-    if traffic_estimate:
-        pdf.ln(2)
-        if pdf.get_y() > 250:
+            pdf.ln(4)
+
+    # ═══════════════════════════════════
+    # AUTOMATION PROPOSALS
+    # ═══════════════════════════════════
+    if proposals:
+        if pdf.get_y() > 210:
             pdf.add_page()
+        pdf.section_heading("Lo que WhiteRabbit puede hacer por vos", VIOLET)
 
+        for prop in proposals[:3]:
+            if pdf.get_y() > 260:
+                pdf.add_page()
+
+            start_y = pdf.get_y()
+
+            # Title
+            pdf.set_font("Helvetica", "B", 8.5)
+            pdf.set_text_color(*DARK)
+            pdf.set_xy(22, start_y)
+            pdf.multi_cell(172, 5, _s(prop.get("title", ""), 90), align="L")
+
+            # Description
+            pdf.set_font("Helvetica", "", 7.5)
+            pdf.set_text_color(*MUTED)
+            pdf.set_xy(22, pdf.get_y())
+            pdf.multi_cell(172, 4.5, _s(prop.get("description", ""), 200), align="L")
+
+            end_y = pdf.get_y()
+            pdf.left_bar(VIOLET, 16, start_y, end_y - start_y)
+            pdf.ln(4)
+
+    # ═══════════════════════════════════
+    # TRAFFIC ESTIMATE
+    # ═══════════════════════════════════
+    if traffic:
+        if pdf.get_y() > 255:
+            pdf.add_page()
+        pdf.ln(2)
+        pdf.set_fill_color(240, 255, 245)
+        pdf.set_draw_color(25, 150, 70)
+        pdf.set_line_width(0.3)
         est_y = pdf.get_y()
-        pdf.card(18, est_y, 174, 18, fill=(240, 255, 245))
-        pdf.set_font("Helvetica", "B", 8.5)
+        # Draw background rectangle (approximate height)
+        pdf.rect(16, est_y, 178, 14, "FD")
+        pdf.set_font("Helvetica", "B", 8)
         pdf.set_text_color(*GREEN)
-        pdf.set_xy(22, est_y + 3)
-        pdf.cell(0, 5, "Potencial de crecimiento estimado:", ln=1)
-        pdf.set_font("Helvetica", "", 8)
+        pdf.set_xy(20, est_y + 2)
+        pdf.cell(0, 4, "Potencial de crecimiento estimado:", ln=1)
+        pdf.set_font("Helvetica", "", 7.5)
         pdf.set_text_color(*DARK)
-        pdf.set_xy(22, est_y + 10)
-        pdf.cell(166, 5, _safe(str(traffic_estimate), 120), ln=1)
-        pdf.set_y(est_y + 22)
+        pdf.set_xy(20, pdf.get_y())
+        pdf.multi_cell(170, 4.5, traffic, align="L")
+        pdf.ln(4)
 
-    # ── CTA PAGE ──
+    # ═══════════════════════════════════
+    # CTA PAGE
+    # ═══════════════════════════════════
     pdf.add_page()
-    pdf.ln(20)
-
-    # Big CTA card
-    pdf.set_fill_color(*DARK)
-    pdf.set_draw_color(*CYAN)
-    pdf.set_line_width(0.5)
-    pdf.rect(18, pdf.get_y(), 174, 80, 'FD')
+    pdf.ln(25)
 
     cta_y = pdf.get_y()
-    pdf.set_font("Helvetica", "B", 16)
-    pdf.set_text_color(*WHITE)
-    pdf.set_xy(18, cta_y + 12)
-    pdf.cell(174, 10, "¿Querés que solucionemos esto?", align="C", ln=1)
+    pdf.set_fill_color(*DARK)
+    pdf.set_draw_color(*CYAN)
+    pdf.set_line_width(0.8)
+    pdf.rect(16, cta_y, 178, 78, "FD")
 
-    pdf.set_font("Helvetica", "", 9)
+    pdf.set_font("Helvetica", "B", 15)
+    pdf.set_text_color(*WHITE)
+    pdf.set_xy(16, cta_y + 12)
+    pdf.cell(178, 9, "Queres que solucionemos esto?", align="C", ln=1)
+
+    pdf.set_font("Helvetica", "", 8.5)
     pdf.set_text_color(180, 180, 200)
-    pdf.set_xy(18, cta_y + 25)
-    pdf.cell(174, 7, "La consulta inicial es 100% gratis.", align="C", ln=1)
-    pdf.set_xy(18, cta_y + 32)
-    pdf.cell(174, 7, "En menos de 48hs tenés una propuesta concreta.", align="C", ln=1)
+    pdf.set_xy(16, cta_y + 24)
+    pdf.cell(178, 6, "La consulta inicial es 100% gratis.", align="C", ln=1)
+    pdf.set_xy(16, cta_y + 31)
+    pdf.cell(178, 6, "En menos de 48hs tenes una propuesta concreta.", align="C", ln=1)
 
     # WA button
-    pdf.set_fill_color(37, 211, 102)
-    pdf.set_draw_color(37, 211, 102)
-    pdf.rect(64, cta_y + 45, 82, 14, 'F')
-    pdf.set_font("Helvetica", "B", 9)
+    pdf.set_fill_color(37, 200, 100)
+    pdf.set_draw_color(37, 200, 100)
+    pdf.rect(66, cta_y + 44, 78, 13, "F")
+    pdf.set_font("Helvetica", "B", 8.5)
     pdf.set_text_color(*WHITE)
-    pdf.set_xy(64, cta_y + 48)
-    pdf.cell(82, 8, "Escribinos por WhatsApp", align="C", ln=1)
+    pdf.set_xy(66, cta_y + 47)
+    pdf.cell(78, 7, "Escribinos por WhatsApp", align="C", ln=1)
 
-    pdf.set_font("Helvetica", "", 7.5)
+    pdf.set_font("Helvetica", "", 7)
     pdf.set_text_color(*CYAN)
-    pdf.set_xy(18, cta_y + 63)
-    pdf.cell(174, 6, "wa.me/595971185578  ·  hola@whiterabbit.com.py  ·  whiterabbit.com.py", align="C", ln=1)
+    pdf.set_xy(16, cta_y + 62)
+    pdf.cell(178, 5, "wa.me/595971185578  |  hola@whiterabbit.com.py  |  whiterabbit.com.py", align="C", ln=1)
 
-    # Return as bytes
     return bytes(pdf.output())
